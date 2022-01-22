@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User extends AuthUser
+class Groupe extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $guarded = ['*'];
+    protected $fillable = ['nom_groupe', 'paroisse', 'jour_reunion', 'heure_reunion'];
 }
