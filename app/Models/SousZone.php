@@ -11,5 +11,5 @@ class SousZone extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['nom', 'quartier', 'zone'];
+    protected $fillable = ['nom', 'quartier', 'zone_id'];
 }

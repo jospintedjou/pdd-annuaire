@@ -15,14 +15,14 @@ class CreateResponsableGroupesTable extends Migration
     {
         Schema::create('responsable_groupes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('groupe');
-            $table->unsignedInteger('user');
+            $table->unsignedInteger('groupe_id');
+            $table->unsignedInteger('user_id');
             $table->string('nom_responsabilite');
             $table->boolean('actif')->default(true);
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('groupe')->references('id')->on('groupes');
-            $table->foreign('user')->references('id')->on('users');
+            $table->foreign('groupe_id')->references('id')->on('groupes');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

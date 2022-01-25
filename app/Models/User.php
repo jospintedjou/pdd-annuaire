@@ -12,5 +12,5 @@ class User extends AuthUser
     use HasFactory;
     use SoftDeletes;
 
-    protected $guarded = ['*'];
+    protected $fillable = [];
 }

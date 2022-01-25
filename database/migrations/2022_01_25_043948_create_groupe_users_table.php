@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateResponsableZonesTable extends Migration
+class CreateGroupeUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateResponsableZonesTable extends Migration
      */
     public function up()
     {
-        Schema::create('responsable_zones', function (Blueprint $table) {
+        Schema::create('groupe_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('zone_id');
             $table->unsignedInteger('user_id');
-            $table->string('nom_responsabilite');
+            $table->unsignedInteger('groupe_id');
             $table->boolean('actif')->default(true);
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('zone_id')->references('id')->on('zones');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('groupe_id')->references('id')->on('groupes');
         });
     }
 
@@ -33,6 +32,6 @@ class CreateResponsableZonesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('responsable_zones');
+        Schema::dropIfExists('groupe_users');
     }
 }

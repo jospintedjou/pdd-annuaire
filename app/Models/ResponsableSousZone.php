@@ -11,5 +11,5 @@ class ResponsableSousZone extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['nom_responsabilite', 'actif', 'user', 'sous_zone'];
+    protected $fillable = ['nom_responsabilite', 'actif', 'user_id', 'sous_zone_id'];
 }

@@ -11,5 +11,5 @@ class CategorieActivite extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['sous_zone', 'groupe', 'nom', 'periodicite'];
+    protected $fillable = ['nom', 'periodicite'];
 }

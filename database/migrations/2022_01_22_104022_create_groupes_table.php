@@ -15,14 +15,14 @@ class CreateGroupesTable extends Migration
     {
         Schema::create('groupes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('sous_zone');
+            $table->unsignedInteger('sous_zone_id');
             $table->string('nom_groupe');
             $table->string('paroisse');
             $table->string('jour_reunion');
             $table->time('heure_reunion');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('sous_zone')->references('id')->on('sous_zones');
+            $table->foreign('sous_zone_id')->references('id')->on('sous_zones');
         });
     }
 

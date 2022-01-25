@@ -11,5 +11,5 @@ class ResponsableGroupe extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['nom_responsabilite', 'actif', 'user', 'groupe'];
+    protected $fillable = ['nom_responsabilite', 'actif', 'user_id', 'groupe_id'];
 }

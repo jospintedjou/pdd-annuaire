@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ResponsableZone extends Model
+class GroupeUser extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['nom_responsabilite', 'actif', 'user_id', 'zone_id'];
+    protected $fillable = ['user_id', 'groupe_id', 'actif'];
 }

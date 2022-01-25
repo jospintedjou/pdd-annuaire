@@ -24,15 +24,14 @@ class CreateUsersTable extends Migration
             $table->string('email')->nullable();
             $table->string('profession')->nullable();
             $table->string('quartier');
-            $table->unsignedInteger('niveau_engagement');
+            $table->unsignedInteger('niveau_engagement_id');
             $table->string('role');
             $table->string('categorie_sociale');
-            $table->unsignedInteger('apostolat');
-            $table->unsignedInteger('groupe');
+            $table->unsignedInteger('apostolat_id');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('apostolat')->references('id')->on('apostolats');
-            $table->foreign('groupe')->references('id')->on('groupes');
+            $table->foreign('apostolat_id')->references('id')->on('apostolats');
+            $table->foreign('niveau_engagement_id')->references('id')->on('niveau_engagements');
         });
     }
 

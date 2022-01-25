@@ -11,5 +11,5 @@ class Activite extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['date_debut', 'date_fin', 'heure_debut','lieu', 'categorie_activite'];
+    protected $fillable = ['zone_id','sous_zone_id', 'groupe_id','date_debut', 'date_fin', 'heure_debut','lieu', 'categorie_activite_id'];
 }

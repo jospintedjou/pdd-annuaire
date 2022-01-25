@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Groupe extends Model
+class Log extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['sous_zone_id','nom_groupe', 'paroisse', 'jour_reunion', 'heure_reunion'];
+    protected $fillable = ['date_action', 'description', 'user_id'];
 }

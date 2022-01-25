@@ -15,14 +15,20 @@ class CreateActivitesTable extends Migration
     {
         Schema::create('activites', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('categorie_activite');
+            $table->unsignedInteger('categorie_activite_id');
+            $table->unsignedInteger('zone_id')->nullable();
+            $table->unsignedInteger('sous_zone_id')->nullable();
+            $table->unsignedInteger('groupe_id')->nullable();
             $table->date('date_debut');
             $table->date('date_fin');
             $table->time('heure_debut');
             $table->string('lieu');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('categorie_activite')->references('id')->on('categorie_activites');
+            $table->foreign('categorie_activite_id')->references('id')->on('categorie_activites');
+            $table->foreign('zone_id')->references('id')->on('zones');
+            $table->foreign('sous_zone_id')->references('id')->on('sous_zones');
+            $table->foreign('groupe_id')->references('id')->on('groupes');
         });
     }
 

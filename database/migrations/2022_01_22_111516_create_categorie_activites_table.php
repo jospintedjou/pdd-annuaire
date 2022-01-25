@@ -15,14 +15,10 @@ class CreateCategorieActivitesTable extends Migration
     {
         Schema::create('categorie_activites', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('sous_zone')->nullable();
-            $table->unsignedInteger('groupe')->nullable();
             $table->string('nom');
             $table->string('periodicite');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('groupe')->references('id')->on('groupes');
-            $table->foreign('sous_zone')->references('id')->on('sous_zones');
         });
     }
 

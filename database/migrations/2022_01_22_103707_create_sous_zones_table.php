@@ -17,10 +17,10 @@ class CreateSousZonesTable extends Migration
             $table->id();
             $table->string('nom');
             $table->string('quartier');
-            $table->unsignedInteger('zone');
+            $table->unsignedInteger('zone_id');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('zone')->references('id')->on('zones');
+            $table->foreign('zone_id')->references('id')->on('zones');
         });
     }
 

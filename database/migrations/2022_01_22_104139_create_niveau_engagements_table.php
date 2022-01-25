@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateParticipationsTable extends Migration
+class CreateNiveauEngagementsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,11 @@ class CreateParticipationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('participations', function (Blueprint $table) {
+        Schema::create('niveau_engagements', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('activite_id');
-            $table->unsignedInteger('user_id');
-            $table->time('heure_arrive');
+            $table->string('nom');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('activite_id')->references('id')->on('activites');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -32,6 +28,6 @@ class CreateParticipationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('participations');
+        Schema::dropIfExists('niveau_engagements');
     }
 }
