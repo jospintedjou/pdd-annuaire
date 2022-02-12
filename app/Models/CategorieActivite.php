@@ -12,4 +12,15 @@ class CategorieActivite extends Model
     use SoftDeletes;
 
     protected $fillable = ['nom', 'periodicite'];
+
+    public function activites()
+    {
+        return $this->hasMany(Activite::class);
+    }
+
+    public function apostolats()
+    {
+        return $this->belongsToMany(Apostolat::class, ApostolatConcerne::class);
+    }
+
 }

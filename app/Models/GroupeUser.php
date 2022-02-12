@@ -11,5 +11,5 @@ class GroupeUser extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'groupe_id', 'actif'];
+    protected $fillable = ['user_id', 'groupe_id', 'actif', 'date_arrivee', 'created_at'];
 }

@@ -11,5 +11,5 @@ class Participation extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['activite_id', 'user', 'heure_arrive'];
+    protected $fillable = ['activite_id', 'user_id', 'heure_arrivee'];
 }

@@ -15,8 +15,8 @@ class CreateResponsableSousZonesTable extends Migration
     {
         Schema::create('responsable_sous_zones', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('sous_zone_id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('sous_zone_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('nom_responsabilite');
             $table->boolean('actif')->default(true);
             $table->timestamps();

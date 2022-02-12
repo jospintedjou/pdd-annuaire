@@ -15,7 +15,7 @@ class CreateGroupesTable extends Migration
     {
         Schema::create('groupes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('sous_zone_id');
+            $table->unsignedBigInteger('sous_zone_id');
             $table->string('nom_groupe');
             $table->string('paroisse');
             $table->string('jour_reunion');

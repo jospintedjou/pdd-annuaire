@@ -14,7 +14,10 @@ class ApostolatController extends Controller
      */
     public function index()
     {
-        //
+        $apostolats = Apostolat::latest()->paginate(5);
+
+        return view('apostolats.index',compact('apostolats'))
+            ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -24,7 +27,7 @@ class ApostolatController extends Controller
      */
     public function create()
     {
-        //
+        return view('apostolats.create');
     }
 
     /**
@@ -35,7 +38,14 @@ class ApostolatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required',
+        ]);
+
+        Apostolat::create($request->all());
+
+        return redirect()->route('apostolats.index')
+            ->with('success','Apostolat créé avec succès.');
     }
 
     /**
@@ -46,7 +56,7 @@ class ApostolatController extends Controller
      */
     public function show(Apostolat $apostolat)
     {
-        //
+        return view('apostolats.show',compact('apostolat'));
     }
 
     /**
@@ -57,7 +67,7 @@ class ApostolatController extends Controller
      */
     public function edit(Apostolat $apostolat)
     {
-        //
+        return view('apostolats.edit',compact('apostolat'));
     }
 
     /**
@@ -69,7 +79,15 @@ class ApostolatController extends Controller
      */
     public function update(Request $request, Apostolat $apostolat)
     {
-        //
+        $request->validate([
+            'nom' => 'required',
+            'prenom' => 'string'
+        ]);
+
+        $apostolat->update($request->all());
+
+        return redirect()->route('apostolats.index')
+            ->with('success','Apostolat updated successfully');
     }
 
     /**
@@ -80,6 +98,9 @@ class ApostolatController extends Controller
      */
     public function destroy(Apostolat $apostolat)
     {
-        //
+        $apostolat->delete();
+
+        return redirect()->route('apostolats.index')
+            ->with('success','Apostolat deleted successfully');
     }
 }

@@ -15,8 +15,8 @@ class CreateResponsableZonesTable extends Migration
     {
         Schema::create('responsable_zones', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('zone_id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('zone_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('nom_responsabilite');
             $table->boolean('actif')->default(true);
             $table->timestamps();

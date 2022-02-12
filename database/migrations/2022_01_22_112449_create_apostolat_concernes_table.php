@@ -15,8 +15,8 @@ class CreateApostolatConcernesTable extends Migration
     {
         Schema::create('apostolat_concernes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('categorie_activite_id');
-            $table->unsignedInteger('apostolat_id');
+            $table->unsignedBigInteger('categorie_activite_id');
+            $table->unsignedBigInteger('apostolat_id');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('categorie_activite_id')->references('id')->on('categorie_activites');

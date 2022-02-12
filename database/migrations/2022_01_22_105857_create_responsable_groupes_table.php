@@ -15,8 +15,8 @@ class CreateResponsableGroupesTable extends Migration
     {
         Schema::create('responsable_groupes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('groupe_id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('groupe_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('nom_responsabilite');
             $table->boolean('actif')->default(true);
             $table->timestamps();

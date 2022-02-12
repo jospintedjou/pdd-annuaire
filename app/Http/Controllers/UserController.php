@@ -14,7 +14,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::latest()->paginate(5);
+
+        return view('users.index',compact('users'))
+            ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -24,7 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('users.create');
     }
 
     /**
@@ -35,7 +38,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+        ]);
+
+        User::create($request->all());
+
+        return redirect()->route('users.index')
+            ->with('success','Utilisateur créé avec succès.');
     }
 
     /**
@@ -46,7 +57,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view('users.show',compact('user'));
     }
 
     /**
@@ -57,7 +68,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('users.edit',compact('user'));
     }
 
     /**
@@ -69,7 +80,29 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'nom' => 'required',
+            'prenom' => 'string',
+            'adresse' => 'required',
+            'telephone1' => 'string',
+            'telephone2' => 'string',
+            'sexe' => 'string',
+            'date_naissance' => 'string',
+            'email' => 'string',
+            'profession' => 'string',
+            'pays' => 'required',
+            'ville' => 'required',
+            'quartier' => 'required',
+            'niveau_engagement_id' => 'required',
+            'role' => 'string',
+            'categorie_sociale' => 'required',
+            'apostolat_id' => 'required',
+        ]);
+
+        $user->update($request->all());
+
+        return redirect()->route('users.index')
+            ->with('success','User updated successfully');
     }
 
     /**
@@ -80,6 +113,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return redirect()->route('users.index')
+            ->with('success','User deleted successfully');
     }
 }

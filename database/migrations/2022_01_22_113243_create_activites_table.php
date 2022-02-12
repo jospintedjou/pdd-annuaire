@@ -15,10 +15,11 @@ class CreateActivitesTable extends Migration
     {
         Schema::create('activites', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('categorie_activite_id');
-            $table->unsignedInteger('zone_id')->nullable();
-            $table->unsignedInteger('sous_zone_id')->nullable();
-            $table->unsignedInteger('groupe_id')->nullable();
+            $table->unsignedBigInteger('categorie_activite_id');
+            $table->unsignedBigInteger('zone_id')->nullable();
+            $table->unsignedBigInteger('sous_zone_id')->nullable();
+            $table->unsignedBigInteger('groupe_id')->nullable();
+            $table->enum('type', ['zonale','sous_zonale', 'groupe']);
             $table->date('date_debut');
             $table->date('date_fin');
             $table->time('heure_debut');

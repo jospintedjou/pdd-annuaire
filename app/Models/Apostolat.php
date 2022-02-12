@@ -12,4 +12,11 @@ class Apostolat extends Model
     use SoftDeletes;
 
     protected $fillable = ['nom'];
+
+    public function categorieActivite()
+    {
+        return $this->belongsToMany(CategorieActivite::class, ApostolatConcerne::class);
+    }
+
+
 }

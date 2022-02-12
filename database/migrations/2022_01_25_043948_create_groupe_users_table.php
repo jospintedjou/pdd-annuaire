@@ -15,8 +15,8 @@ class CreateGroupeUsersTable extends Migration
     {
         Schema::create('groupe_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('groupe_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('groupe_id');
             $table->boolean('actif')->default(true);
             $table->timestamps();
             $table->softDeletes();

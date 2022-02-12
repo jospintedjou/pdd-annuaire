@@ -12,4 +12,9 @@ class NiveauEngagement extends Model
     use SoftDeletes;
 
     protected $fillables = ['nom'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

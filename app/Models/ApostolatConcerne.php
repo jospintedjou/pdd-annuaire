@@ -12,4 +12,5 @@ class ApostolatConcerne extends Model
     use SoftDeletes;
 
     protected $fillable = ['categorie_activite_id', 'apostolat_id'];
+
 }

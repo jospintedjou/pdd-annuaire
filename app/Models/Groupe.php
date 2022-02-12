@@ -12,4 +12,27 @@ class Groupe extends Model
     use SoftDeletes;
 
     protected $fillable = ['sous_zone_id','nom_groupe', 'paroisse', 'jour_reunion', 'heure_reunion'];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, GroupeUser::class)
+            ->withPivot(['user_id', 'groupe_id', 'actif', 'date_arrivee']);
+    }
+
+    public function sousZone()
+    {
+        return $this->belongsTo(SousZone::class);
+    }
+
+    public function responsableGroupes()
+    {
+        return $this->belongsToMany(User::class, ResponsableGroupe::class)
+                ->withPivot(['nom_responsabilite', 'actif']);
+    }
+
+    public function activites()
+    {
+        return $this->hasMany(Activite::class);
+    }
+
 }

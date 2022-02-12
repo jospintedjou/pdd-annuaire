@@ -1,0 +1,32 @@
+.wd-100{
+    width: 100%!important;
+}
+.mb-10{
+    margin-bottom: 10px!important;
+}
+.pb-30{
+    padding-bottom: 30px !important;
+}
+.bg-green{
+    background: #28b0d6!important;
+}
+.pink{
+    background: #d2007a!important;
+}
+.pointer{
+    cursor: pointer!important;
+}
+tbody>tr{
+    height: 61px!important;
+}
+.f-w-500{
+    font-weight: 500!important;
+}
+.f-w-400{
+    font-weight: 400!important;
+}
+.bonus-date{
+    font-size: 14px;
+    color: #d2007a;
+    font-weight: 500;
+}
