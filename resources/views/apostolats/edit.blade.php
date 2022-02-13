@@ -7,7 +7,7 @@
                 .
             @endcomponent
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="card pb-30">
                         <div class="card-header card-header-primary card-header-text">
                             <div class="card-text">

@@ -61,7 +61,7 @@
                         <i class="material-icons">person</i>
                         <p>Utilisateur <b class="caret"></b> </p>
                     </a>
-                    <div class="collapse show" id="users" style="">
+                    <div class="collapse" id="users" style="">
                         <ul class="nav">
                             <li class="nav-item @if(request()->routeIs('users.index')) active @endif" >
                                 <a class="nav-link" href="{!! route('users.index') !!}">
@@ -107,7 +107,7 @@
                         <i class="material-icons">person</i>
                         <p>Niveau d'engagement <b class="caret"></b> </p>
                     </a>
-                    <div class="collapse show" id="niveau_engagements" style="">
+                    <div class="collapse" id="niveau_engagements" style="">
                         <ul class="nav">
                             <li class="nav-item @if(request()->routeIs('niveau_engagements.index')) active @endif" >
                                 <a class="nav-link" href="{!! route('niveau_engagements.index') !!}">
@@ -202,14 +202,14 @@
         <nav class="float-left">
     <ul>
     <li>
-        <a href="https://www.creative-tim.com">&copy; {{date('Y')}} EXOSSA AFRIC GROUP</a>
+        <a href="https://www.creative-tim.com">&copy; {{date('Y')}} MOUVEMENT DE L'INCARNATION</a>
     </li>
     </ul>
     </nav>
-    <div class="copyright float-right">
+    <!--div class="copyright float-right">
      réalisé par
     <a href="https://www.code-sniper.com" target="_blank">CODE SNIPER AGENCY</a>
-    </div>
+    </div-->
     </div>
     </footer>
     </div>
@@ -538,9 +538,39 @@ $(document).ready(function(){
         $(this).autoComplete();
     });
 });
-
 </script>
 <!--script src="{ asset('js/app.js') }}" defer></script-->
+
+<!--Start confirm delete modal -->
+<script>
+$(document).ready(function(){
+
+    $('.btn-ok').on('click', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var _token = $('[name="_token"]').val();
+        $.ajax({
+            type: "DELETE",
+            url: url,
+            data: "_token="+_token,
+            cache: false,
+            success: function(html)
+            {
+                window.location.reload();
+            }
+        });
+    });
+
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
+
+    $('#confirm-approve').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
+});
+</script>
+<!--End confirm delete modal -->
 @yield('script')
 </body>
 </html>

@@ -68,6 +68,11 @@
                                                         <i class="material-icons">dashboard</i>
                                                         <div class="ripple-container"></div>
                                                     </a>
+                                                    <a href="{{route('users.show', ['apostolat' =>$user->id])}}" type="button" rel="tooltip"
+                                                       class="btn btn-primary btn-round" data-original-title="" title="modifier">
+                                                        <i class="material-icons">visibility</i>
+                                                        <div class="ripple-container"></div>
+                                                    </a>
                                                     <button type="button" rel="tooltip" class="btn btn-info btn-round"
                                                             data-original-title="" title="">
                                                         <i class="material-icons">person</i>
