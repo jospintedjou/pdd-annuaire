@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Exossa</title>
+    <title>Mouvement Incarnation</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
@@ -38,7 +38,7 @@
                 <div class="logo">
                     <a href="http://www.creative-tim.com" class="simple-text logo-normal">
                         <center>
-                            <img style="width: 50%" src="{{asset('images/exossa_fav_by_iconegr-2.png')}}" alt="">
+                            <img style="width: 50%" src="{{asset('images/logo.jpg')}}" alt="">
                         </center>
                     </a>
                 </div>
@@ -84,7 +84,7 @@
                 </div>
             </form>
 
-            <div class="login100-more" style="background-image: url('{{asset('images/exossa.jpeg')}}');">
+            <div class="login100-more" style="background-image: url('{{asset('images/25emme_anniv_image.jpg')}}');">
             </div>
         </div>
     </div>

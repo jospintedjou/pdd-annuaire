@@ -41,11 +41,13 @@
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>
                                                         </a>
-                                                        <button type="button" rel="tooltip" class="btn btn-danger btn-round text-white"
-                                                           data-original-title="" title="supprimer">
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('apostolats.destroy',$apostolat->id) }}"
+                                                                data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>
                                                         </button>
+
                                                     </form>
                                                 </td>
                                             </tr>
@@ -61,46 +63,46 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation de la suppression</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Etes-vous sûr de vouloir supprimer cet élément?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary btn-ok">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-            //console.log($('#datatables').html());
+            //console.log($('.dataTable').html());
             $('.dataTable').DataTable({
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
                 ],
-                "order": [[ 4, "desc" ]],
+                "order": [[ 0, "desc" ]],
                 responsive: true,
                 language: {
                     search: "_INPUT_",
                     searchPlaceholder: "Search records",
                 }
             });
-
-            //var table = $('#datatable').DataTable();
-
-            // Edit record
-            table.on('click', '.edit', function () {
-                $tr = $(this).closest('tr');
-                var data = table.row($tr).data();
-                alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-            });
-
-            // Delete a record
-            table.on('click', '.remove', function (e) {
-                $tr = $(this).closest('tr');
-                table.row($tr).remove().draw();
-                e.preventDefault();
-            });
-
-            //Like record
-            table.on('click', '.like', function () {
-                alert('You clicked on Like button');
-            });
         });
-
     </script>
 @endsection

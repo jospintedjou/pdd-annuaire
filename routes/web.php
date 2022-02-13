@@ -27,17 +27,18 @@ use App\Http\Controllers\NiveauEngagementController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
+//Clear Config cache:
+Route::get('/clear', 'CacheController@clear')->name('clear');
+Route::get('/cache', 'CacheController@cache')->name('cache');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
 Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+
     Route::resource('niveau_engagements', NiveauEngagementController::class);
     Route::resource('apostolats', ApostolatController::class);
     Route::resource('categorie_activites', CategorieActiviteController::class);
