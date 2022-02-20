@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Zone;
 use App\Models\SousZone;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,10 @@ class SousZoneController extends Controller
     public function index()
     {
         //
+        $sous_zones = SousZone::latest()->paginate();
+
+        return view('sous_zones.index', compact('sous_zones'))
+            ->with('i', (request()->input('page', 1)-1)*5);
     }
 
     /**
@@ -25,6 +30,9 @@ class SousZoneController extends Controller
     public function create()
     {
         //
+        $zones = Zone::all();
+
+        return view('sous_zones.create', compact('zones'));
     }
 
     /**
@@ -36,6 +44,16 @@ class SousZoneController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->validate([
+            'nom' => 'required|string',
+            'quartier' => 'required|string',
+            'zone' => 'required|exists:zones,id',
+        ]);
+
+        SousZone::create($data);
+
+        return redirect()->route('sous_zones.index')
+            ->with('success','Sous Zone cree avec succes');
     }
 
     /**
@@ -46,7 +64,7 @@ class SousZoneController extends Controller
      */
     public function show(SousZone $sousZone)
     {
-        //
+        return view('zones.show', compact('sousZone'));
     }
 
     /**
@@ -58,6 +76,7 @@ class SousZoneController extends Controller
     public function edit(SousZone $sousZone)
     {
         //
+        return view('sous_zones', compact('sousZone'));
     }
 
     /**
@@ -69,7 +88,16 @@ class SousZoneController extends Controller
      */
     public function update(Request $request, SousZone $sousZone)
     {
-        //
+        $data = $request->validate([
+            'nom' => 'required|string',
+            'quartier' => 'required|string',
+            'zone' => 'required|exists:zones,id',
+        ]);
+
+        $sousZone->update($data);
+
+        return redirect()->route('sous_zones.index')
+            ->with('success', 'Sous Zones updated successfully');
     }
 
     /**
@@ -81,5 +109,10 @@ class SousZoneController extends Controller
     public function destroy(SousZone $sousZone)
     {
         //
+
+        $sousZone->delete();
+
+        return redirect()->route('sous_zones.index')
+            ->with('success', 'Sous Zone deleted successfully');
     }
 }

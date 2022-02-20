@@ -14,7 +14,10 @@ class GroupeController extends Controller
      */
     public function index()
     {
-        //
+        $groupes = Groupe::latest()->paginate(5);
+
+        return view('groupes.index', compact('groupes'))
+            ->with('i', (request()->input('page', 1)-1)*5);
     }
 
     /**
@@ -24,7 +27,7 @@ class GroupeController extends Controller
      */
     public function create()
     {
-        //
+        return view('groupes.create');
     }
 
     /**
@@ -35,7 +38,18 @@ class GroupeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'nom_groupe' => 'required|string',
+            'paroise' => 'required|string',
+            'jour_reunion' => 'required|string',
+            'heure_reunion' => 'required|string',
+            'sous_zone' => 'required|exists:sous_zones,id'
+        ]);
+
+        Groupe::create($data);
+
+        return redirect()->route('groupes.index')
+            ->with('success', 'Groupe created successfully');
     }
 
     /**
@@ -46,7 +60,7 @@ class GroupeController extends Controller
      */
     public function show(Groupe $groupe)
     {
-        //
+        return view('groupes.show', compact('groupe'));
     }
 
     /**
@@ -57,7 +71,7 @@ class GroupeController extends Controller
      */
     public function edit(Groupe $groupe)
     {
-        //
+        return view('groupe.edit', compact('groupe'));
     }
 
     /**
@@ -69,7 +83,18 @@ class GroupeController extends Controller
      */
     public function update(Request $request, Groupe $groupe)
     {
-        //
+        $data = $request->validate([
+            'nom_groupe' => 'required|string',
+            'paroise' => 'required|string',
+            'jour_reunion' => 'required|string',
+            'heure_reunion' => 'required|string',
+            'sous_zone' => 'required|exists:sous_zones,id'
+        ]);
+
+        $groupe->update($data);
+
+        return redirect()->route('groupes.index')
+            ->with('success', 'Groupe updated successfully');
     }
 
     /**
@@ -80,6 +105,9 @@ class GroupeController extends Controller
      */
     public function destroy(Groupe $groupe)
     {
-        //
+        $groupe->delete();
+
+        return redirect()->route('groupes.index')
+            ->with('success', 'Groupe deleted successfully');
     }
 }
