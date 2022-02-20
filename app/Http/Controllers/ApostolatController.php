@@ -96,11 +96,19 @@ class ApostolatController extends Controller
      * @param  \App\Models\Apostolat  $apostolat
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Apostolat $apostolat)
-    {
-        $apostolat->delete();
 
-        return redirect()->route('apostolats.index')
-            ->with('success','Apostolat deleted successfully');
+    public function destroy(Request $request)
+    {
+        $id = $request->input('id');
+
+        if(!empty($id)){
+            Apostolat::find($id)->delete();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
+
     }
 }
