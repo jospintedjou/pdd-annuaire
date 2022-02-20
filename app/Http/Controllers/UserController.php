@@ -42,8 +42,27 @@ class UserController extends Controller
             'title' => 'required',
             'description' => 'required',
         ]);
-
-        User::create($request->all());
+        //1. Store user
+        //2. Store Apostolat
+        //3. Store Niveau Engagement
+        User::create([
+            'nom' => $request->input('nom'),
+            'prenom' => $request->input('prenom'),
+            'adresse' => $request->input('adresse'),
+            'telephone1' => $request->input('telephone1'),
+            'telephone2' => $request->input('telephone2'),
+            'sexe' => $request->input('sexe'),
+            'date_naissance' => $request->input('date_naissance'),
+            'email' => $request->input('email'),
+            'profession' => $request->input('profession'),
+            'pays' => $request->input('pays'),
+            'ville' => $request->input('ville'),
+            'quartier' => $request->input('quartier'),
+            'niveau_engagement_id' => $request->input('niveau_engagement_id'),
+            'role' => $request->input('role'),
+            'categorie_sociale' => $request->input('categorie_sociale'),
+            'apostolat_id' => $request->input('apostolat_id'),
+        ]);
 
         return redirect()->route('users.index')
             ->with('success','Utilisateur créé avec succès.');
@@ -99,7 +118,24 @@ class UserController extends Controller
             'apostolat_id' => 'required',
         ]);
 
-        $user->update($request->all());
+        $user->update([
+            'nom' => $request->input('nom'),
+            'prenom' => $request->input('prenom'),
+            'adresse' => $request->input('adresse'),
+            'telephone1' => $request->input('telephone1'),
+            'telephone2' => $request->input('telephone2'),
+            'sexe' => $request->input('sexe'),
+            'date_naissance' => $request->input('date_naissance'),
+            'email' => $request->input('email'),
+            'profession' => $request->input('profession'),
+            'pays' => $request->input('pays'),
+            'ville' => $request->input('ville'),
+            'quartier' => $request->input('quartier'),
+            'niveau_engagement_id' => $request->input('niveau_engagement_id'),
+            'role' => $request->input('role'),
+            'categorie_sociale' => $request->input('categorie_sociale'),
+            'apostolat_id' => $request->input('apostolat_id'),
+        ]);
 
         return redirect()->route('users.index')
             ->with('success','User updated successfully');
@@ -111,11 +147,18 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Request $request)
     {
-        $user->delete();
+        $id = $request->input('id');
 
-        return redirect()->route('users.index')
-            ->with('success','User deleted successfully');
+        if(!empty($id)){
+            Apostolat::find($id)->delete();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
+
     }
 }

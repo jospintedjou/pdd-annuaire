@@ -42,7 +42,9 @@
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('niveau_engagements.destroy',$niveau_engagement->id) }}"
+                                                        <button type="button" class="btn btn-danger btn-round text-white"
+                                                                data-id="{{ $niveau_engagement->id }}"
+                                                                data-href="{{ route('niveau_engagements.destroy',$niveau_engagement->id) }}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>

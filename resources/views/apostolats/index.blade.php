@@ -43,6 +43,7 @@
                                                         </a>
                                                         <!-- Button trigger modal -->
                                                         <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('apostolats.destroy',$apostolat->id) }}"
+                                                            data-id="{{ $apostolat->id }}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>

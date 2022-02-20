@@ -128,7 +128,7 @@
                 <li class="nav-item @if(request()->routeIs('sous_zones*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#sous-zones" aria-expanded="true">
                         <i class="material-icons">person</i>
-                        <p>zones <b class="caret"></b> </p>
+                        <p>Sous-zones <b class="caret"></b> </p>
                     </a>
                     <div class="collapse @if(request()->routeIs('sous_zones*')) show @endif" id="sous-zones" style="">
                         <ul class="nav">
@@ -174,7 +174,7 @@
                 <li class="nav-item @if(request()->routeIs('responsable_zones*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#responsable-zones" aria-expanded="true">
                         <i class="material-icons">person</i>
-                        <p>Responsable Zones <b class="caret"></b> </p>
+                        <p>Responsable de zones <b class="caret"></b> </p>
                     </a>
                     <div class="collapse @if(request()->routeIs('responsable_zones*')) show @endif" id="responsable-zones" style="">
                         <ul class="nav">
@@ -197,7 +197,7 @@
                 <li class="nav-item @if(request()->routeIs('responsable_sous_zones*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#responsable-sous-zones" aria-expanded="true">
                         <i class="material-icons">person</i>
-                        <p>Responsable Sous-zones <b class="caret"></b> </p>
+                        <p>Responsable de Sous-zones <b class="caret"></b> </p>
                     </a>
                     <div class="collapse @if(request()->routeIs('responsable_sous_zones*')) show @endif" id="responsable-sous-zones" style="">
                         <ul class="nav">
@@ -220,7 +220,7 @@
                 <li class="nav-item @if(request()->routeIs('responsable_groupes*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#responsable-groupes" aria-expanded="true">
                         <i class="material-icons">person</i>
-                        <p>zones <b class="caret"></b> </p>
+                        <p>Responsable de groupes <b class="caret"></b> </p>
                     </a>
                     <div class="collapse @if(request()->routeIs('responsable_groupes*')) show @endif" id="responsable-groupes" style="">
                         <ul class="nav">
@@ -243,7 +243,7 @@
                 <li class="nav-item @if(request()->routeIs('categorie_activites*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#categorie-activites" aria-expanded="true">
                         <i class="material-icons">person</i>
-                        <p>zones <b class="caret"></b> </p>
+                        <p>Categorie d'activités <b class="caret"></b> </p>
                     </a>
                     <div class="collapse @if(request()->routeIs('categorie_activites*')) show @endif" id="categorie-activites" style="">
                         <ul class="nav">
@@ -266,7 +266,7 @@
                 <li class="nav-item @if(request()->routeIs('activites*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#activites" aria-expanded="true">
                         <i class="material-icons">person</i>
-                        <p>Activites <b class="caret"></b> </p>
+                        <p>Activités <b class="caret"></b> </p>
                     </a>
                     <div class="collapse @if(request()->routeIs('activites*')) show @endif" id="activites" style="">
                         <ul class="nav">
@@ -289,7 +289,7 @@
                 <li class="nav-item @if(request()->routeIs('users*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#users" aria-expanded="true">
                         <i class="material-icons">person</i>
-                        <p>Utilisateur <b class="caret"></b> </p>
+                        <p>Membre <b class="caret"></b> </p>
                     </a>
                     <div class="collapse @if(request()->routeIs('users*')) show @endif" id="users" style="">
                         <ul class="nav">
@@ -731,12 +731,14 @@ $(document).ready(function(){
 
     $('.btn-ok').on('click', function(e) {
         e.preventDefault();
-        var url = $(this).attr('href');
+        var url = $(this).data('href');
+        var id = $(this).data('id');
         var _token = $('[name="_token"]').val();
+        console.log('url', url);
         $.ajax({
-            type: "DELETE",
+            type: "delete",
             url: url,
-            data: "_token="+_token,
+            data: "_token="+_token+'&id='+id,
             cache: false,
             success: function(html)
             {
@@ -746,11 +748,13 @@ $(document).ready(function(){
     });
 
     $('#confirm-delete').on('show.bs.modal', function(e) {
-        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        $(this).find('.btn-ok').data('href', $(e.relatedTarget).data('href'));
+        $(this).find('.btn-ok').data('id', $(e.relatedTarget).data('id'));
     });
 
     $('#confirm-approve').on('show.bs.modal', function(e) {
-        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        $(this).find('.btn-ok').data('href', $(e.relatedTarget).data('href'));
+        $(this).find('.btn-ok').data('id', $(e.relatedTarget).data('id'));
     });
 });
 </script>

@@ -29,8 +29,8 @@ use App\Http\Controllers\NiveauEngagementController;
 
 Auth::routes();
 //Clear Config cache:
-Route::get('/clear', 'CacheController@clear')->name('clear');
-Route::get('/cache', 'CacheController@cache')->name('cache');
+Route::get('/clear', [App\Http\Controllers\CacheController::class, 'clear'])->name('clear');
+Route::get('/clear', [App\Http\Controllers\CacheController::class, 'cache'])->name('cache');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

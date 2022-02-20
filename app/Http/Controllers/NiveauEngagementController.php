@@ -96,11 +96,19 @@ class NiveauEngagementController extends Controller
      * @param  \App\Models\NiveauEngagement  $niveau_engagement
      * @return \Illuminate\Http\Response
      */
-    public function destroy(NiveauEngagement $niveau_engagement)
+    public function destroy(Request $request)
     {
-        $niveau_engagement->delete();
+        $id = $request->input('id');
 
-        return redirect()->route('niveau_engagements.index')
-            ->with('success','NiveauEngagement deleted successfully');
+        if(!empty($id)){
+            NiveauEngagement::find($id)->delete();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
+
+
     }
 }
