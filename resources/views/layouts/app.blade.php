@@ -56,35 +56,12 @@
                 </li>
                 @endif
 
-                <li class="nav-item @if(request()->routeIs('users*')) active @endif">
-                    <a class="nav-link" data-toggle="collapse" href="#users" aria-expanded="true">
-                        <i class="material-icons">person</i>
-                        <p>Utilisateur <b class="caret"></b> </p>
-                    </a>
-                    <div class="collapse" id="users" style="">
-                        <ul class="nav">
-                            <li class="nav-item @if(request()->routeIs('users.index')) active @endif" >
-                                <a class="nav-link" href="{!! route('users.index') !!}">
-                                    <span class="sidebar-mini"> L </span>
-                                    <span class="sidebar-normal"> Lister </span>
-                                </a>
-                            </li>
-
-                            <li class="nav-item @if(request()->routeIs('users.create')) active @endif">
-                                <a class="nav-link" href="{!! route('users.create') !!}">
-                                    <span class="sidebar-mini"> A </span>
-                                    <span class="sidebar-normal"> Ajouter </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item @if(request()->routeIs('apostolats*')) active @endif">
+               <li class="nav-item @if(request()->routeIs('apostolats*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#apostolats" aria-expanded="true">
                         <i class="material-icons">person</i>
                         <p>Apostolat <b class="caret"></b> </p>
                     </a>
-                    <div class="collapse show" id="apostolats" style="">
+                    <div class="collapse @if(request()->routeIs('apostolats*')) show @endif" id="apostolats" style="">
                         <ul class="nav">
                             <li class="nav-item @if(request()->routeIs('apostolats.index')) active @endif" >
                                 <a class="nav-link" href="{!! route('apostolats.index') !!}">
@@ -107,7 +84,7 @@
                         <i class="material-icons">person</i>
                         <p>Niveau d'engagement <b class="caret"></b> </p>
                     </a>
-                    <div class="collapse" id="niveau_engagements" style="">
+                    <div class="collapse @if(request()->routeIs('niveau_engagements*')) show @endif" id="niveau_engagements" style="">
                         <ul class="nav">
                             <li class="nav-item @if(request()->routeIs('niveau_engagements.index')) active @endif" >
                                 <a class="nav-link" href="{!! route('niveau_engagements.index') !!}">
@@ -118,6 +95,213 @@
 
                             <li class="nav-item @if(request()->routeIs('niveau_engagements.create')) active @endif">
                                 <a class="nav-link" href="{!! route('niveau_engagements.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item @if(request()->routeIs('zones*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#zones" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>zones <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('zones*')) show @endif" id="zones" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('zones.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('zones.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('zones.create')) active @endif">
+                                <a class="nav-link" href="{!! route('zones.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item @if(request()->routeIs('sous_zones*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#sous-zones" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>zones <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('sous_zones*')) show @endif" id="sous-zones" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('sous_zones.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('sous_zones.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('sous_zones.create')) active @endif">
+                                <a class="nav-link" href="{!! route('sous_zones.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item @if(request()->routeIs('groupes*')) active @endif">
+                    <a class="nav-link @if(request()->routeIs('groupes*')) show @endif" data-toggle="collapse" href="#groupes" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>Groupes <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse" id="groupes" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('groupes.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('groupes.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('groupes.create')) active @endif">
+                                <a class="nav-link" href="{!! route('groupes.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item @if(request()->routeIs('responsable_zones*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#responsable-zones" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>Responsable Zones <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('responsable_zones*')) show @endif" id="responsable-zones" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('responsable_zones.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('responsable_zones.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('responsable_zones.create')) active @endif">
+                                <a class="nav-link" href="{!! route('responsable_zones.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item @if(request()->routeIs('responsable_sous_zones*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#responsable-sous-zones" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>Responsable Sous-zones <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('responsable_sous_zones*')) show @endif" id="responsable-sous-zones" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('responsable_sous_zones.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('responsable_sous_zones.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('responsable_sous_zones.create')) active @endif">
+                                <a class="nav-link" href="{!! route('responsable_sous_zones.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item @if(request()->routeIs('responsable_groupes*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#responsable-groupes" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>zones <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('responsable_groupes*')) show @endif" id="responsable-groupes" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('responsable_groupes.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('responsable_groupes.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('responsable_groupes.create')) active @endif">
+                                <a class="nav-link" href="{!! route('responsable_groupes.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item @if(request()->routeIs('categorie_activites*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#categorie-activites" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>zones <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('categorie_activites*')) show @endif" id="categorie-activites" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('categorie_activites.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('categorie_activites.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('categorie_activites.create')) active @endif">
+                                <a class="nav-link" href="{!! route('categorie_activites.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item @if(request()->routeIs('activites*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#activites" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>Activites <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('activites*')) show @endif" id="activites" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('activites.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('activites.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('activites.create')) active @endif">
+                                <a class="nav-link" href="{!! route('activites.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item @if(request()->routeIs('users*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#users" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>Utilisateur <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('users*')) show @endif" id="users" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('users.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('users.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('users.create')) active @endif">
+                                <a class="nav-link" href="{!! route('users.create') !!}">
                                     <span class="sidebar-mini"> A </span>
                                     <span class="sidebar-normal"> Ajouter </span>
                                 </a>

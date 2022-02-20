@@ -52,6 +52,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('sous_zones', SousZoneController::class);
     Route::resource('zones', ZoneController::class);
     Route::resource('users', UserController::class);
+
 });
 
 
