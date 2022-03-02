@@ -16,7 +16,7 @@ class ZoneController extends Controller
     {
         $zones = Zone::latest()->paginate(5);
 
-        return view('zone.index', compact('zones'))
+        return view('zones.index', compact('zones'))
                 ->with('i', (request()->input('page', 1)-1*5));
     }
 
@@ -108,7 +108,7 @@ class ZoneController extends Controller
     {
         //
         $zone->delete();
-        
+
         return redirect()->route('zones.index')
             ->with('success', 'Zone deleted successfully');
     }
