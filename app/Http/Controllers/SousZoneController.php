@@ -47,7 +47,7 @@ class SousZoneController extends Controller
         $data = $request->validate([
             'nom' => 'required|string',
             'quartier' => 'required|string',
-            'zone' => 'required|exists:zones,id',
+            'zone_id' => 'required|exists:zones,id',
         ]);
 
         SousZone::create($data);
@@ -73,10 +73,12 @@ class SousZoneController extends Controller
      * @param  \App\Models\SousZone  $sousZone
      * @return \Illuminate\Http\Response
      */
-    public function edit(SousZone $sousZone)
+    public function edit(SousZone $sous_zone)
     {
         //
-        return view('sous_zones', compact('sousZone'));
+        $zones = Zone::all();
+
+        return view('sous_zones.edit', compact('sous_zone'), compact('zones'));
     }
 
     /**
@@ -91,7 +93,7 @@ class SousZoneController extends Controller
         $data = $request->validate([
             'nom' => 'required|string',
             'quartier' => 'required|string',
-            'zone' => 'required|exists:zones,id',
+            'zone_id' => 'required|exists:zones,id',
         ]);
 
         $sousZone->update($data);
