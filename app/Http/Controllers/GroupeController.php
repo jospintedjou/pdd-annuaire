@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Zone;
 use App\Models\Groupe;
+use App\Models\SousZone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GroupeController extends Controller
 {
@@ -27,7 +30,10 @@ class GroupeController extends Controller
      */
     public function create()
     {
-        return view('groupes.create');
+        $zones = Zone::all();
+        $sous_zones = SousZone::all();
+
+        return view('groupes.create', compact('zones'), compact('sous_zones'));
     }
 
     /**
@@ -40,10 +46,10 @@ class GroupeController extends Controller
     {
         $data = $request->validate([
             'nom_groupe' => 'required|string',
-            'paroise' => 'required|string',
+            'paroisse' => 'required|string',
             'jour_reunion' => 'required|string',
-            'heure_reunion' => 'required|string',
-            'sous_zone' => 'required|exists:sous_zones,id'
+            'heure_reunion' => 'required',
+            'sous_zone_id' => 'required|exists:sous_zones,id'
         ]);
 
         Groupe::create($data);
@@ -71,7 +77,10 @@ class GroupeController extends Controller
      */
     public function edit(Groupe $groupe)
     {
-        return view('groupe.edit', compact('groupe'));
+        $zones = Zone::all();
+        $sous_zones = SousZone::all();
+
+        return view('groupes.edit', compact('groupe'), compact('zones'))->with('sous_zones', $sous_zones);
     }
 
     /**
@@ -85,10 +94,10 @@ class GroupeController extends Controller
     {
         $data = $request->validate([
             'nom_groupe' => 'required|string',
-            'paroise' => 'required|string',
+            'paroisse' => 'required|string',
             'jour_reunion' => 'required|string',
-            'heure_reunion' => 'required|string',
-            'sous_zone' => 'required|exists:sous_zones,id'
+            'heure_reunion' => 'required',
+            'sous_zone_id' => 'required|exists:sous_zones,id'
         ]);
 
         $groupe->update($data);
