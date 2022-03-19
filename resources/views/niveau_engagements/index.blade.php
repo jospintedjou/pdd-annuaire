@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Apostolat @endsection
+@section('page_title') Nideau d'engagement @endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des apostolats</h4>
+                        <h4 class="card-title">Liste des niveaux d'engagements</h4>
                     </div>
                     <div class="card-body">
                         <div class="toolbar">
@@ -29,21 +29,22 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($apostolats as $apostolat)
+                                            @foreach($niveau_engagements as $niveau_engagement)
                                             <tr>
-                                                <td class="">{{$apostolat->nom}}</td>
+                                                <td class="">{{$niveau_engagement->nom}}</td>
                                                 <td class="td-actions text-right">
-                                                    <form action="{{ route('apostolats.destroy',$apostolat->id) }}" method="Post">
+                                                    <form action="{{ route('niveau_engagements.destroy',$niveau_engagement->id) }}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a href="{{route('apostolats.edit', ['apostolat' =>$apostolat->id])}}" type="button" rel="tooltip"
+                                                        <a href="{{route('niveau_engagements.edit', ['niveau_engagement' =>$niveau_engagement->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('apostolats.destroy',$apostolat->id) }}"
-                                                            data-id="{{ $apostolat->id }}"
+                                                        <button type="button" class="btn btn-danger btn-round text-white"
+                                                                data-id="{{ $niveau_engagement->id }}"
+                                                                data-href="{{ route('niveau_engagements.destroy',$niveau_engagement->id) }}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>
