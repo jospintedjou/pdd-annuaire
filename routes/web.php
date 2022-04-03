@@ -1,20 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-use App\Http\Controllers\APostolatController;
-use App\Http\Controllers\CategorieActiviteController;
-use App\Http\Controllers\ActiviteController;
-use App\Http\Controllers\GroupeController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ZoneController;
+use App\Http\Controllers\GroupeController;
+use App\Http\Controllers\ActiviteController;
+use App\Http\Controllers\SousZoneController;
+use App\Http\Controllers\ApostolatController;
 use App\Http\Controllers\ParticipationController;
+use App\Http\Controllers\ResponsableZoneController;
+use App\Http\Controllers\NiveauEngagementController;
+use App\Http\Controllers\CategorieActiviteController;
 use App\Http\Controllers\ResponsableGroupeController;
 use App\Http\Controllers\ResponsableSousZoneController;
-use App\Http\Controllers\ResponsableZoneController;
-use App\Http\Controllers\SousZoneController;
-use App\Http\Controllers\ZoneController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\NiveauEngagementController;
 
 /*
 |--------------------------------------------------------------------------

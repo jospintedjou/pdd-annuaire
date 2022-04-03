@@ -14,7 +14,10 @@ class ZoneController extends Controller
      */
     public function index()
     {
-        //
+        $zones = Zone::latest()->paginate(5);
+
+        return view('zones.index', compact('zones'))
+                ->with('i', (request()->input('page', 1)-1*5));
     }
 
     /**
@@ -25,6 +28,7 @@ class ZoneController extends Controller
     public function create()
     {
         //
+        return view('zones.create');
     }
 
     /**
@@ -36,6 +40,17 @@ class ZoneController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->validate([
+            'nom' => 'required|string',
+            'continent' => 'required|string',
+            'pays' => 'required|string',
+            'ville' => 'required|string'
+        ]);
+
+        Zone::create($data);
+
+        return redirect()->route('zones.index')
+                ->with('success', 'Zone créé avec succès');
     }
 
     /**
@@ -46,7 +61,7 @@ class ZoneController extends Controller
      */
     public function show(Zone $zone)
     {
-        //
+        return view('zones.show', compact('zone'));
     }
 
     /**
@@ -57,7 +72,7 @@ class ZoneController extends Controller
      */
     public function edit(Zone $zone)
     {
-        //
+        return view('zones.edit', compact('zone'));
     }
 
     /**
@@ -70,6 +85,17 @@ class ZoneController extends Controller
     public function update(Request $request, Zone $zone)
     {
         //
+        $data = $request->validate([
+            'nom' => 'required|string',
+            'continent' => 'required|string',
+            'pays' => 'required|string',
+            'ville' => 'required|string'
+        ]);
+
+        $zone->update($data);
+
+        return redirect()->route('zones.index')
+            ->with('success', 'Zone updated successfully');
     }
 
     /**
@@ -81,5 +107,9 @@ class ZoneController extends Controller
     public function destroy(Zone $zone)
     {
         //
+        $zone->delete();
+
+        return redirect()->route('zones.index')
+            ->with('success', 'Zone deleted successfully');
     }
 }
