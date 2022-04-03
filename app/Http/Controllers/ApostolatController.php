@@ -87,7 +87,7 @@ class ApostolatController extends Controller
         $apostolat->update($request->all());
 
         return redirect()->route('apostolats.index')
-            ->with('success','Apostolat updated successfully');
+            ->with('success','Apostolat mis à jour avec succès');
     }
 
     /**
