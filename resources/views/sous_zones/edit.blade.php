@@ -20,10 +20,16 @@
                                 @method('PUT')
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group @error('nom') has-danger @enderror">
-                                            <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
-                                            <input type="text" value="{{old('nom') ?? $sous_zone->nom}}" name="nom" id="nom" class="form-control @error('nom') is-invalid @enderror">
-                                            @error('nom')
+                                        <div class=" @error('nom') has-danger @enderror">
+                                            <label for="zone_id" class="form-label @error('zone_id') text-danger @enderror">Zone</label>
+                                            <br>
+                                            <select name="zone_id" id="zone_id" value="{{ old('zone_id') ?? $sous_zone->zone_id }}" class="form-control @error('zone_id') is-invalid @enderror">
+                                                <option value="" disabled selected>-- <i>Choisir dans la liste</i></option>
+                                                @foreach ($zones as $zone)
+                                                    <option value="{{ $zone->id }}">{{$zone->nom}}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('zone_id')
                                             <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                             </span>
@@ -38,15 +44,10 @@
                                             </span>
                                             @enderror
                                         </div>
-                                        <div class=" @error('nom') has-danger @enderror">
-                                            <label for="zone_id" class="form-label @error('zone_id') text-danger @enderror">Zone</label>
-                                            <br>
-                                            <select name="zone_id" id="zone_id" value="{{ old('zone_id') ?? $sous_zone->zone_id }}" class="form-control @error('zone_id') is-invalid @enderror">
-                                                @foreach ($zones as $zone)
-                                                    <option value="{{ $zone->id }}">{{$zone->nom}}</option>
-                                                @endforeach
-                                            </select>
-                                            @error('zone_id')
+                                        <div class="form-group @error('nom') has-danger @enderror">
+                                            <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
+                                            <input type="text" value="{{old('nom') ?? $sous_zone->nom}}" name="nom" id="nom" class="form-control @error('nom') is-invalid @enderror">
+                                            @error('nom')
                                             <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                             </span>

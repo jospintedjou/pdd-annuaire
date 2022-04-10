@@ -25,10 +25,10 @@
                                             <thead>
                                             <tr>
                                                 <th>Nom</th>
-                                                <th>Paroisse</th>
-                                                <th>Jour Reunion</th>
                                                 <th>Zone</th>
                                                 <th>Sous Zone</th>
+                                                <th>Paroisse</th>
+                                                <th>Jour Reunion</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
                                             </tr>
                                             </thead>
@@ -36,10 +36,10 @@
                                             @foreach($groupes as $groupe)
                                             <tr>
                                                 <td class="">{{$groupe->nom_groupe}}</td>
-                                                <td class="">{{$groupe->paroisse}}</td>
-                                                <td class="">{{$groupe->jour_reunion}} &agrave; {{$groupe->heure_reunion}}</td>
                                                 <td class="">{{$groupe->sousZone->zone->nom}}</td>
                                                 <td class="">{{$groupe->sousZone->nom}}</td>
+                                                <td class="">{{$groupe->paroisse}}</td>
+                                                <td class="">{{$groupe->jour_reunion}} &agrave; {{$groupe->heure_reunion}}</td>
                                                 <td class="td-actions text-right">
                                                     <form action="{{ route('groupes.destroy',$groupe->id) }}" method="Post">
                                                         @csrf

@@ -20,6 +20,36 @@
 
                             <div class="row">
                                 <div class="col-md-8">
+                                    <div class=" @error('nom') has-danger @enderror">
+                                        <label for="zone_id" class="form-label @error('zone_id') text-danger @enderror">Zone</label>
+                                        <br>
+                                        <select name="zone_id" id="zone_id" value="{{ old('zone_id') }}" class="form-control @error('zone_id') is-invalid @enderror">
+                                            <option value="" disabled selected>-- <i>Choisir dans la liste</i></option>
+                                            @foreach ($zones as $zone)
+                                                <option value="{{ $zone->id }}">{{$zone->nom}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('zone_id')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                    <div class=" @error('nom') has-danger @enderror">
+                                        <label for="sous_zone_id" class="form-label @error('sous_zone_id') text-danger @enderror">Sous Zone</label>
+                                        <br>
+                                        <select name="sous_zone_id" id="sous_zone_id" value="{{ old('sous_zone_id') }}" class="form-control @error('sous_zone_id') is-invalid @enderror">
+                                            <option value="" disabled selected>-- <i>Choisir dans la liste</i></option>
+                                            @foreach ($sous_zones as $sous_zone)
+                                                <option value="{{ $sous_zone->id }}">{{$sous_zone->nom}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('zone_id')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
                                     <div class="form-group @error('nom_groupe') has-danger @enderror">
                                         <label for="nom_groupe" class="bmd-label-floating @error('nom_groupe') text-danger @enderror">Nom</label>
                                         <input type="text" name="nom_groupe" id="nom_groupe" value="{{ old('nom_groupe') }}" class="form-control @error('nom_groupe') is-invalid @enderror">
@@ -60,34 +90,6 @@
                                         <label for="nom" class="bmd-label-floating @error('heure_reunion') text-danger @enderror">Heure de Reunion</label>
                                         <input type="time" name="heure_reunion" id="heure_reunion" value="{{ old('heure_reunion') }}" class="form-control @error('heure_reunion') is-invalid @enderror">
                                         @error('heure_reunion')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-                                    <div class=" @error('nom') has-danger @enderror">
-                                        <label for="zone_id" class="form-label @error('zone_id') text-danger @enderror">Zone</label>
-                                        <br>
-                                        <select name="zone_id" id="zone_id" value="{{ old('zone_id') }}" class="form-control @error('zone_id') is-invalid @enderror">
-                                            @foreach ($zones as $zone)
-                                                <option value="{{ $zone->id }}">{{$zone->nom}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('zone_id')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-                                    <div class=" @error('nom') has-danger @enderror">
-                                        <label for="sous_zone_id" class="form-label @error('sous_zone_id') text-danger @enderror">Sous Zone</label>
-                                        <br>
-                                        <select name="sous_zone_id" id="sous_zone_id" value="{{ old('sous_zone_id') }}" class="form-control @error('sous_zone_id') is-invalid @enderror">
-                                            @foreach ($sous_zones as $sous_zone)
-                                                <option value="{{ $sous_zone->id }}">{{$sous_zone->nom}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('zone_id')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                         </span>

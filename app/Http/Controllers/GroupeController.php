@@ -46,7 +46,7 @@ class GroupeController extends Controller
     {
         $data = $request->validate([
             'nom_groupe' => 'required|string',
-            'paroisse' => 'required|string',
+            'paroisse' => 'nullable|string',
             'jour_reunion' => 'required|string',
             'heure_reunion' => 'required',
             'sous_zone_id' => 'required|exists:sous_zones,id'
@@ -94,7 +94,7 @@ class GroupeController extends Controller
     {
         $data = $request->validate([
             'nom_groupe' => 'required|string',
-            'paroisse' => 'required|string',
+            'paroisse' => 'nullable|string',
             'jour_reunion' => 'required|string',
             'heure_reunion' => 'required',
             'sous_zone_id' => 'required|exists:sous_zones,id'

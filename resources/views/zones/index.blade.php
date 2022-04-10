@@ -25,9 +25,9 @@
                                             <thead>
                                             <tr>
                                                 <th>Nom</th>
-                                                <th>Ville</th>
-                                                <th>Pays</th>
                                                 <th>Continent</th>
+                                                <th>Pays</th>
+                                                <th>Ville</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
                                             </tr>
                                             </thead>
@@ -35,9 +35,9 @@
                                             @foreach($zones as $zone)
                                             <tr>
                                                 <td class="">{{$zone->nom}}</td>
-                                                <td class="">{{$zone->ville}}</td>
-                                                <td class="">{{$zone->pays}}</td>
                                                 <td class="">{{$zone->continent}}</td>
+                                                <td class="">{{$zone->pays}}</td>
+                                                <td class="">{{$zone->ville}}</td>
                                                 <td class="td-actions text-right">
                                                     <form action="{{ route('zones.destroy',$zone->id) }}" method="Post">
                                                         @csrf
