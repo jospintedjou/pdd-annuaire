@@ -15,6 +15,10 @@ class CategorieActiviteController extends Controller
     public function index()
     {
         //
+        $categorieActivites = CategorieActivite::latest()->paginate(5);
+
+        return view('categorie_activites.index', compact('categorieActivites'))
+                    ->with('i', (request()->input('page', 1)-1)*5);
     }
 
     /**
@@ -25,6 +29,7 @@ class CategorieActiviteController extends Controller
     public function create()
     {
         //
+        return view('categorie_activites.create');
     }
 
     /**
@@ -36,6 +41,15 @@ class CategorieActiviteController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->validate([
+            'nom' => 'required|string',
+            'periodicite' => 'required|string'
+        ]);
+
+        CategorieActivite::create($data);
+
+        return redirect()->route('categorie_activites.index')
+                ->with('message', 'Categorie créé avec succes');
     }
 
     /**
@@ -47,6 +61,7 @@ class CategorieActiviteController extends Controller
     public function show(CategorieActivite $categorieActivite)
     {
         //
+        return view('categorie_activites.show', compact('categorieActivite'));
     }
 
     /**
@@ -58,6 +73,7 @@ class CategorieActiviteController extends Controller
     public function edit(CategorieActivite $categorieActivite)
     {
         //
+        return view('categorie_activites.edit', compact('categorieActivite'));
     }
 
     /**
@@ -70,6 +86,16 @@ class CategorieActiviteController extends Controller
     public function update(Request $request, CategorieActivite $categorieActivite)
     {
         //
+
+        $data = $request->validate([
+            'nom' => 'required|string',
+            'periodicite' => 'required|string'
+        ]);
+
+        $categorieActivite->update($data);
+
+        return redirect()->route('categorie_activites.index')
+            ->with('message', 'Categorie modifié avec success');
     }
 
     /**
@@ -81,5 +107,9 @@ class CategorieActiviteController extends Controller
     public function destroy(CategorieActivite $categorieActivite)
     {
         //
+        $categorieActivite->delete();
+
+        return redirect()->route('categorie_activites.index')
+                ->with('message', 'Categorie Activite supprimé avec succes');
     }
 }

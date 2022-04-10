@@ -15,6 +15,10 @@ class ActiviteController extends Controller
     public function index()
     {
         //
+        $activites = Activite::latest()->paginate(5);
+
+        return view('activite.index', compact('activites'))
+                ->with('i', (request()->input('page', 1)-1)*5);
     }
 
     /**
@@ -25,6 +29,7 @@ class ActiviteController extends Controller
     public function create()
     {
         //
+        return view('activite.create');
     }
 
     /**
@@ -36,6 +41,10 @@ class ActiviteController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->validate();
+
+        return redirect()->route('activites.index')
+            ->with('message', 'Activité créé avec succes');
     }
 
     /**
@@ -47,6 +56,7 @@ class ActiviteController extends Controller
     public function show(Activite $activite)
     {
         //
+        return view('activite.show', compact('activite'));
     }
 
     /**
@@ -58,6 +68,7 @@ class ActiviteController extends Controller
     public function edit(Activite $activite)
     {
         //
+        return view('activite.edit', compact('activite'));
     }
 
     /**
@@ -70,6 +81,9 @@ class ActiviteController extends Controller
     public function update(Request $request, Activite $activite)
     {
         //
+
+        return redirect()->route('activites.index')
+            ->with('message', 'Activité modifié avec succes');
     }
 
     /**
@@ -81,5 +95,9 @@ class ActiviteController extends Controller
     public function destroy(Activite $activite)
     {
         //
+        $activite->delete();
+
+        return redirect()->route('activites.index')
+            ->with('message', 'Activité supprimée avec succes');
     }
 }
