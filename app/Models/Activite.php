@@ -11,7 +11,7 @@ class Activite extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['zone_id','sous_zone_id', 'groupe_id','date_debut', 'date_fin', 'heure_debut','lieu',
+    protected $fillable = ['zone_id','sous_zone_id', 'groupe_id', 'type','date_debut', 'date_fin', 'heure_debut','lieu',
                 'categorie_activite_id', 'created_at'];
 
     public function participations()
