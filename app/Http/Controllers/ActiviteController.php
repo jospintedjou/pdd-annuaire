@@ -188,17 +188,22 @@ class ActiviteController extends Controller
      * @param  \App\Models\Activite  $activite
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Activite $activite)
+    public function destroy(Request $request)
     {
         //
+        $id = $request->input('id');
 
-        DB::beginTransaction();
-        ApostolatConcerne::where('activite_id', $activite->id)->delete();
+        if(!empty($id)){
+            DB::beginTransaction();
+            ApostolatConcerne::where('activite_id', $id)->delete();
 
-        $activite->delete();
-        DB::commit();
-
-        return redirect()->route('activites.index')
-            ->with('message', 'Activité supprimée avec succes');
+            Activite::find($id)->delete();
+            DB::commit();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
     }
 }

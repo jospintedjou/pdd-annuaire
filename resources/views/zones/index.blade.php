@@ -48,7 +48,9 @@
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('zones.destroy',$zone->id) }}"
+                                                        <button type="button" class="btn btn-danger btn-round text-white"
+                                                                data-id="{{ $zone->id }}"
+                                                                data-href="{{ route('zones.destroy',$zone->id) }}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>

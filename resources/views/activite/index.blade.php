@@ -60,7 +60,9 @@
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('activites.destroy',$activite->id) }}"
+                                                        <button type="button" class="btn btn-danger btn-round text-white"
+                                                                data-id="{{ $activite->id }}"
+                                                                data-href="{{ route('activites.destroy',$activite->id) }}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>

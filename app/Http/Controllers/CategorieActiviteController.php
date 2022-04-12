@@ -104,12 +104,18 @@ class CategorieActiviteController extends Controller
      * @param  \App\Models\CategorieActivite  $categorieActivite
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CategorieActivite $categorieActivite)
+    public function destroy(Request $request)
     {
         //
-        $categorieActivite->delete();
+        $id = $request->input('id');
 
-        return redirect()->route('categorie_activites.index')
-                ->with('message', 'Categorie Activite supprimé avec succes');
+        if(!empty($id)){
+            CategorieActivite::find($id)->delete();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
     }
 }
