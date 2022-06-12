@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Sous Zone @endsection
+@section('page_title') Activit&eacute; @endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -7,9 +7,9 @@
                 <div class="card">
                     <div class="card-header card-header-primary card-header-icon">
                         <div class="card-icon">
-                            <i class="material-icons">person</i>
+                            <i class="material-icons">activity</i>
                         </div>
-                        <h4 class="card-title">Liste des Sous Zones</h4>
+                        <h4 class="card-title">Liste des activit&eacute;s</h4>
                     </div>
                     <div class="card-body">
                         <div class="toolbar">
@@ -24,33 +24,45 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <th>Nom</th>
-                                                <th>Zone</th>
-                                                <th>Ville</th>
-                                                <th>Quartier</th>
+                                                <th>Categorie</th>
+                                                <th>Concern&eacute;s</th>
+                                                <th>Date Debut</th>
+                                                <th>Date Fin</th>
+                                                <th>Lieu</th>
+                                                <th>Heure debut</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($sous_zones as $sous_zone)
+                                            @foreach($activites as $activite)
                                             <tr>
-                                                <td class="">{{$sous_zone->nom}}</td>
-                                                <td class="">{{$sous_zone->zone->nom}}</td>
-                                                <td class="">{{$sous_zone->zone->ville}}</td>
-                                                <td class="">{{$sous_zone->quartier}}</td>
+                                                <td class="">{{$activite->categorieActivite->nom}}</td>
+                                                <td class="">
+                                                    @if ($activite->zone_id)
+                                                    Zone de {{$activite->zone->nom}}
+                                                    @elseif ($activite->sous_zone_id)
+                                                    Sous Zone de {{$activite->sousZone->nom}}
+                                                    @else
+                                                    Groupe de {{$activite->groupe->nom_groupe}}
+                                                    @endif
+                                                </td>
+                                                <td class="">{{$activite->date_debut}}</td>
+                                                <td class="">{{$activite->date_fin}}</td>
+                                                <td class="">{{$activite->lieu}}</td>
+                                                <td class="">{{$activite->heure_debut}}</td>
                                                 <td class="td-actions text-right">
-                                                    <form action="{{ route('sous_zones.destroy',$sous_zone->id) }}" method="Post">
+                                                    <form action="{{ route('activites.destroy',$activite->id) }}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a href="{{route('sous_zones.edit', ['sous_zone' =>$sous_zone->id])}}" type="button" rel="tooltip"
+                                                        <a href="{{route('activites.edit', ['activite' =>$activite->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
                                                         <button type="button" class="btn btn-danger btn-round text-white"
-                                                                data-id="{{ $sous_zone->id }}"
-                                                                data-href="{{ route('sous_zones.destroy',$sous_zone->id) }}"
+                                                                data-id="{{ $activite->id }}"
+                                                                data-href="{{ route('activites.destroy',$activite->id) }}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>

@@ -108,13 +108,18 @@ class SousZoneController extends Controller
      * @param  \App\Models\SousZone  $sousZone
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SousZone $sousZone)
+    public function destroy(Request $request)
     {
         //
+        $id = $request->input('id');
 
-        $sousZone->delete();
-
-        return redirect()->route('sous_zones.index')
-            ->with('success', 'Sous Zone deleted successfully');
+        if(!empty($id)){
+            SousZone::find($id)->delete();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
     }
 }

@@ -11,6 +11,6 @@ class ApostolatConcerne extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['categorie_activite_id', 'apostolat_id'];
+    protected $fillable = ['categorie_activite_id', 'activite_id', 'apostolat_id'];
 
 }

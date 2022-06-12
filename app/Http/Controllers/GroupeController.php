@@ -46,7 +46,7 @@ class GroupeController extends Controller
     {
         $data = $request->validate([
             'nom_groupe' => 'required|string',
-            'paroisse' => 'required|string',
+            'paroisse' => 'nullable|string',
             'jour_reunion' => 'required|string',
             'heure_reunion' => 'required',
             'sous_zone_id' => 'required|exists:sous_zones,id'
@@ -94,7 +94,7 @@ class GroupeController extends Controller
     {
         $data = $request->validate([
             'nom_groupe' => 'required|string',
-            'paroisse' => 'required|string',
+            'paroisse' => 'nullable|string',
             'jour_reunion' => 'required|string',
             'heure_reunion' => 'required',
             'sous_zone_id' => 'required|exists:sous_zones,id'
@@ -112,11 +112,18 @@ class GroupeController extends Controller
      * @param  \App\Models\Groupe  $groupe
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Groupe $groupe)
+    public function destroy(Request $request)
     {
-        $groupe->delete();
+        //
+        $id = $request->input('id');
 
-        return redirect()->route('groupes.index')
-            ->with('success', 'Groupe deleted successfully');
+        if(!empty($id)){
+            Groupe::find($id)->delete();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
     }
 }

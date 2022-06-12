@@ -104,12 +104,18 @@ class ZoneController extends Controller
      * @param  \App\Models\Zone  $zone
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Zone $zone)
+    public function destroy(Request $request)
     {
         //
-        $zone->delete();
+        $id = $request->input('id');
 
-        return redirect()->route('zones.index')
-            ->with('success', 'Zone deleted successfully');
+        if(!empty($id)){
+            Zone::find($id)->delete();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
     }
 }
