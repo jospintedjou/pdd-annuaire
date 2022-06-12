@@ -31,7 +31,8 @@
                                     </div>
                                     <div class="@error('periodicite') has-danger @enderror">
                                         <label for="periodicite" class="bmd-label-floating @error('periodicite') text-danger @enderror">Periodicit&eacute;</label>
-                                        <select name="periodicite" id="periodicite" value="{{ old('periodicite') }}" class="form-control @error('periodicite') is-invalid @enderror">
+                                        <select name="periodicite" id="periodicite" value="{{ old('periodicite') }}" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                        data-style2="btn btn-primary btn-round" data-header="Choisir la periodicité">
                                             <option value="" disabled selected>-- <i>Choisir dans la liste</i></option>
                                             @foreach (config('data.periods') as $period)
                                                 <option value="{{ $period }}">{{ $period }}</option>

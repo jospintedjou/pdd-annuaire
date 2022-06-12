@@ -19,66 +19,88 @@
                                 @method('PUT')
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <div class=" @error('categorie_activite_id') has-danger @enderror">
-                                            <label for="categorie_activite_id" class="form-label @error('categorie_activite_id') text-danger @enderror">Cat&eacute;gorie</label>
-                                            <br>
-                                            <select name="categorie_activite_id" id="categorie_activite_id" value="{{ old('categorie_activite_id') ?? $activite->categorie_activite_id }}" class="form-control @error('categorie_activite_id') is-invalid @enderror">
-                                                <option value="" disabled >-- <i>Choisir dans la liste</i></option>
-                                                @foreach ($categories as $categorie)
-                                                    <option value="{{ $categorie->id }}">{{$categorie->nom}}</option>
+
+                                        <div class="form-group @error('categorie_activite_id') has-danger @enderror">
+                                            <label for="categorie_activite_id" class="bmd-label-floating @error('categorie_activite_id') text-danger @enderror">Categorie</label>
+
+                                            <select name="categorie_activite_id" id="categorie_activite_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                    data-style2="btn btn-primary btn-round" data-header="Choisir la catégorie">
+                                                @foreach ($categories as $categorie_activite)
+                                                    @if(isset($categorie_activite))
+                                                        <option value="{{ $categorie_activite->id }}"  {{$categorie_activite == $activite->categorie_activite ? 'selected'  : '' }}>{{ $categorie_activite->nom }}</option>
+                                                    @else
+                                                        <option  selected disabled>Aucune categorie d'activite trouvée</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
-                                            @error('categorie_activite_id')
+                                            @error('categorie_activite')
                                             <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                             @enderror
                                         </div>
-                                        <div class=" @error('zone_id') has-danger @enderror">
-                                            <label for="zone_id" class="form-label @error('zone_id') text-danger @enderror">Zone</label>
-                                            <br>
-                                            <select name="zone_id" id="zone_id" value="{{ old('zone_id') ?? $activite->zone_id }}" class="form-control @error('zone_id') is-invalid @enderror">
-                                                <option value="" disabled >-- <i>Choisir dans la liste</i></option>
+
+                                        <div class="form-group @error('zone_id') has-danger @enderror">
+                                            <label for="zone_id" class="bmd-label-floating @error('zone_id') text-danger @enderror">Zone</label>
+
+                                            <select name="zone_id" id="zone_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                    data-style2="btn btn-primary btn-round" data-header="Choisir la zone">
                                                 @foreach ($zones as $zone)
-                                                    <option value="{{ $zone->id }}">{{$zone->nom}}</option>
+                                                    @if(isset($zone))
+                                                        <option value="{{ $zone->id }}"  {{$zone == $activite->zone ? 'selected'  : '' }}>{{ $zone->nom }}</option>
+                                                    @else
+                                                        <option  selected disabled>Aucune zone trouvée</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
-                                            @error('zone_id')
+                                            @error('zone')
                                             <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                             @enderror
                                         </div>
-                                        <div class=" @error('sous_zone_id') has-danger @enderror">
-                                            <label for="sous_zone_id" class="form-label @error('sous_zone_id') text-danger @enderror">Sous Zone</label>
-                                            <br>
-                                            <select name="sous_zone_id" id="sous_zone_id" value="{{ old('sous_zone_id') ?? $activite->sous_zone_id }}" class="form-control @error('sous_zone_id') is-invalid @enderror">
-                                                <option value="" disabled >-- <i>Choisir dans la liste</i></option>
+
+                                        <div class="form-group @error('sous_zone_id') has-danger @enderror">
+                                            <label for="sous_zone_id" class="bmd-label-floating @error('sous_zone_id') text-danger @enderror">Sous Zone</label>
+
+                                            <select name="sous_zone_id" id="sous_zone_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                    data-style2="btn btn-primary btn-round" data-header="Choisir la sous zone">
                                                 @foreach ($sous_zones as $sous_zone)
-                                                    <option value="{{ $sous_zone->id }}">{{$sous_zone->nom}}</option>
+                                                    @if(isset($sous_zone))
+                                                        <option value="{{ $sous_zone->id }}"  {{$sous_zone == $sous_zone->sous_zone ? 'selected'  : '' }}>{{ $sous_zone->nom }}</option>
+                                                    @else
+                                                        <option  selected disabled>Aucune sous zone trouvée</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
-                                            @error('zone_id')
+                                            @error('sous_zone')
                                             <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                             @enderror
                                         </div>
-                                        <div class=" @error('groupe_id') has-danger @enderror">
-                                            <label for="groupe_id" class="form-label @error('groupe_id') text-danger @enderror">Groupe</label>
-                                            <br>
-                                            <select name="groupe_id" id="groupe_id" value="{{ old('groupe_id') ?? $activite->groupe_id }}" class="form-control @error('groupe_id') is-invalid @enderror">
-                                                <option value="" disabled >-- <i>Choisir dans la liste</i></option>
+
+
+                                        <div class="form-group @error('groupe_id') has-danger @enderror">
+                                            <label for="groupe_id" class="bmd-label-floating @error('groupe_id') text-danger @enderror">Groupe</label>
+
+                                            <select name="groupe_id" id="groupe_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                    data-style2="btn btn-primary btn-round" data-header="Choisir le groupe">
                                                 @foreach ($groupes as $groupe)
-                                                    <option value="{{ $groupe->id }}">{{$groupe->nom_groupe}}</option>
+                                                    @if(isset($groupe))
+                                                        <option value="{{ $groupe->id }}"  {{$groupe == $activite->groupe ? 'selected'  : '' }}>{{ $groupe->nom_groupe }}</option>
+                                                    @else
+                                                        <option  selected disabled>Aucun groupe trouvé</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
-                                            @error('zone_id')
+                                            @error('groupe')
                                             <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                             @enderror
                                         </div>
+
                                         <div class="@error('date_debut') has-danger @enderror">
                                             <label for="date_debut" class="bmd-label-floating @error('date_debut') text-danger @enderror">Date de debut</label>
                                             <input type="date" name="date_debut" id="date_debut" value="{{ old('heure_debut') ?? $activite->date_debut }}" class="form-control @error('date_debut') is-invalid @enderror">
@@ -118,9 +140,16 @@
                                         <div class="@error('nom') has-danger @enderror">
                                             <label for="apostolat" class="form-label @error('apostolat') text-danger @enderror">Apostolats</label>
                                             <br>
-                                            <select name="apostolat[]" id="apostolat" class="form-control @error('apostolat') is-invalid @enderror" multiple>
+                                            <select name="apostolat[]" id="apostolat" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                            data-style2="btn btn-primary btn-round" data-header="Choisir les apostolats" multiple>
                                                 @foreach ($apostolats as $apostolat)
-                                                    <option value="{{ $apostolat->id }}">{{$apostolat->nom}}</option>
+                                                @if(isset($apostolat))
+                                                        <option value="{{ $apostolat->id }}" {{in_array($apostolat->id, $activite->id_apostolats()) ? 'selected': ' '}}>
+                                                            {{$apostolat->nom}}
+                                                        </option>
+                                                    @else
+                                                        <option  selected disabled>Aucun apostolat trouvé</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
                                             @error('apostolat')

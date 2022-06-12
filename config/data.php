@@ -39,7 +39,7 @@ return [
      *
      */
     'towns' => [
-        'Doula',
+        'Douala',
         'Yaounde',
         'Ebolowa',
         'Bafoussam',

@@ -26,7 +26,7 @@
                                             <label for="continent" class="bmd-label-floating @error('continent') text-danger @enderror">Continent</label>
 
                                             <select name="continent" id="continent" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
-                                                    data-style2="btn btn-primary btn-round" data-header="Choisir le type d'assujetti">
+                                                    data-style2="btn btn-primary btn-round" data-header="Choisir le continent">
                                                 @foreach (config('data.continents') as $continent)
                                                     @if(isset($continent))
                                                         <option value="{{ $continent }}" {{$continent == $zone->continent ? 'selected'  : '' }}>{{ $continent }}</option>
@@ -46,7 +46,7 @@
                                             <label for="pays" class="bmd-label-floating @error('pays') text-danger @enderror">Pays</label>
 
                                             <select name="pays" id="pays" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
-                                                    data-style2="btn btn-primary btn-round" data-header="Choisir le type d'assujetti">
+                                                    data-style2="btn btn-primary btn-round" data-header="Choisir le pays">
                                                 @foreach (config('data.countries') as $pays)
                                                     @if(isset($pays))
                                                         <option value="{{ $pays }}"  value="{{ $continent }}" {{$continent == $zone->pays ? 'selected'  : '' }}>{{ $pays }}</option>
@@ -66,10 +66,10 @@
                                             <label for="ville" class="bmd-label-floating @error('ville') text-danger @enderror">VIlle</label>
 
                                             <select name="ville" id="ville" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
-                                                    data-style2="btn btn-primary btn-round" data-header="Choisir le type d'assujetti">
+                                                    data-style2="btn btn-primary btn-round" data-header="Choisir la ville">
                                                 @foreach (config('data.towns') as $ville)
                                                     @if(isset($ville))
-                                                        <option value="{{ $ville }}"  value="{{ $continent }}" {{$continent == $zone->ville ? 'selected'  : '' }}>{{ $ville }}</option>
+                                                        <option value="{{ $ville }}"  {{$ville == $zone->ville ? 'selected'  : '' }}>{{ $ville }}</option>
                                                     @else
                                                         <option  selected disabled>Aucune ville trouvée</option>
                                                     @endif
@@ -77,8 +77,8 @@
                                             </select>
                                             @error('ville')
                                             <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
+                                                <strong>{{ $message }}</strong>
+                                            </span>
                                             @enderror
                                         </div>
                                         <div class="form-group @error('nom') has-danger @enderror">
