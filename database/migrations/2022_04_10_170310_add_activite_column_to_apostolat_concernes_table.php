@@ -14,7 +14,7 @@ class AddActiviteColumnToApostolatConcernesTable extends Migration
     public function up()
     {
         Schema::table('apostolat_concernes', function (Blueprint $table) {
-            $table->unsignedInteger('activite_id');
+            $table->unsignedBigInteger('activite_id');
             $table->foreign('activite_id')->references('id')->on('activites');
         });
     }
