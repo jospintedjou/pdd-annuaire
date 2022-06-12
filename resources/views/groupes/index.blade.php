@@ -25,10 +25,10 @@
                                             <thead>
                                             <tr>
                                                 <th>Nom</th>
-                                                <th>Paroisse</th>
-                                                <th>Jour Reunion</th>
                                                 <th>Zone</th>
                                                 <th>Sous Zone</th>
+                                                <th>Paroisse</th>
+                                                <th>Jour Reunion</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
                                             </tr>
                                             </thead>
@@ -36,10 +36,10 @@
                                             @foreach($groupes as $groupe)
                                             <tr>
                                                 <td class="">{{$groupe->nom_groupe}}</td>
-                                                <td class="">{{$groupe->paroisse}}</td>
-                                                <td class="">{{$groupe->jour_reunion}} &agrave; {{$groupe->heure_reunion}}</td>
                                                 <td class="">{{$groupe->sousZone->zone->nom}}</td>
                                                 <td class="">{{$groupe->sousZone->nom}}</td>
+                                                <td class="">{{$groupe->paroisse}}</td>
+                                                <td class="">{{$groupe->jour_reunion}} &agrave; {{$groupe->heure_reunion}}</td>
                                                 <td class="td-actions text-right">
                                                     <form action="{{ route('groupes.destroy',$groupe->id) }}" method="Post">
                                                         @csrf
@@ -50,7 +50,9 @@
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('groupes.destroy',$groupe->id) }}"
+                                                        <button type="button" class="btn btn-danger btn-round text-white"
+                                                                data-id="{{ $groupe->id }}"
+                                                                data-href="{{ route('groupes.destroy',$groupe->id) }}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>

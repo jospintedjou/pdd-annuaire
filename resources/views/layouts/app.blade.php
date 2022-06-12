@@ -6,7 +6,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Annuaire PDD') }}</title>
 
     <!-- creative Dashboard-->
     <link rel="apple-touch-icon" sizes="76x76" href="{{asset('theme-admin/img/apple-icon.png')}}">

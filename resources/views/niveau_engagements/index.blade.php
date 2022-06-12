@@ -36,7 +36,8 @@
                                                     <form action="{{ route('niveau_engagements.destroy',$niveau_engagement->id) }}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a href="{{route('niveau_engagements.edit', ['niveau_engagement' =>$niveau_engagement->id])}}" type="button" rel="tooltip"
+                                                        <a href="{{route('niveau_engagements.edit', ['niveau_engagement' =>$niveau_engagement->id])}}"
+                                                            type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>

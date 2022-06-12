@@ -13,10 +13,8 @@ class Apostolat extends Model
 
     protected $fillable = ['nom'];
 
-    public function categorieActivite()
+    public function activites()
     {
-        return $this->belongsToMany(CategorieActivite::class, ApostolatConcerne::class);
+        return $this->belongsToMany(Activite::class, ApostolatConcerne::class);
     }
-
-
 }

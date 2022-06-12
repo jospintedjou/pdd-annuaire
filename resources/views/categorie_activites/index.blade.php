@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Sous Zone @endsection
+@section('page_title') Groupe @endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des Sous Zones</h4>
+                        <h4 class="card-title">Liste des Catégories d'Activités</h4>
                     </div>
                     <div class="card-body">
                         <div class="toolbar">
@@ -25,32 +25,28 @@
                                             <thead>
                                             <tr>
                                                 <th>Nom</th>
-                                                <th>Zone</th>
-                                                <th>Ville</th>
-                                                <th>Quartier</th>
+                                                <th>Periodicité</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($sous_zones as $sous_zone)
+                                            @foreach($categorieActivites as $categorie)
                                             <tr>
-                                                <td class="">{{$sous_zone->nom}}</td>
-                                                <td class="">{{$sous_zone->zone->nom}}</td>
-                                                <td class="">{{$sous_zone->zone->ville}}</td>
-                                                <td class="">{{$sous_zone->quartier}}</td>
+                                                <td class="">{{$categorie->nom}}</td>
+                                                <td class="">{{$categorie->periodicite}}</td>
                                                 <td class="td-actions text-right">
-                                                    <form action="{{ route('sous_zones.destroy',$sous_zone->id) }}" method="Post">
+                                                    <form action="{{ route('categorie_activites.destroy',$categorie->id) }}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a href="{{route('sous_zones.edit', ['sous_zone' =>$sous_zone->id])}}" type="button" rel="tooltip"
+                                                        <a href="{{route('categorie_activites.edit', ['categorie_activite' =>$categorie->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
                                                         <button type="button" class="btn btn-danger btn-round text-white"
-                                                                data-id="{{ $sous_zone->id }}"
-                                                                data-href="{{ route('sous_zones.destroy',$sous_zone->id) }}"
+                                                                data-id="{{ $categorie->id }}"
+                                                                data-href="{{ route('categorie_activites.destroy',$categorie->id) }}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>

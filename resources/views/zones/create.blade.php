@@ -13,7 +13,7 @@
                     <div class="card pb-30">
                         <div class="card-header card-header-primary card-header-text">
                             <div class="card-text">
-                                <h4 class="card-title">Ajouter un zone</h4>
+                                <h4 class="card-title">Ajouter une zone</h4>
                             </div>
                         </div>
                         <div class="card-body">
@@ -29,32 +29,50 @@
                                         </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group @error('ville') has-danger @enderror">
-                                        <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Ville</label>
-                                        <input type="text" name="ville" id="ville" value="{{ old('ville') }}" class="form-control @error('nom') is-invalid @enderror">
-                                        @error('ville')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group @error('pays') has-danger @enderror">
-                                        <label for="pays" class="bmd-label-floating @error('nom') text-danger @enderror">Pays</label>
-                                        <input type="text" name="pays" id="pays" value="{{ old('pays') }}" class="form-control @error('pays') is-invalid @enderror">
-                                        @error('pays')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group @error('continent') has-danger @enderror">
+                                    <div class="@error('continent') has-danger @enderror">
                                         <label for="continent" class="bmd-label-floating @error('continent') text-danger @enderror">Continent</label>
-                                        <input type="text" name="continent" id="continent" value="{{ old('continent') }}" class="form-control @error('continent') is-invalid @enderror">
+                                        <select name="continent" id="continent" value="{{ old('continent') }}" class="form-control @error('continent') is-invalid @enderror">
+                                            <option value="" disabled selected>-- <i>Choisir dans la liste</i></option>
+                                            @foreach (config('data.continents') as $continent)
+                                                <option value="{{ $continent }}">{{ $continent }}</option>
+                                            @endforeach
+                                        </select>
                                         @error('continent')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                         </span>
                                         @enderror
+                                        <br>
+                                    </div>
+                                    <div class="@error('pays') has-danger @enderror">
+                                        <label for="pays" class="bmd-label-floating @error('nom') text-danger @enderror">Pays</label>
+                                        <select name="pays" id="pays" value="{{ old('pays') }}" class="form-control @error('pays') is-invalid @enderror">
+                                            <option value="" disabled selected>-- <i>Choisir dans la liste</i></option>
+                                            @foreach (config('data.countries') as $pays)
+                                                <option value="{{ $pays }}">{{ $pays }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('pays')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                        <br>
+                                    </div>
+                                    <div class="@error('ville') has-danger @enderror">
+                                        <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Ville</label>
+                                        <select name="ville" id="ville" value="{{ old('ville') }}" class="form-control @error('ville') is-invalid @enderror">
+                                            <option value="" disabled selected>-- <i>Choisir dans la liste</i></option>
+                                            @foreach (config('data.towns') as $ville)
+                                                <option value="{{ $ville }}">{{ $ville }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('ville')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                        <br>
                                     </div>
                                     <div class="form-group @error('nom') has-danger @enderror">
                                         <button id="btn-send" type="submit" class="btn btn-primary">Envoyer</button>
