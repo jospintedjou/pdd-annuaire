@@ -26,7 +26,11 @@
                                         <select name="zone_id" id="zone_id" value="{{ old('zone_id') }}" class="form-control @error('zone_id') is-invalid @enderror">
                                             <option value="" disabled selected>-- <i>Choisir dans la liste</i></option>
                                             @foreach ($zones as $zone)
-                                                <option value="{{ $zone->id }}">{{$zone->nom}}</option>
+                                                @if(isset($zone))
+                                                    <option value="{{ $zone->id }}">{{ $zone->nom }}</option>
+                                                @else
+                                                    <option  selected disabled>Aucune zone trouvée</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                         @error('zone_id')
