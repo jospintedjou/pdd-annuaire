@@ -25,7 +25,7 @@
                                         <label for="continent" class="bmd-label-floating @error('continent') text-danger @enderror">Continent</label>
 
                                         <select name="continent" id="continent" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir le type d'assujetti">
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir le continent">
                                             @foreach (config('data.continents') as $continent)
                                                 @if(isset($continent))
                                                     <option value="{{ $continent }}">{{ $continent }}</option>
@@ -45,7 +45,7 @@
                                         <label for="pays" class="bmd-label-floating @error('pays') text-danger @enderror">Pays</label>
 
                                         <select name="pays" id="pays" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir le type d'assujetti">
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir le pays">
                                             @foreach (config('data.countries') as $pays)
                                                 @if(isset($pays))
                                                     <option value="{{ $pays }}">{{ $pays }}</option>
@@ -62,10 +62,10 @@
                                     </div>
 
                                     <div class="form-group @error('ville') has-danger @enderror">
-                                        <label for="ville" class="bmd-label-floating @error('ville') text-danger @enderror">VIlle</label>
+                                        <label for="ville" class="bmd-label-floating @error('ville') text-danger @enderror">Ville</label>
 
                                         <select name="ville" id="ville" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir le type d'assujetti">
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir la ville">
                                             @foreach (config('data.towns') as $ville)
                                                 @if(isset($ville))
                                                     <option value="{{ $ville }}">{{ $ville }}</option>

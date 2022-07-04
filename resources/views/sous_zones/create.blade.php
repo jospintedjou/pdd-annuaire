@@ -20,7 +20,7 @@
 
                             <div class="row">
                                 <div class="col-md-8">
-                                    <div class=" @error('nom') has-danger @enderror">
+                                    <div class=" @error('zone_id') has-danger @enderror">
                                         <label for="zone_id" class="form-label @error('zone_id') text-danger @enderror">Zone</label>
                                         <br>
                                         <select name="zone_id" id="zone_id" value="{{ old('zone_id') }}" class="form-control @error('zone_id') is-invalid @enderror">
@@ -35,7 +35,7 @@
                                         </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group @error('nom') has-danger @enderror">
+                                    <div class="form-group @error('quartier') has-danger @enderror">
                                         <label for="quartier" class="bmd-label-floating @error('quartier') text-danger @enderror">Quartier</label>
                                         <input type="text" name="quartier" id="quartier" value="{{ old('quartier') }}" class="form-control @error('quartier') is-invalid @enderror">
                                         @error('quartier')
@@ -53,7 +53,7 @@
                                         </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group @error('nom') has-danger @enderror">
+                                    <div class="form-group">
                                         <button id="btn-send" type="submit" class="btn btn-primary">Envoyer</button>
                                     </div>
                                 </div>

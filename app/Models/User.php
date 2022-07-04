@@ -31,7 +31,7 @@ class User extends AuthUser
     /**================= Start Model Relation functions ===================**/
     public function niveauEngagement()
     {
-        return $this->hasOne(NiveauEngagement::class);
+        return $this->belongsTo(NiveauEngagement::class);
     }
 
     public function apostolat()
@@ -42,7 +42,7 @@ class User extends AuthUser
     public function groupes()
     {
         return $this->belongsToMany(Groupe::class, GroupeUser::class)
-            ->withPivot(['user_id', 'groupe_id', 'actif', 'date_arrivee']);
+            ->withPivot(['user_id', 'groupe_id', 'actif', 'created_at']);
     }
 
     public function activite()

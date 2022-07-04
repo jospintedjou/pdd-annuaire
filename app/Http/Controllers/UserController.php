@@ -2,8 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Constantes;
+use App\Models\Apostolat;
+use App\Models\Groupe;
+use App\Models\GroupeUser;
+use App\Models\NiveauEngagement;
+use App\Models\ResponsableGroupe;
+use App\Models\ResponsableSousZone;
+use App\Models\ResponsableZone;
+use App\Models\SousZone;
 use App\Models\User;
+use App\Models\Zone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -14,7 +26,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(5);
+        $users = User::where('role', '!=', Constantes::ROLE_ADMIN)->latest()->paginate(5);
 
         return view('users.index',compact('users'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
@@ -27,7 +39,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $niveau_engagements = NiveauEngagement::get();
+        $apostolats = Apostolat::get();
+        $groupes = Groupe::get();
+        $zones = Zone::get();
+        $sous_zones = SousZone::get();
+        return view('users.create', compact('niveau_engagements', 'apostolats', 'groupes', 'sous_zones', 'zones'));
     }
 
     /**
@@ -38,31 +55,103 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+
+        $data = $request->validate([
+                'nom' =>  'required',
+                'prenom' => 'string|nullable',
+                'adresse' => 'required',
+                'telephone1' => 'required',
+                'telephone2' => 'string|nullable',
+                'sexe' => 'required',
+                'email' => 'string|unique:users',
+                'profession' => 'string|nullable',
+                'quartier' => 'required',
+                'password' => 'string|nullable',
+                'niveau_engagement_id' => 'integer|required',
+                'categorie_sociale' => 'required',
+                'apostolat_id' => 'required',
+                'groupe_id' => 'required',
+                'etat' => 'required'
+            ]);
+
+        $data['role'] = "MEMBRE";
+        $data['password'] = \Illuminate\Support\Facades\Hash::make($request->input('passsword'));
+
+        //We are storing the user data in database
+        $user = User::create($data);
+
+        //Update old existing User Group (usefull when updating)
+        DB::table('groupe_users')->where(['user_id' => $user->id, 'actif' => Constantes::ETAT_ACTIF])
+                    ->update(['actif'=>Constantes::ETAT_INACTIF]);
+        
+        //Store User Group
+        GroupeUser::create([
+            'groupe_id' => $request->input('groupe_id'),
+            'user_id' => $user->id,
+            'actif' => Constantes::ETAT_ACTIF
         ]);
-        //1. Store user
-        //2. Store Apostolat
-        //3. Store Niveau Engagement
-        User::create([
-            'nom' => $request->input('nom'),
-            'prenom' => $request->input('prenom'),
-            'adresse' => $request->input('adresse'),
-            'telephone1' => $request->input('telephone1'),
-            'telephone2' => $request->input('telephone2'),
-            'sexe' => $request->input('sexe'),
-            'date_naissance' => $request->input('date_naissance'),
-            'email' => $request->input('email'),
-            'profession' => $request->input('profession'),
-            'pays' => $request->input('pays'),
-            'ville' => $request->input('ville'),
-            'quartier' => $request->input('quartier'),
-            'niveau_engagement_id' => $request->input('niveau_engagement_id'),
-            'role' => $request->input('role'),
-            'categorie_sociale' => $request->input('categorie_sociale'),
-            'apostolat_id' => $request->input('apostolat_id'),
-        ]);
+
+        if(!empty($request->input('responsabilite_groupe'))){
+            //Check if this group already have a "responsable" and throw error if the new value is still "responsable"
+            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'), 'nom_responsabilite'=>Constantes::RESPONSABLE])
+                ->delete();
+
+            //Check if this group already have a "1er adjoint au responsable" and throw error if the new value is still "responsable"
+            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'), 'nom_responsabilite'=>Constantes::PREMIER_ADJOINT_RESPONSABLE])
+                ->delete();
+
+            //Check if this group already have a "2e adjoint au responsable" and throw error if the new value is still "responsable"
+            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'), 'nom_responsabilite'=>Constantes::DEUXIEME_ADJOINT_RESPONSABLE])
+                ->delete();
+
+            ResponsableGroupe::create([
+                'groupe_id' => $request->input('responsabilite_groupe_id'),
+                'user_id' => $user->id,
+                'nom_responsabilite' => $request->input('responsabilite_groupe'),
+                'actif' => Constantes::ETAT_ACTIF
+            ]);
+        }
+        if(!empty($request->input('responsabilite_sous_zone'))){
+            //Check if this sous_zone already have a "responsable" and throw error if the new value is still "responsable"
+            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'), 'nom_responsabilite'=>Constantes::RESPONSABLE])
+                ->delete();
+
+            //Check if this sous_zone already have a "1er adjoint au responsable" and throw error if the new value is still "responsable"
+            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'), 'nom_responsabilite'=>Constantes::PREMIER_ADJOINT_RESPONSABLE])
+                ->delete();
+
+            //Check if this sous_zone already have a "2e adjoint au responsable" and throw error if the new value is still "responsable"
+            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'), 'nom_responsabilite'=>Constantes::DEUXIEME_ADJOINT_RESPONSABLE])
+                ->delete();
+
+            ResponsableSousZone::create([
+                'sous_zone_id' => $request->input('responsable_sous_zone_id'),
+                'user_id' => $user->id,
+                'nom_responsabilite' => $request->input('responsabilite_sous_zone'),
+                'actif' => Constantes::ETAT_ACTIF
+            ]);
+        }
+        if(!empty($request->input('responsabilite_zone'))){
+            //Check if this zone already have a "responsable" and throw error if the new value is still "responsable"
+            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=>Constantes::RESPONSABLE])
+                ->delete();
+
+            //Check if this zone already have a "1er adjoint au responsable" and throw error if the new value is still "responsable"
+            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=>Constantes::PREMIER_ADJOINT_RESPONSABLE])
+                ->delete();
+
+            //Check if this zone already have a "2e adjoint au responsable" and throw error if the new value is still "responsable"
+            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=>Constantes::DEUXIEME_ADJOINT_RESPONSABLE])
+                ->delete();
+
+            ResponsableZone::create([
+                'zone_id' => $request->input('responsable_zone_id'),
+                'user_id' => $user->id,
+                'nom_responsabilite' => $request->input('responsabilite_zone'),
+                'actif' => Constantes::ETAT_ACTIF
+            ]);
+
+        }
 
         return redirect()->route('users.index')
             ->with('success','Utilisateur créé avec succès.');

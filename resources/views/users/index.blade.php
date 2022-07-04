@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header card-header-primary card-header-icon">
                         <div class="card-icon">
-                            <i class="material-icons">utilisateur</i>
+                            <i class="material-icons">person</i>
                         </div>
                         <h4 class="card-title">Liste des utilisateurs</h4>
                     </div>
@@ -29,24 +29,12 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <th>
-                                                    Nom
-                                                </th>
-                                                <th>
-                                                    Zone
-                                                </th>
-                                                <th>
-                                                    Sous-zone
-                                                </th>
-                                                <th>
-                                                    Groupe
-                                                </th>
-                                                <th>
-                                                    Date d'inscr.
-                                                </th>
-                                                <th>
-                                                    Niveau d'engagement
-                                                </th>
+                                                <th>Nom</th>
+                                                <th>Zone</th>
+                                                <th>Sous-zone</th>
+                                                <th>Groupe</th>
+                                                <th>Date d'inscr.</th>
+                                                <th>Niveau d'engagement</th>
                                                 <th class="disabled-sorting text-right sorting">
                                                     Actions
                                                 </th>
@@ -54,13 +42,17 @@
                                             </thead>
                                             <tbody>
                                             @foreach($users as $user)
-                                            <tr>
+                                                @if($user)
+                                                <tr>
                                                 <td class="">{{$user->prenom}} {{$user->nom}}</td>
-                                                <td class="">{{$user->groupe()->first()->sousZone()->first()->zone()->first()->nom}}</td>
-                                                <td class="">{{$user->groupe()->first()->sousZone()->first()->nom}}</td>
-                                                <td class="">{{$user->groupe()->first()->nom}}</td>
+                                                <td class="">
+                                                    <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
+                                                    {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first()->nom }}
+                                                </td>
+                                                <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom }}</td>
+                                                <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
                                                 <td class="">{{$user->created_at}}</td>
-                                                <td class="">{{$user->niveau_engagement}}</td>
+                                                <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
                                                 <td class="td-actions text-right">
                                                     <a href="{{route('dashboard', ['id' => encrypt($user->id)])}}" type="button" rel="tooltip"
                                                             class="btn btn-primary btn-round"
@@ -68,7 +60,7 @@
                                                         <i class="material-icons">dashboard</i>
                                                         <div class="ripple-container"></div>
                                                     </a>
-                                                    <a href="{{route('users.show', ['apostolat' =>$user->id])}}" type="button" rel="tooltip"
+                                                    <a href="{{-- route('users.show', ['apostolat' =>$user->id]) --}}" type="button" rel="tooltip"
                                                        class="btn btn-primary btn-round" data-original-title="" title="modifier">
                                                         <i class="material-icons">visibility</i>
                                                         <div class="ripple-container"></div>
@@ -91,6 +83,7 @@
                                                     </button>
                                                 </td>
                                             </tr>
+                                                @endif
                                             @endforeach
                                             </tbody>
                                         </table>

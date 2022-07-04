@@ -25,8 +25,8 @@ class CreateUsersTable extends Migration
             $table->string('etat')->nullable();
             $table->string('email')->nullable();
             $table->string('profession')->nullable();
-            $table->string('pays');
-            $table->string('ville');
+            //$table->string('pays');
+            //$table->string('ville');
             $table->string('quartier')->nullable();
             $table->unsignedBigInteger('niveau_engagement_id')->nullable();
             $table->string('role');
