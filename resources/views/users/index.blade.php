@@ -54,33 +54,23 @@
                                                 <td class="">{{$user->created_at}}</td>
                                                 <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
                                                 <td class="td-actions text-right">
-                                                    <a href="{{route('dashboard', ['id' => encrypt($user->id)])}}" type="button" rel="tooltip"
-                                                            class="btn btn-primary btn-round"
-                                                            data-original-title="" title="Voir les Bonus">
-                                                        <i class="material-icons">dashboard</i>
-                                                        <div class="ripple-container"></div>
-                                                    </a>
-                                                    <a href="{{-- route('users.show', ['apostolat' =>$user->id]) --}}" type="button" rel="tooltip"
-                                                       class="btn btn-primary btn-round" data-original-title="" title="modifier">
-                                                        <i class="material-icons">visibility</i>
-                                                        <div class="ripple-container"></div>
-                                                    </a>
-                                                    <button type="button" rel="tooltip" class="btn btn-info btn-round"
-                                                            data-original-title="" title="">
-                                                        <i class="material-icons">person</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>
-                                                    <button type="button" rel="tooltip"
-                                                            class="btn btn-success btn-round"
-                                                            data-original-title="" title="">
-                                                        <i class="material-icons">edit</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" class="btn btn-danger btn-round"
-                                                            data-original-title="" title="">
-                                                        <i class="material-icons">close</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>
+                                                    <form action="{{ route('users.destroy',$user->id) }}" method="Post">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <a href="{{route('users.edit', ['user' =>$user->id])}}" type="button" rel="tooltip"
+                                                           class="btn btn-success btn-round" data-original-title="" title="modifier">
+                                                            <i class="material-icons">edit</i>
+                                                            <div class="ripple-container"></div>
+                                                        </a>
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('users.destroy',$user->id) }}"
+                                                                data-id="{{ $user->id }}"
+                                                                data-toggle="modal" data-target="#confirm-delete">
+                                                            <i class="material-icons">close</i>
+                                                            <div class="ripple-container"></div>
+                                                        </button>
+
+                                                    </form>
                                                 </td>
                                             </tr>
                                                 @endif
