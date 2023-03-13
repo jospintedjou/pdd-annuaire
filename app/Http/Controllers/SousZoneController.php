@@ -16,10 +16,9 @@ class SousZoneController extends Controller
     public function index()
     {
         //
-        $sous_zones = SousZone::latest()->paginate();
+        $sous_zones = SousZone::get();
 
-        return view('sous_zones.index', compact('sous_zones'))
-            ->with('i', (request()->input('page', 1)-1)*5);
+        return view('sous_zones.index', compact('sous_zones'));
     }
 
     /**

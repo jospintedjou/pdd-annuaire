@@ -90,6 +90,63 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('.dataTable thead th').each(function () {
+                var title = $(this).text();
+                $(this).append('<input type="text" placeholder="Search ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('.dataTable').DataTable({
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                "order": [[ 4, "desc" ]],
+                responsive: true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search records",
+                },
+                initComplete: function () {
+                    // Apply the search
+                    this.api()
+                            .columns()
+                            .every(function () {
+                                var that = this;
+
+                                $('input', this.header()).on('keyup change clear', function () {
+                                    if (that.search() !== this.value) {
+                                        that.search(this.value.replace("/;/g", "&quot;|&quot;"), true, false).draw();
+                                        //that.search(this.value).draw();
+                                    }
+                                });
+                            });
+                }
+            });
+
+            // Apply the search
+            /*
+            * mytable.columns().eq(0).each(function (colIdx) {
+                 $('input', mytable.column(colIdx).footer()).on('keyup change', function () {
+                     mytable.column (colIdx)
+                              .search (this.value.replace(/;/g, &quot;|&quot;), true, false)
+                              .draw ();
+                 } );
+             } );
+            * */
+            /*table.columns().eq( 0 ).each( function ( colIdx ) {
+                $( 'input', table.column( colIdx ).header() ).on( 'keyup change', function () {
+                    table
+                            .column( colIdx )
+                            .search( this.value )
+                            .draw();
+                } );
+            } );*/
+        });
+
+        /*$(document).ready(function () {
             //console.log($('#datatables').html());
             $('.dataTable').DataTable({
                 "pagingType": "full_numbers",
@@ -126,6 +183,7 @@
                 alert('You clicked on Like button');
             });
         });
+        */
 
     </script>
 @endsection

@@ -15,8 +15,9 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form method="post" action="{!! route('niveau_engagements.store', ['id'=>$niveau_engagement->id]) !!}">
+                            <form method="post" action="{!! route('niveau_engagements.update', $niveau_engagement) !!}">
                                 @csrf
+                                @method('PUT')
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group @error('nom') has-danger @enderror">

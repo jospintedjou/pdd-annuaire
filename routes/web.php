@@ -47,9 +47,19 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('groupes', GroupeController::class);
     Route::resource('logs', LogController::class);
     Route::resource('participations', ParticipationController::class);
-    Route::resource('responsable_groupes', ResponsableGroupeController::class);
+
+    Route::get('/responsable_groupes', [App\Http\Controllers\ResponsableGroupeController::class, 'index'])
+        ->name('responsable_groupes.index');
+    Route::get('/responsable_groupes/create', [App\Http\Controllers\ResponsableGroupeController::class, 'create'])
+        ->name('responsable_groupes.create');
+    Route::get('/responsable_groupes/{groupe}', [App\Http\Controllers\ResponsableGroupeController::class, 'edit'])
+        ->name('responsable_groupes.edit');
+    Route::put('/responsable_groupes/{groupe}', [App\Http\Controllers\ResponsableGroupeController::class, 'update'])
+        ->name('responsable_groupes.update');
+    //Route::resource('responsable_groupes', ResponsableGroupeController::class);
     Route::resource('responsable_sous_zones', ResponsableSousZoneController::class);
     Route::resource('responsable_zones', ResponsableZoneController::class);
+
     Route::resource('sous_zones', SousZoneController::class);
     Route::resource('zones', ZoneController::class);
     Route::resource('users', UserController::class);

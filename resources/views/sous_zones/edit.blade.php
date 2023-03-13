@@ -28,7 +28,7 @@
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir la zone">
                                                 @foreach ($zones as $zone)
                                                     @if(isset($zone))
-                                                        <option value="{{ $zone->id }}"  {{$zone->id == $sous_zone->zone ? 'selected'  : '' }}>{{ $zone->nom }}</option>
+                                                        <option value="{{ $zone->id }}"  {{$zone->id == $sous_zone->zone_id ? 'selected'  : '' }}>{{ $zone->nom }}</option>
                                                     @else
                                                         <option  selected disabled>Aucune zone trouvée</option>
                                                     @endif

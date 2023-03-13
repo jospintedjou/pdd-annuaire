@@ -13,6 +13,11 @@ class Apostolat extends Model
 
     protected $fillable = ['nom'];
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
     public function activites()
     {
         return $this->belongsToMany(Activite::class, ApostolatConcerne::class);

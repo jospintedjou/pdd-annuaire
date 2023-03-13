@@ -17,10 +17,9 @@ class GroupeController extends Controller
      */
     public function index()
     {
-        $groupes = Groupe::latest()->paginate(5);
+        $groupes = Groupe::get();
 
-        return view('groupes.index', compact('groupes'))
-            ->with('i', (request()->input('page', 1)-1)*5);
+        return view('groupes.index', compact('groupes'));
     }
 
     /**

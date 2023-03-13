@@ -14,10 +14,9 @@ class NiveauEngagementController extends Controller
      */
     public function index()
     {
-        $niveau_engagements = NiveauEngagement::latest()->paginate(5);
+        $niveau_engagements = NiveauEngagement::get();
 
-        return view('niveau_engagements.index',compact('niveau_engagements'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('niveau_engagements.index',compact('niveau_engagements'));
     }
 
     /**
@@ -80,8 +79,7 @@ class NiveauEngagementController extends Controller
     public function update(Request $request, NiveauEngagement $niveau_engagement)
     {
         $request->validate([
-            'nom' => 'required',
-            'prenom' => 'string'
+            'nom' => 'required'
         ]);
 
         $niveau_engagement->update($request->all());

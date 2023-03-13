@@ -8,6 +8,7 @@
             @endcomponent
             <form method="post" action="{!! route('users.update', [$user]) !!}">
                 @csrf
+                @method('PUT')
             <div class="row">
                 <div class="col-md-12">
                     <div class="card pb-30">
@@ -115,8 +116,8 @@
 
                                 <div class="row">
                                     <div class="form-group col-md-4 @error('categorie_sociale') has-danger @enderror">
-                                        <label for="categorie_sociale" class="bmd-label-floating @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
-                                        <select name="categorie_sociale" id="categorie_sociale" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
+                                        <label for="categorie_sociale" class="bmd-label-floating col-12 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
+                                        <select name="categorie_sociale" id="categorie_sociale" class="selectpicker  col-12" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir">
                                             @foreach (\App\Constantes::CATEGORIE_SOCIALES as $categorie_sociale)
                                                 @if(isset($categorie_sociale))
@@ -132,16 +133,16 @@
                                         </span>
                                         @enderror
                                     </div>
-
+                                    <?php //dd($user->apostolats()->pluck('apostolat_id')->toArray()); ?>
                                     <div class="form-group col-md-4 @error('apostolat_id') has-danger @enderror">
-                                        <label for="apostolat_id" class="bmd-label-floating @error('apostolat_id') text-danger @enderror">Apostolat</label>
-                                        <select name="apostolat_id" id="apostolat_id" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir l'apostolat">
+                                        <label for="apostolat_id" class="bmd-label-floating  col-12 @error('apostolat_id') text-danger @enderror">Apostolat</label>
+                                        <select name="apostolat_id[]" id="apostolat_id" class="selectpicker  col-12" data-size="auto" data-style="select-with-transition"
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir l'apostolat" multiple>
                                             @foreach ($apostolats as $apostolat)
                                                 @if(isset($apostolat))
-                                                    <option value="{{ $apostolat->id }}" {{ $user->apostolat()->first()->nom == $apostolat ? "selected" : ""}}>{{$apostolat->nom}}</option>
+                                                    <option value="{{ $apostolat->id }}" {{  in_array($apostolat->id, $user->apostolats()->pluck('apostolat_id')->toArray()) ? "selected" : ""}}>{{$apostolat->nom}}</option>
                                                 @else
-                                                    <option  selected disabled>Aucun apostolat trouvé</option>
+                                                    <option selected disabled>Aucun apostolat trouvé</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -153,12 +154,12 @@
                                     </div>
 
                                     <div class="form-group col-md-4 @error('niveau_engagement_id') has-danger @enderror">
-                                        <label for="niveau_engagement_id" class="bmd-label-floating @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
-                                        <select name="niveau_engagement_id" id="niveau_engagement_id" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
+                                        <label for="niveau_engagement_id" class="bmd-label-floating  col-12 @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
+                                        <select name="niveau_engagement_id" id="niveau_engagement_id" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir">
                                             @foreach ($niveau_engagements as $niveau_engagement)
                                                 @if(isset($niveau_engagement))
-                                                    <option value="{{ $niveau_engagement->id }}" {{ $user->niveauEngagement()->first()->nom == $niveau_engagement ? "selected" : ""}}>{{$niveau_engagement->nom}}</option>
+                                                    <option value="{{ $niveau_engagement->id }}" {{ $user->niveauEngagement()->first()->id == $niveau_engagement->id ? "selected" : ""}}>{{$niveau_engagement->nom}}</option>
                                                 @else
                                                     <option  selected disabled>Aucun niveau d'engagement trouvé</option>
                                                 @endif
@@ -177,7 +178,7 @@
                                     <div class="form-group col-md-4 @error('groupe_id') has-danger @enderror">
                                         <label for="groupe_id" class="bmd-label-floating @error('groupe_id') text-danger @enderror">Groupe</label>
 
-                                        <select name="groupe_id" id="groupe_id" class="selectpicker col-md-8" data-size="auto" data-style="select-with-transition"
+                                        <select name="groupe_id" id="groupe_id" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir le groupe">
                                             @foreach ($groupes as $groupe)
                                                 @if(isset($groupe))
@@ -209,8 +210,8 @@
 
                                         <select name="etat" id="etat" class="selectpicker col-md-8" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir le groupe">
-                                                    <option value="{{ \App\Constantes::ETAT_ACTIF }}" {{ $user->etat == \App\Constantes::ETAT_ACTIF ? "selected" : ""}}>Activé</option>
-                                                    <option value="{{ \App\Constantes::ETAT_INACTIF }}" {{ $user->etat == \App\Constantes::ETAT_INACTIF ? "selected" : ""}}>Désactivé</option>
+                                            <option value="{{ \App\Constantes::ETAT_ACTIF }}" {{ $user->etat == \App\Constantes::ETAT_ACTIF ? "selected" : ""}}>Activé</option>
+                                            <option value="{{ \App\Constantes::ETAT_INACTIF }}" {{ $user->etat == \App\Constantes::ETAT_INACTIF ? "selected" : ""}}>Désactivé</option>
                                         </select>
                                         @error('etat')
                                             <span class="invalid-feedback" role="alert">
@@ -219,6 +220,19 @@
                                         @enderror
                                     </div>
 
+                                </div><!-- row -->
+
+                                <div class="row">
+                                    <div class="form-group col-md-4 @error('date_entree') has-danger @enderror">
+                                        <label for="date_entree" class="bmd-label-floating @error('date_entree') text-danger @enderror">Date d'entrée</label>
+                                        <input type="date" name="date_entree" id="date_entree" value="{{ $user->date_entree }}" class="form-control @error('date_entree') is-invalid @enderror">
+
+                                        @error('date_entree')
+                                        <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
                                 </div><!-- row -->
 
                                 <div class="row">
@@ -232,7 +246,7 @@
                                             @foreach ($groupes as $groupe)
                                                 @if(isset($groupe))
                                                     <option value="{{ $groupe->id }}"
-                                                         {{$user->responsableGroupes()->where(['etat'=>\App\Constantes::ETAT_ACTIF, 'groupe_id'=>$groupe->id])->exists() ? "selected" : ""}}>
+                                                         {{$user->responsableGroupes()->where(['actif'=>\App\Constantes::ETAT_ACTIF, 'groupe_id'=>$groupe->id])->exists() ? "selected" : ""}}>
                                                         {{$groupe->nom_groupe}}
                                                     </option>
                                                 @else
@@ -249,15 +263,14 @@
 
                                     <div class="form-group col-md-6 @error('responsabilite_groupe') has-danger @enderror">
                                         <label for="responsabilite" class="bmd-label-floating @error('responsabilite_groupe') text-danger @enderror">Responsabilité dans le groupe</label>
-
                                         <select name="responsabilite_groupe" id="responsabilite_groupe" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
                                             <option value="">Aucune</option>
                                             @foreach (\App\Constantes::RESPONSABILITES_GROUPE as $responsabilite)
                                                 @if(isset($responsabilite))
-                                                    <?php $userResponsabiliteGroupe = $user->responsableGroupes()->where(['etat'=>\App\Constantes::ETAT_ACTIF])->first() ?>
+                                                    <?php $userResponsabiliteGroupe = $user->responsableGroupes()->where(['actif'=>\App\Constantes::ETAT_ACTIF])->first() ?>
                                                     <option value="{{ $responsabilite }}"
-                                                         {{!empty($userResponsabiliteGroupe) && $userResponsabiliteGroupe->nom_responsabilite == $responsabilite ? "selected" : ""}}>
+                                                         {{!empty($userResponsabiliteGroupe) && $userResponsabiliteGroupe->pivot->nom_responsabilite == $responsabilite ? "selected" : ""}}>
                                                         {{$responsabilite}}</option>
                                                 @else
                                                     <option  selected disabled>Aucune responsabilité trouvé</option>
@@ -270,20 +283,18 @@
                                             </span>
                                         @enderror
                                     </div>
-
                                 </div><!-- row -->
 
                                 <div class="row">
                                     <div class="form-group col-md-6 @error('responsable_sous_zone_id') has-danger @enderror">
                                         <label for="responsable_sous_zone_id" class="bmd-label-floating @error('responsable_sous_zone_id') text-danger @enderror">Responsable de Sous-zone?</label>
-
                                         <select name="responsable_sous_zone_id" id="responsable_sous_zone_id" class="selectpicker col-md-7" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir le sous-zone">
                                             <option value="">Non</option>
                                             @foreach ($sous_zones as $sous_zone)
                                                 @if(isset($sous_zone))
                                                     <option value="{{ $sous_zone->id }}"
-                                                            {{$user->responsableGroupes()->where(['etat'=>\App\Constantes::ETAT_ACTIF, 'groupe_id'=>$groupe->id])->exists() ? "selected" : ""}}>
+                                                            {{$user->responsableSousZones()->where(['actif'=>\App\Constantes::ETAT_ACTIF, 'sous_zone_id'=>$sous_zone->id])->exists() ? "selected" : ""}}>
                                                         {{$sous_zone->nom}}
                                                     </option>
                                                 @else
@@ -297,20 +308,21 @@
                                         </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-6 @error('responsabilite_sous_zone') has-danger @enderror">
-                                        <label for="responsabilite_sous_zone" class="bmd-label-floating @error('responsabilite_sous_zone') text-danger @enderror">Responsabilité de dans la sous-zone</label>
 
+                                    <div class="form-group col-md-6 @error('responsabilite_sous_zone') has-danger @enderror">
+                                        <label for="responsabilite_sous_zone" class="bmd-label-floating @error('responsabilite_sous_zone') text-danger @enderror">Responsabilité dans la sous-zone</label>
+                                        <?php $userResponsabiliteSousZone = $user->responsableSousZones()->where(['actif'=>\App\Constantes::ETAT_ACTIF])->first(); ?>
                                         <select name="responsabilite_sous_zone" id="responsabilite_sous_zone" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
                                             <option value="">Aucune</option>
                                             @foreach (\App\Constantes::RESPONSABILITES_SOUS_ZONE as $responsabilite)
                                                 @if(isset($responsabilite))
-                                                    <?php $userResponsabiliteSousZone = $user->responsableSousZones()->where(['etat'=>\App\Constantes::ETAT_ACTIF])->first() ?>
+                                                    <?php $userResponsabiliteSousZone = $user->responsableSousZones()->where(['actif'=>\App\Constantes::ETAT_ACTIF])->first(); ?>
                                                     <option value="{{ $responsabilite }}"
-                                                            {{!empty($userResponsabiliteSousZone) && $userResponsabiliteSousZone->nom_responsabilite == $responsabilite ? "selected" : ""}}>
+                                                            {{!empty($userResponsabiliteSousZone) && $userResponsabiliteSousZone->pivot->nom_responsabilite == $responsabilite ? "selected" : ""}}>
                                                         {{$responsabilite}}</option>
                                                 @else
-                                                    <option  selected disabled>Aucune responsabilité trouvé</option>
+                                                    <option selected disabled>Aucune responsabilité trouvé</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -331,7 +343,9 @@
                                             <option value="">Non</option>
                                             @foreach ($zones as $zone)
                                                 @if(isset($zone))
-                                                    <option value="{{ $zone->id }}">{{$zone->nom}}</option>
+                                                    <option value="{{ $zone->id }}"
+                                                        {{$user->responsableZones()->where(['actif'=>\App\Constantes::ETAT_ACTIF, 'zone_id'=>$zone->id])->exists() ? "selected" : ""}}>
+                                                    {{$zone->nom}}</option>
                                                 @else
                                                     <option selected disabled>Aucune sous zone trouvé</option>
                                                 @endif
@@ -349,9 +363,13 @@
                                         <select name="responsabilite_zone" id="responsabilite_zone" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
                                             <option value="">Aucune</option>
+
                                             @foreach (\App\Constantes::RESPONSABILITES_ZONE as $responsabilite)
                                                 @if(isset($responsabilite))
-                                                    <option value="{{ $responsabilite }}">{{$responsabilite}}</option>
+                                                    <option value="{{ $responsabilite }}"
+                                                            <?php $userResponsabiliteZone = $user->responsableZones()->where(['actif'=>\App\Constantes::ETAT_ACTIF])->first(); ?>
+                                                    {{!empty($userResponsabiliteZone) && $userResponsabiliteZone->pivot->nom_responsabilite == $responsabilite ? "selected" : ""}}>
+                                                        {{$responsabilite}}</option>
                                                 @else
                                                     <option  selected disabled>Aucune responsabilité trouvée</option>
                                                 @endif

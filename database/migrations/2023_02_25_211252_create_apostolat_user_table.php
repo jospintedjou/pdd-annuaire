@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateResponsableSousZonesTable extends Migration
+class CreateApostolatUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateResponsableSousZonesTable extends Migration
      */
     public function up()
     {
-        Schema::create('responsable_sous_zones', function (Blueprint $table) {
+        Schema::create('apostolat_user', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sous_zone_id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('nom_responsabilite');
-            $table->boolean('actif')->default(true);
             $table->timestamps();
+
+            $table->unsignedBigInteger('apostolat_id');
+            $table->unsignedBigInteger('user_id');
             $table->softDeletes();
-            $table->foreign('sous_zone_id')->references('id')->on('sous_zones');
+            $table->foreign('apostolat_id')->references('id')->on('apostolats');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
@@ -33,6 +32,6 @@ class CreateResponsableSousZonesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('responsable_sous_zones');
+        Schema::dropIfExists('apostolat_users');
     }
 }

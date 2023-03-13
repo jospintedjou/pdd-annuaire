@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constantes;
 use App\Models\Apostolat;
+use App\Models\ApostolatUser;
 use App\Models\Groupe;
 use App\Models\GroupeUser;
 use App\Models\NiveauEngagement;
@@ -26,10 +27,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('role', '!=', Constantes::ROLE_ADMIN)->latest()->paginate(5);
+        $users = User::where('role', '!=', Constantes::ROLE_ADMIN)->get();
 
-        return view('users.index',compact('users'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('users.index',compact('users'));
     }
 
     /**
@@ -63,7 +63,7 @@ class UserController extends Controller
                 'telephone1' => 'required',
                 'telephone2' => 'string|nullable',
                 'sexe' => 'required',
-                'email' => 'string|unique:users',
+                'email' => 'string|nullable|unique:users',
                 'profession' => 'string|nullable',
                 'quartier' => 'required',
                 'password' => 'string|nullable',
@@ -71,7 +71,8 @@ class UserController extends Controller
                 'categorie_sociale' => 'required',
                 'apostolat_id' => 'required',
                 'groupe_id' => 'required',
-                'etat' => 'required'
+                'etat' => 'required',
+                'date_entree' => 'string'
             ]);
 
         $data['role'] = "MEMBRE";
@@ -81,86 +82,50 @@ class UserController extends Controller
         $user = User::create($data);
 
         //Update old existing User Group (usefull when updating)
-        DB::table('groupe_users')->where(['user_id' => $user->id, 'actif' => Constantes::ETAT_ACTIF])
+        DB::table('groupe_user')->where(['user_id' => $user->id, 'actif' => Constantes::ETAT_ACTIF])
                     ->update(['actif'=>Constantes::ETAT_INACTIF]);
         
         //Store User Group
-        GroupeUser::create([
-            'groupe_id' => $request->input('groupe_id'),
-            'user_id' => $user->id,
+        $user->groupes()->attach($request->input('groupe_id'), [
             'actif' => Constantes::ETAT_ACTIF
         ]);
 
+        //Store User Apostolats
+        DB::table('apostolat_user')->where(['user_id' => $user->id])->delete();
+        foreach($request->input('apostolat_id') as $apostolat_id){
+            $user->apostolats()->attach([
+                'apostolat_id' => $apostolat_id
+            ]);
+        }
+
         if(!empty($request->input('responsabilite_groupe'))){
-            //Check if this group already have a "responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'),
-                'nom_responsabilite'=>$request->input('responsabilite_groupe')])->delete();
+            //Check if this group already have a "responsable" and throw error if the new value is still "responsable"$user->responsableZones()->where(['zone_id' => $request->input('responsable_zone_id')])
 
-            /* //Check if this group already have a "responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'), 'nom_responsabilite'=>Constantes::RESPONSABLE])
-                ->delete();
+            $user->responsableGroupes()->where(['groupe_id' => $request->input('responsabilite_groupe_id')])
+                ->update([ 'actif' => Constantes::ETAT_ACTIF]);
 
-            //Check if this group already have a "1er adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'), 'nom_responsabilite'=>Constantes::PREMIER_ADJOINT_RESPONSABLE])
-                ->delete();
-
-            //Check if this group already have a "2e adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'), 'nom_responsabilite'=>Constantes::DEUXIEME_ADJOINT_RESPONSABLE])
-                ->delete();*/
-
-            ResponsableGroupe::create([
-                'groupe_id' => $request->input('responsabilite_groupe_id'),
-                'user_id' => $user->id,
+            $user->responsableGroupes()->attach($request->input('responsabilite_groupe_id'), [
                 'nom_responsabilite' => $request->input('responsabilite_groupe'),
                 'actif' => Constantes::ETAT_ACTIF
             ]);
         }
         if(!empty($request->input('responsabilite_sous_zone'))){
             //Deletge old responsable sous-zone
-            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'), 'nom_responsabilite'=>Constantes::RESPONSABLE])
-                ->delete();
 
-            /*//Check if this sous_zone already have a "responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'), 'nom_responsabilite'=>Constantes::RESPONSABLE])
-                ->delete();
+            $user->responsableSousZones()->where(['sous_zone_id' => $request->input('responsabilite_sous_zone_id')])
+                ->update([ 'actif' => Constantes::ETAT_ACTIF]);
 
-            //Check if this sous_zone already have a "1er adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'), 'nom_responsabilite'=>Constantes::PREMIER_ADJOINT_RESPONSABLE])
-                ->delete();
-
-            //Check if this sous_zone already have a "2e adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'), 'nom_responsabilite'=>Constantes::DEUXIEME_ADJOINT_RESPONSABLE])
-                ->delete();
-            */
-
-            ResponsableSousZone::create([
-                'sous_zone_id' => $request->input('responsable_sous_zone_id'),
-                'user_id' => $user->id,
+            $user->responsableSousZones()->attach($request->input('responsable_sous_zone_id'), [
                 'nom_responsabilite' => $request->input('responsabilite_sous_zone'),
                 'actif' => Constantes::ETAT_ACTIF
             ]);
         }
         if(!empty($request->input('responsabilite_zone'))){
             //Check if this zone already have a "responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=>$request->input('responsabilite_zone')])
-                ->delete();
+            $user->responsableZones()->where(['zone_id' => $request->input('responsabilite_zone_id')])
+                ->update([ 'actif' => Constantes::ETAT_ACTIF]);
 
-            /*
-            //Check if this zone already have a "responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=>Constantes::RESPONSABLE])
-                ->delete();
-
-            //Check if this zone already have a "1er adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=>Constantes::PREMIER_ADJOINT_RESPONSABLE])
-                ->delete();
-
-            //Check if this zone already have a "2e adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=>Constantes::DEUXIEME_ADJOINT_RESPONSABLE])
-                ->delete();
-            */
-            ResponsableZone::create([
-                'zone_id' => $request->input('responsable_zone_id'),
-                'user_id' => $user->id,
+            $user->responsableZones()->attach($request->input('responsable_zone_id'), [
                 'nom_responsabilite' => $request->input('responsabilite_zone'),
                 'actif' => Constantes::ETAT_ACTIF
             ]);
@@ -215,7 +180,7 @@ class UserController extends Controller
             'telephone1' => 'required',
             'telephone2' => 'string|nullable',
             'sexe' => 'required',
-            'email' => 'string|unique:users',
+            'email' => 'nullable|max:50|email|unique:users,email,'.$user->id,
             'profession' => 'string|nullable',
             'quartier' => 'required',
             'password' => 'string|nullable',
@@ -223,121 +188,69 @@ class UserController extends Controller
             'categorie_sociale' => 'required',
             'apostolat_id' => 'required',
             'groupe_id' => 'required',
-            'etat' => 'required'
+            'etat' => 'required',
+            'date_entree' => 'string'
         ]);
 
         $data['role'] = "MEMBRE"; //Must be "membre" or "responsable groupe" or "responsable sous-zone" or "responsable zone"
         $data['password'] = $request->filled('passsword') ? \Illuminate\Support\Facades\Hash::make($request->input('passsword')) : $user->password;
 
         //We are storing the user data in database
-        $user = $user->update($data);
+        $user->update($data);
 
         //Update old existing User Group (usefull when updating)
-        DB::table('groupe_users')->where(['user_id' => $user->id, 'actif' => Constantes::ETAT_ACTIF])
+        DB::table('groupe_user')->where(['user_id' => $user->id, 'actif' => Constantes::ETAT_ACTIF])
             ->update(['actif'=>Constantes::ETAT_INACTIF]);
 
         //Store User Group
-        GroupeUser::create([
-            'groupe_id' => $request->input('groupe_id'),
-            'user_id' => $user->id,
+        $user->groupes()->attach($request->input('groupe_id'),[
             'actif' => Constantes::ETAT_ACTIF
         ]);
 
+        //Store User Apostolats
+        DB::table('apostolat_user')->where(['user_id' => $user->id])->delete();
+
+        foreach($request->input('apostolat_id') as $apostolat_id){
+            $user->apostolats()->attach([
+                'apostolat_id' => $apostolat_id
+            ]);
+        }
+
         if(!empty($request->input('responsabilite_groupe'))){
             //Delete old "responsable" groupe
-            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'),
-                'nom_responsabilite'=>$request->input('responsabilite_groupe')])->delete();
 
-            /*//Delete old "responsable"
-            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'), 'nom_responsabilite'=>Constantes::RESPONSABLE])
-                ->delete();
+            $user->responsableGroupes()->where(['groupe_id' => $request->input('responsabilite_groupe_id')])
+                ->update([ 'actif' => Constantes::ETAT_INACTIF]);
 
-            //Check if this group already have a "1er adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'), 'nom_responsabilite'=>Constantes::PREMIER_ADJOINT_RESPONSABLE])
-                ->delete();
-
-            //Check if this group already have a "2e adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_groupes')->where(['groupe_id' => $request->input('responsabilite_groupe_id'), 'nom_responsabilite'=>Constantes::DEUXIEME_ADJOINT_RESPONSABLE])
-                ->delete();*/
-
-            ResponsableGroupe::create([
-                'groupe_id' => $request->input('responsabilite_groupe_id'),
-                'user_id' => $user->id,
+            $user->responsableGroupes()->attach($request->input('responsabilite_groupe_id'), [
                 'nom_responsabilite' => $request->input('responsabilite_groupe'),
                 'actif' => Constantes::ETAT_ACTIF
             ]);
         }
         if(!empty($request->input('responsabilite_sous_zone'))){
             //Delete old responsable sous-zone
-            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'),
-                        'nom_responsabilite'=>$request->input('responsable_sous_zone_id')])->delete();
+            $user->responsableSousZones()->where(['sous_zone_id' => $request->input('responsable_sous_zone_id')])
+                ->update([ 'actif' => Constantes::ETAT_INACTIF]);
 
-            /* //Check if this sous_zone already have a "responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'), 'nom_responsabilite'=>Constantes::RESPONSABLE])
-                ->delete();
-
-            //Check if this sous_zone already have a "1er adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'), 'nom_responsabilite'=>Constantes::PREMIER_ADJOINT_RESPONSABLE])
-                ->delete();
-
-            //Check if this sous_zone already have a "2e adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_sous_zones')->where(['sous_zone_id' => $request->input('responsable_sous_zone_id'), 'nom_responsabilite'=>Constantes::DEUXIEME_ADJOINT_RESPONSABLE])
-                ->delete(); */
-
-            ResponsableSousZone::create([
-                'sous_zone_id' => $request->input('responsable_sous_zone_id'),
-                'user_id' => $user->id,
+            $user->responsableSousZones()->attach($request->input('responsable_sous_zone_id'), [
                 'nom_responsabilite' => $request->input('responsabilite_sous_zone'),
                 'actif' => Constantes::ETAT_ACTIF
             ]);
         }
         if(!empty($request->input('responsabilite_zone'))){
             //Delete old responsabilite zone. E.g: "RESPONSABLE", "PREMIER_ADJOINT_RESPONSABLE", "DEUXIEME_ADJOINT_RESPONSABLE"
-            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=> $request->input('responsabilite_zone')])
-                ->delete();
+            $user->responsableZones()->where(['zone_id' => $request->input('responsable_zone_id')])
+                ->update([ 'actif' => Constantes::ETAT_INACTIF]);
 
-            /* //Check if this zone already have a "responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=>Constantes::RESPONSABLE])
-                ->delete();
-
-            //Check if this zone already have a "1er adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=>Constantes::PREMIER_ADJOINT_RESPONSABLE])
-                ->delete();
-
-            //Check if this zone already have a "2e adjoint au responsable" and throw error if the new value is still "responsable"
-            DB::table('responsable_zones')->where(['zone_id' => $request->input('responsable_zone_id'), 'nom_responsabilite'=>Constantes::DEUXIEME_ADJOINT_RESPONSABLE])
-                ->delete();*/
-
-            ResponsableZone::create([
-                'zone_id' => $request->input('responsable_zone_id'),
-                'user_id' => $user->id,
+            $user->responsableZones()->attach($request->input('responsable_zone_id'), [
                 'nom_responsabilite' => $request->input('responsabilite_zone'),
                 'actif' => Constantes::ETAT_ACTIF
             ]);
 
         }
 
-       /* $user->update([
-            'nom' => $request->input('nom'),
-            'prenom' => $request->input('prenom'),
-            'adresse' => $request->input('adresse'),
-            'telephone1' => $request->input('telephone1'),
-            'telephone2' => $request->input('telephone2'),
-            'sexe' => $request->input('sexe'),
-            'date_naissance' => $request->input('date_naissance'),
-            'email' => $request->input('email'),
-            'profession' => $request->input('profession'),
-            'pays' => $request->input('pays'),
-            'ville' => $request->input('ville'),
-            'quartier' => $request->input('quartier'),
-            'niveau_engagement_id' => $request->input('niveau_engagement_id'),
-            'role' => $request->input('role'),
-            'categorie_sociale' => $request->input('categorie_sociale'),
-            'apostolat_id' => $request->input('apostolat_id'),
-        ]);*/
-
         return redirect()->route('users.index')
-            ->with('success','User updated successfully');
+            ->with('success','Utilisateur mis à jour avec succès');
     }
 
     /**

@@ -14,8 +14,8 @@ class User extends AuthUser
     use SoftDeletes;
 
     protected $fillable = ['nom', 'prenom', 'adresse', 'telephone1', 'telephone2', 'sexe', 'date_naissance', 'etat', 'email',
-        'profession', 'pays', 'ville', 'quartier', 'niveau_engagement_id', 'role', 'categorie_sociale', 'apostolat_id',
-        'email_verified_at', 'password'];
+        'profession', 'pays', 'ville', 'quartier', 'niveau_engagement_id', 'role', 'categorie_sociale',
+        'email_verified_at', 'password', 'date_entree'];
 
     /**================== Start Custom functions ===========================**/
     public function isActive(){
@@ -27,45 +27,50 @@ class User extends AuthUser
     }
     /**================== End Custom functions ==============================**/
 
-
     /**================= Start Model Relation functions ===================**/
     public function niveauEngagement()
     {
         return $this->belongsTo(NiveauEngagement::class);
     }
-
+    /*
     public function apostolat()
     {
         return $this->belongsTo(Apostolat::class);
     }
+    */
+
+    public function apostolats()
+    {
+        return $this->belongsToMany(Apostolat::class)->withTimestamps();
+    }
 
     public function groupes()
     {
-        return $this->belongsToMany(Groupe::class, GroupeUser::class)
-            ->withPivot(['user_id', 'groupe_id', 'actif', 'created_at']);
+        return $this->belongsToMany(Groupe::class)->withTimestamps()
+            ->withPivot(['actif']);
     }
 
     public function activite()
     {
-        return $this->belongsToMany(Activite::class, Participation::class)
+        return $this->belongsToMany(Activite::class)->withTimestamps()
             ->withPivot(['nom_responsabilite', 'actif']);
     }
 
     public function responsableGroupes()
     {
-        return $this->belongsToMany(User::class, ResponsableGroupe::class)
+        return $this->belongsToMany(Groupe::class, 'responsable_groupe')->withTimestamps()
             ->withPivot(['nom_responsabilite', 'actif']);
     }
 
     public function responsableSousZones()
     {
-        return $this->belongsToMany(User::class, ResponsableSousZone::class)
+        return $this->belongsToMany(SousZone::class, 'responsable_sous_zone')->withTimestamps()
             ->withPivot(['nom_responsabilite', 'actif']);
     }
 
     public function responsableZones()
     {
-        return $this->belongsToMany(User::class, ResponsableZone::class)
+        return $this->belongsToMany(Zone::class, 'responsable_zone')->withTimestamps()
             ->withPivot(['nom_responsabilite', 'actif']);
     }
 

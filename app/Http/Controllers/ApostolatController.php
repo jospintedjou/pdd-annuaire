@@ -14,10 +14,9 @@ class ApostolatController extends Controller
      */
     public function index()
     {
-        $apostolats = Apostolat::latest()->paginate(5);
+        $apostolats = Apostolat::get();
 
-        return view('apostolats.index',compact('apostolats'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('apostolats.index',compact('apostolats'));
     }
 
     /**

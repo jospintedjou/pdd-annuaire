@@ -15,10 +15,9 @@ class CategorieActiviteController extends Controller
     public function index()
     {
         //
-        $categorieActivites = CategorieActivite::latest()->paginate(5);
+        $categorieActivites = CategorieActivite::get();
 
-        return view('categorie_activites.index', compact('categorieActivites'))
-                    ->with('i', (request()->input('page', 1)-1)*5);
+        return view('categorie_activites.index', compact('categorieActivites'));
     }
 
     /**

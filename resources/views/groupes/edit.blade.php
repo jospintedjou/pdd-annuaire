@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Apostolat @endsection
+@section('page_title') Groupe @endsection
 @section('content')
     <div class="content">
         <div class="container-fluid">
@@ -42,7 +42,7 @@
                                         </div>
 
                                         <div class="form-group @error('sous_zone_id') has-danger @enderror">
-                                            <label for="sous_zone_id" class="bmd-label-floating @error('sous_zone_id') text-danger @enderror">Zone</label>
+                                            <label for="sous_zone_id" class="bmd-label-floating @error('sous_zone_id') text-danger @enderror">Sous-zone</label>
 
                                             <select name="sous_zone_id" id="sous_zone_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir la sous zone">

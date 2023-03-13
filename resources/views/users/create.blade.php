@@ -115,8 +115,8 @@
 
                                 <div class="row">
                                     <div class="form-group col-md-4 @error('categorie_sociale') has-danger @enderror">
-                                        <label for="categorie_sociale" class="bmd-label-floating @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
-                                        <select name="categorie_sociale" id="categorie_sociale" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
+                                        <label for="categorie_sociale" class="bmd-label-floating col-12 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
+                                        <select name="categorie_sociale" id="categorie_sociale" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir">
                                             @foreach (\App\Constantes::CATEGORIE_SOCIALES as $categorie_sociale)
                                                 @if(isset($categorie_sociale))
@@ -134,9 +134,9 @@
                                     </div>
 
                                     <div class="form-group col-md-4 @error('apostolat_id') has-danger @enderror">
-                                        <label for="apostolat_id" class="bmd-label-floating @error('apostolat_id') text-danger @enderror">Apostolat</label>
-                                        <select name="apostolat_id" id="apostolat_id" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir l'apostolat">
+                                        <label for="apostolat_id" class="bmd-label-floating col-12 @error('apostolat_id') text-danger @enderror">Apostolat</label>
+                                        <select name="apostolat_id[]" id="apostolat_id" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir l'apostolat" multiple>
                                             @foreach ($apostolats as $apostolat)
                                                 @if(isset($apostolat))
                                                     <option value="{{ $apostolat->id }}">{{$apostolat->nom}}</option>
@@ -153,8 +153,8 @@
                                     </div>
 
                                     <div class="form-group col-md-4 @error('niveau_engagement_id') has-danger @enderror">
-                                        <label for="niveau_engagement_id" class="bmd-label-floating @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
-                                        <select name="niveau_engagement_id" id="niveau_engagement_id" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
+                                        <label for="niveau_engagement_id" class="bmd-label-floating col-12 @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
+                                        <select name="niveau_engagement_id" id="niveau_engagement_id" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir">
                                             @foreach ($niveau_engagements as $niveau_engagement)
                                                 @if(isset($niveau_engagement))
@@ -209,10 +209,8 @@
 
                                         <select name="etat" id="etat" class="selectpicker col-md-8" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir le groupe">
-
-                                                    <option value="{{ \App\Constantes::ETAT_ACTIF }}">Activé</option>
-                                                    <option value="{{ \App\Constantes::ETAT_INACTIF }}">Désactivé</option>
-
+                                                <option value="{{ \App\Constantes::ETAT_ACTIF }}">Activé</option>
+                                                <option value="{{ \App\Constantes::ETAT_INACTIF }}">Désactivé</option>
                                         </select>
                                         @error('etat')
                                             <span class="invalid-feedback" role="alert">
@@ -224,7 +222,19 @@
                                 </div><!-- row -->
 
                                 <div class="row">
+                                    <div class="form-group col-md-4 @error('date_entree') has-danger @enderror">
+                                        <label for="date_entree" class="bmd-label-floating @error('date_entree') text-danger @enderror">Date d'entrée</label>
+                                        <input type="date" name="date_entree" id="date_entree" value="{{ old('date_entree') }}" class="form-control @error('date_entree') is-invalid @enderror">
 
+                                        @error('date_entree')
+                                        <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div><!-- row -->
+
+                                <div class="row">
                                     <div class="form-group col-md-6 @error('responsabilite_groupe_id') has-danger @enderror">
                                         <label for="responsabilite_groupe_id" class="bmd-label-floating @error('responsabilite_groupe_id') text-danger @enderror">Responsable de Groupe ?</label>
 

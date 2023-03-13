@@ -27,7 +27,8 @@
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir la catégorie">
                                                 @foreach ($categories as $categorie_activite)
                                                     @if(isset($categorie_activite))
-                                                        <option value="{{ $categorie_activite->id }}"  {{$categorie_activite == $activite->categorie_activite ? 'selected'  : '' }}>{{ $categorie_activite->nom }}</option>
+                                                        <option value="{{ $categorie_activite->id }}"  {{$categorie_activite->id
+                                                         == $activite->categorie_activite_id ? 'selected'  : '' }}>{{ $categorie_activite->nom }}</option>
                                                     @else
                                                         <option  selected disabled>Aucune categorie d'activite trouvée</option>
                                                     @endif
@@ -137,7 +138,7 @@
                                             </span>
                                             @enderror
                                         </div>
-                                        <div class="@error('nom') has-danger @enderror">
+                                        <div class="@error('apostolat') has-danger @enderror">
                                             <label for="apostolat" class="form-label @error('apostolat') text-danger @enderror">Apostolats</label>
                                             <br>
                                             <select name="apostolat[]" id="apostolat" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"

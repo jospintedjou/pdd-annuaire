@@ -21,11 +21,9 @@ class ActiviteController extends Controller
      */
     public function index()
     {
-        //
-        $activites = Activite::latest()->paginate(5);
+        $activites = Activite::get();
 
-        return view('activite.index', compact('activites'))
-                ->with('i', (request()->input('page', 1)-1)*5);
+        return view('activite.index', compact('activites'));
     }
 
     /**
