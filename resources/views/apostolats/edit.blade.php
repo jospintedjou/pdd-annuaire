@@ -15,8 +15,9 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form method="post" action="{!! route('apostolats.store', ['id'=>$apostolat->id]) !!}">
+                            <form method="post" action="{!! route('apostolats.update', [$apostolat->id]) !!}">
                                 @csrf
+                                @method('PUT')
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group @error('nom') has-danger @enderror">

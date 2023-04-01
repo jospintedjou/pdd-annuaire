@@ -30,3 +30,8 @@ tbody>tr{
     color: #d2007a;
     font-weight: 500;
 }
+.dataTable thead input {
+   width: 60% !important;
+   padding: 2px !important;
+   box-sizing: border-box !important;
+}

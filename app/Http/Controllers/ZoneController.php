@@ -14,7 +14,9 @@ class ZoneController extends Controller
      */
     public function index()
     {
-        //
+        $zones = Zone::get();
+
+        return view('zones.index', compact('zones'));
     }
 
     /**
@@ -25,6 +27,7 @@ class ZoneController extends Controller
     public function create()
     {
         //
+        return view('zones.create');
     }
 
     /**
@@ -36,6 +39,17 @@ class ZoneController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->validate([
+            'nom' => 'required|string',
+            'continent' => 'required|string',
+            'pays' => 'required|string',
+            'ville' => 'required|string'
+        ]);
+
+        Zone::create($data);
+
+        return redirect()->route('zones.index')
+                ->with('success', 'Zone créé avec succès');
     }
 
     /**
@@ -46,7 +60,7 @@ class ZoneController extends Controller
      */
     public function show(Zone $zone)
     {
-        //
+        return view('zones.show', compact('zone'));
     }
 
     /**
@@ -57,7 +71,7 @@ class ZoneController extends Controller
      */
     public function edit(Zone $zone)
     {
-        //
+        return view('zones.edit', compact('zone'));
     }
 
     /**
@@ -70,6 +84,17 @@ class ZoneController extends Controller
     public function update(Request $request, Zone $zone)
     {
         //
+        $data = $request->validate([
+            'nom' => 'required|string',
+            'continent' => 'required|string',
+            'pays' => 'required|string',
+            'ville' => 'required|string'
+        ]);
+
+        $zone->update($data);
+
+        return redirect()->route('zones.index')
+            ->with('success', 'Zone updated successfully');
     }
 
     /**
@@ -78,8 +103,18 @@ class ZoneController extends Controller
      * @param  \App\Models\Zone  $zone
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Zone $zone)
+    public function destroy(Request $request)
     {
         //
+        $id = $request->input('id');
+
+        if(!empty($id)){
+            Zone::find($id)->delete();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
     }
 }

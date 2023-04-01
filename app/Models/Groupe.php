@@ -15,7 +15,7 @@ class Groupe extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, GroupeUser::class)
+        return $this->belongsToMany(User::class)
             ->withPivot(['user_id', 'groupe_id', 'actif', 'date_arrivee']);
     }
 
@@ -26,8 +26,8 @@ class Groupe extends Model
 
     public function responsableGroupes()
     {
-        return $this->belongsToMany(User::class, ResponsableGroupe::class)
-                ->withPivot(['nom_responsabilite', 'actif']);
+        return $this->belongsToMany(User::class, 'responsable_groupe')->withTimestamps()
+            ->withPivot(['nom_responsabilite', 'actif']);
     }
 
     public function activites()

@@ -25,7 +25,7 @@ class SousZone extends Model
 
     public function responsableSousZones()
     {
-        return $this->belongsToMany(User::class, ResponsableSousZone::class)
+        return $this->belongsToMany(User::class, 'responsable_sous_zone')->withTimestamps()
             ->withPivot(['nom_responsabilite', 'actif']);
     }
 

@@ -50,9 +50,21 @@ class Constantes
 
     //Categories Sociales
     const ELEVE = 'ELEVE';
-    const ETUDIANT_MINEUR = 'ETUDIANT_MINEUR';
-    const ETUDIANT_MAJEUR = 'ETUDIANT_MAJEUR';
-    const JEUNE_TRAVAILLEUR = 'JEUNE_TRAVAILLEUR';
+    const ETUDIANT_MINEUR = 'ETUDIANT MINEUR';
+    const ETUDIANT_MAJEUR = 'ETUDIANT MAJEUR';
+    const JEUNE_TRAVAILLEUR = 'JEUNE TRAVAILLEUR';
+    const CATEGORIE_SOCIALES = array('ELEVE', 'ETUDIANT MINEUR', 'ETUDIANT MAJEUR', 'JEUNE TRAVAILLEUR',
+        'ETUDIANT MAJEUR','JEUNE MARIE','ADULTE MARIE');
+
+    //Responsable
+    const SUPERVISEUR = 'SUPERVISEUR';
+    const RESPONSABLE = 'RESPONSABALE';
+    const VICE_RESPONSABLE = 'VICE RESPONSABALE';
+    const PREMIER_ADJOINT_RESPONSABLE = '1er Adjoint au Responsable';
+    const DEUXIEME_ADJOINT_RESPONSABLE = '2e Adjoint au Responsable';
+    const RESPONSABILITES_ZONE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable');
+    const RESPONSABILITES_SOUS_ZONE = array('SUPERVISEUR', 'RESPONSABLE', 'Vice-Responsable');
+    const RESPONSABILITES_GROUPE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable ', 'EPAULEUR');
 
     //Niveau d'engagement
     const SIMPLE                      = 'SIMPLE';

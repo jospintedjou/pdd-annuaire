@@ -20,7 +20,7 @@ class Zone extends Model
 
     public function responsableZones()
     {
-        return $this->belongsToMany(User::class, ResponsableZone::class)
+        return $this->belongsToMany(User::class, 'responsable_zone')->withTimestamps()
             ->withPivot(['nom_responsabilite', 'actif']);
     }
 

@@ -11,10 +11,10 @@ class NiveauEngagement extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillables = ['nom'];
+    protected $fillable = ['nom'];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(User::class);
     }
 }

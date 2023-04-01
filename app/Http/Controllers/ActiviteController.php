@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Zone;
+use App\Models\Groupe;
 use App\Models\Activite;
+use App\Models\SousZone;
+use App\Models\Apostolat;
 use Illuminate\Http\Request;
+use App\Models\ApostolatConcerne;
+use App\Models\CategorieActivite;
+use Illuminate\Support\Facades\DB;
 
 class ActiviteController extends Controller
 {
@@ -14,7 +21,9 @@ class ActiviteController extends Controller
      */
     public function index()
     {
-        //
+        $activites = Activite::get();
+
+        return view('activite.index', compact('activites'));
     }
 
     /**
@@ -25,6 +34,18 @@ class ActiviteController extends Controller
     public function create()
     {
         //
+        $zones = Zone::all();
+        $sous_zones = SousZone::all();
+        $groupes = Groupe::all();
+        $apostolats = Apostolat::all();
+        $categories = CategorieActivite::all();
+
+        return view('activite.create')
+                ->with('zones', $zones)
+                ->with('sous_zones', $sous_zones)
+                ->with('groupes', $groupes)
+                ->with('categories', $categories)
+                ->with('apostolats', $apostolats);
     }
 
     /**
@@ -36,6 +57,42 @@ class ActiviteController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->validate([
+            'zone_id' => 'required_without_all:sous_zone_id,groupe_id|exists:zones,id',
+            'sous_zone_id' => 'required_without_all:zone_id,groupe_id|exists:sous_zones,id',
+            'groupe_id' => 'required_without_all:zone_id,sous_zone_id|exists:groupes,id',
+            'categorie_activite_id' => 'required|exists:categorie_activites,id',
+            'date_debut' => 'required|date',
+            'date_fin' => 'nullable|date|after:date_debut',
+            'heure_debut' => 'required|date_format:H:i',
+            'lieu' => 'required|string',
+            'apostolat' => 'required|array|min:1',
+            'apostolat.*' => 'exists:apostolats,id'
+        ]);
+
+        if($data['zone_id']){
+            $data['type'] = 'zonale';
+        }else if($data['sous_zone_id']){
+            $data['type'] = 'sous_zonale';
+        }else{
+            $data['type'] = 'groupe';
+        }
+
+        DB::beginTransaction();
+        $activite = Activite::create($data);
+
+        foreach ($data['apostolat'] as $apostolat) {
+            ApostolatConcerne::create([
+                'categorie_activite_id' => $activite->categorie_activite_id,
+                'activite_id' => $activite->id,
+                'apostolat_id' => $apostolat
+            ]);
+        }
+
+        DB::commit();
+
+        return redirect()->route('activites.index')
+            ->with('message', 'Activité créé avec succes');
     }
 
     /**
@@ -47,6 +104,7 @@ class ActiviteController extends Controller
     public function show(Activite $activite)
     {
         //
+        return view('activite.show', compact('activite'));
     }
 
     /**
@@ -58,6 +116,18 @@ class ActiviteController extends Controller
     public function edit(Activite $activite)
     {
         //
+        $zones = Zone::all();
+        $sous_zones = SousZone::all();
+        $groupes = Groupe::all();
+        $apostolats = Apostolat::all();
+        $categories = CategorieActivite::all();
+
+        return view('activite.edit', compact('activite'))
+                ->with('zones', $zones)
+                ->with('sous_zones', $sous_zones)
+                ->with('groupes', $groupes)
+                ->with('categories', $categories)
+                ->with('apostolats', $apostolats);
     }
 
     /**
@@ -70,6 +140,44 @@ class ActiviteController extends Controller
     public function update(Request $request, Activite $activite)
     {
         //
+        $data = $request->validate([
+            'zone_id' => 'required_without_all:sous_zone_id,groupe_id|exists:zones,id',
+            'sous_zone_id' => 'required_without_all:zone_id,groupe_id|exists:sous_zones,id',
+            'groupe_id' => 'required_without_all:zone_id,sous_zone_id|exists:groupes,id',
+            'categorie_activite_id' => 'required|exists:categorie_activites,id',
+            'date_debut' => 'required|date',
+            'date_fin' => 'nullable|date|after:date_debut',
+            'heure_debut' => 'required|date_format:H:i',
+            'lieu' => 'required|string',
+            'apostolat' => 'required|array|min:1',
+            'apostolat.*' => 'exists:apostolats,id'
+        ]);
+
+        if($data['zone_id']){
+            $data['type'] = 'zonale';
+        }else if($data['sous_zone_id']){
+            $data['type'] = 'sous_zonale';
+        }else{
+            $data['type'] = 'groupe';
+        }
+
+        DB::beginTransaction();
+        $activite->update($data);
+
+        ApostolatConcerne::where('activite_id', $activite->id)->delete();
+
+        foreach ($data['apostolat'] as $apostolat) {
+            ApostolatConcerne::create([
+                'categorie_activite_id' => $activite->categorie_activite_id,
+                'activite_id' => $activite->id,
+                'apostolat_id' => $apostolat
+            ]);
+        }
+
+        DB::commit();
+
+        return redirect()->route('activites.index')
+            ->with('message', 'Activité modifié avec succes');
     }
 
     /**
@@ -78,8 +186,22 @@ class ActiviteController extends Controller
      * @param  \App\Models\Activite  $activite
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Activite $activite)
+    public function destroy(Request $request)
     {
         //
+        $id = $request->input('id');
+
+        if(!empty($id)){
+            DB::beginTransaction();
+            ApostolatConcerne::where('activite_id', $id)->delete();
+
+            Activite::find($id)->delete();
+            DB::commit();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
     }
 }

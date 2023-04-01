@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Constantes;
 use App\Models\ResponsableZone;
+use App\Models\User;
+use App\Models\Zone;
 use Illuminate\Http\Request;
 
 class ResponsableZoneController extends Controller
@@ -14,7 +17,8 @@ class ResponsableZoneController extends Controller
      */
     public function index()
     {
-        //
+        $zones = Zone::get();
+        return view('responsable_zones.index',compact('zones'));
     }
 
     /**
@@ -55,9 +59,16 @@ class ResponsableZoneController extends Controller
      * @param  \App\Models\ResponsableZone  $responsableZone
      * @return \Illuminate\Http\Response
      */
-    public function edit(ResponsableZone $responsableZone)
+    public function edit(Request $request)
     {
-        //
+        $zone = Zone::find($request->zone);
+        $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
+            ->orderBy('nom')->get();
+        if(!empty($request)){
+            return view('responsable_zones.edit',compact('zone', 'users'));
+        }else{
+            abort(404);
+        }
     }
 
     /**
@@ -69,7 +80,29 @@ class ResponsableZoneController extends Controller
      */
     public function update(Request $request, ResponsableZone $responsableZone)
     {
-        //
+        $data = $request->validate([
+            'zone_id' =>  'required',
+            'responsabilite_zones' => 'array',
+            'responsable_zone_ids' => 'array'
+        ]);
+
+        //$users = User::where(['etat'=>Constantes::ETAT_ACTIF])->get();
+        $zone = Zone::find($request->zone_id);
+
+        foreach($request->responsabilite_zones as $key => $responsabiliteZone){
+            if($key !== '' ){
+                $zone->responsableZones()->where(['nom_responsabilite' => $responsabiliteZone])
+                    ->update([ 'actif' => Constantes::ETAT_INACTIF]);
+
+                $zone->responsableZones()->attach($request->responsable_zone_ids[$key], [
+                    'nom_responsabilite' => $responsabiliteZone,
+                    'actif' => Constantes::ETAT_ACTIF
+                ]);
+            }
+        }
+
+        return redirect()->route('responsable_zones.edit', [$zone])
+            ->with('success','Responsables de zone mis à jour avec succès.');
     }
 
     /**
