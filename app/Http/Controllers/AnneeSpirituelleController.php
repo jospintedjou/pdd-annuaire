@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Apostolat;
+use App\Constantes;
+use App\Models\AnneeSpirituelle;
 use Illuminate\Http\Request;
 
-class ApostolatController extends Controller
+class AnneeSpirituelleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +15,9 @@ class ApostolatController extends Controller
      */
     public function index()
     {
-        $apostolats = Apostolat::get();
+        $annee_spirituelles = AnneeSpirituelle::get();
 
-        return view('apostolats.index',compact('apostolats'));
+        return view('annee_spirituelles.index',compact('annee_spirituelles'));
     }
 
     /**
@@ -26,7 +27,7 @@ class ApostolatController extends Controller
      */
     public function create()
     {
-        return view('apostolats.create');
+        return view('annee_spirituelles.create');
     }
 
     /**
@@ -37,76 +38,80 @@ class ApostolatController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'nom' => 'required',
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date'
         ]);
 
-        Apostolat::create($request->all());
+        $data['etat'] = Constantes::ETAT_ACTIF;
 
-        return redirect()->route('apostolats.index')
-            ->with('success','Apostolat créé avec succès.');
+        AnneeSpirituelle::create($data);
+
+        return redirect()->route('annee_spirituelles.index')
+            ->with('success','année spirituelle créée avec succès.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Apostolat  $apostolat
+     * @param  \App\Models\AnneeSpirituelle  $anneeSpirituelle
      * @return \Illuminate\Http\Response
      */
-    public function show(Apostolat $apostolat)
+    public function show(AnneeSpirituelle $annee_spirituelle)
     {
-        return view('apostolats.show',compact('apostolat'));
+        return view('annee_spirituelles.show',compact('annee_spirituelle'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Apostolat  $apostolat
+     * @param  \App\Models\AnneeSpirituelle  $anneeSpirituelle
      * @return \Illuminate\Http\Response
      */
-    public function edit(Apostolat $apostolat)
+    public function edit(AnneeSpirituelle $annee_spirituelle)
     {
-        return view('apostolats.edit',compact('apostolat'));
+        return view('annee_spirituelles.edit',compact('annee_spirituelle'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Apostolat  $apostolat
+     * @param  \App\Models\AnneeSpirituelle  $anneeSpirituelle
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Apostolat $apostolat)
+    public function update(Request $request, AnneeSpirituelle $anneeSpirituelle)
     {
         $request->validate([
-            'nom' => 'required'
+            'nom' => 'required',
+            'date_debut' => 'required',
+            'date_fin' => 'required',
         ]);
 
-        $apostolat->update($request->all());
+        $anneeSpirituelle->update($request->all());
 
-        return redirect()->route('apostolats.index')
-            ->with('success','Apostolat mis à jour avec succès');
+        return redirect()->route('annee_spirituelles.index')
+            ->with('success','Année spirituelles mise à jour avec succès');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Apostolat  $apostolat
+     * @param  \App\Models\AnneeSpirituelle  $anneeSpirituelle
      * @return \Illuminate\Http\Response
      */
-
     public function destroy(Request $request)
     {
         $id = $request->input('id');
 
         if(!empty($id)){
-            Apostolat::find($id)->delete();
+            AnneeSpirituelle::find($id)->delete();
             return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
                 JSON_UNESCAPED_UNICODE);
         }else{
             return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
                 JSON_UNESCAPED_UNICODE);
         }
-
     }
 }

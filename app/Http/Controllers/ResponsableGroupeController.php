@@ -30,10 +30,7 @@ class ResponsableGroupeController extends Controller
      */
     public function create()
     {
-        $groupes = Groupe::get();
-        $zones = Zone::get();
-        $sous_zones = SousZone::get();
-        return view('responsable_groupes.create', compact('groupes', 'sous_zones', 'zones'));
+        //
     }
 
     /**
@@ -76,7 +73,8 @@ class ResponsableGroupeController extends Controller
     public function edit(Request $request)
     {
         $groupe = Groupe::find($request->groupe);
-        $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->get();
+        $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
+                    ->orderBy('nom')->get();
         if(!empty($request)){
             return view('responsable_groupes.edit',compact('groupe', 'users'));
         }else{
@@ -94,7 +92,30 @@ class ResponsableGroupeController extends Controller
      */
     public function update(Request $request, ResponsableGroupe $responsableGroupe)
     {
-        //
+
+        $data = $request->validate([
+            'groupe_id' =>  'required',
+            'responsabilite_groupes' => 'array',
+            'responsable_groupe_ids' => 'array'
+        ]);
+
+        $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->get();
+        $groupe = Groupe::find($request->groupe_id);
+
+        foreach($request->responsabilite_groupes as $key => $responsabiliteGroupe){
+            if($key !== '' ){
+                $groupe->responsableGroupes()->where(['nom_responsabilite' => $responsabiliteGroupe])
+                    ->update([ 'actif' => Constantes::ETAT_INACTIF]);
+
+                $groupe->responsableGroupes()->attach($request->responsable_groupe_ids[$key], [
+                    'nom_responsabilite' => $responsabiliteGroupe,
+                    'actif' => Constantes::ETAT_ACTIF
+                ]);
+            }
+        }
+
+        return redirect()->route('responsable_groupes.edit', [$groupe])
+            ->with('success','Responsables de groupe mis à jour avec succès.');
     }
 
     /**

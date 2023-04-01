@@ -56,6 +56,30 @@
                 </li>
                 @endif
 
+               <li class="nav-item @if(request()->routeIs('annee_spirituelles*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#annee_spirituelles" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>Année spirituelle <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('annee_spirituelles*')) show @endif" id="annee_spirituelles" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('annee_spirituelles.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('annee_spirituelles.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('annee_spirituelles.create')) active @endif">
+                                <a class="nav-link" href="{!! route('annee_spirituelles.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
                <li class="nav-item @if(request()->routeIs('apostolats*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#apostolats" aria-expanded="true">
                         <i class="material-icons">person</i>
@@ -184,13 +208,6 @@
                                     <span class="sidebar-normal"> Lister </span>
                                 </a>
                             </li>
-
-                            <li class="nav-item @if(request()->routeIs('responsable_zones.create')) active @endif">
-                                <a class="nav-link" href="{!! route('responsable_zones.create') !!}">
-                                    <span class="sidebar-mini"> A </span>
-                                    <span class="sidebar-normal"> Ajouter </span>
-                                </a>
-                            </li>
                         </ul>
                     </div>
                 </li>
@@ -207,13 +224,6 @@
                                     <span class="sidebar-normal"> Lister </span>
                                 </a>
                             </li>
-
-                            <li class="nav-item @if(request()->routeIs('responsable_sous_zones.create')) active @endif">
-                                <a class="nav-link" href="{!! route('responsable_sous_zones.create') !!}">
-                                    <span class="sidebar-mini"> A </span>
-                                    <span class="sidebar-normal"> Ajouter </span>
-                                </a>
-                            </li>
                         </ul>
                     </div>
                 </li>
@@ -228,13 +238,6 @@
                                 <a class="nav-link" href="{!! route('responsable_groupes.index') !!}">
                                     <span class="sidebar-mini"> L </span>
                                     <span class="sidebar-normal"> Lister </span>
-                                </a>
-                            </li>
-
-                            <li class="nav-item @if(request()->routeIs('responsable_groupes.create')) active @endif">
-                                <a class="nav-link" href="{!! route('responsable_groupes.create') !!}">
-                                    <span class="sidebar-mini"> A </span>
-                                    <span class="sidebar-normal"> Ajouter </span>
                                 </a>
                             </li>
                         </ul>

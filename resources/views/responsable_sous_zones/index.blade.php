@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Groupe @endsection
+@section('page_title') Responsables de Sous-zones @endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des groupes</h4>
+                        <h4 class="card-title">Liste des responsables des Sous-zones</h4>
                     </div>
                     <div class="card-body">
                         <div class="toolbar">
@@ -27,38 +27,36 @@
                                                 <th>N°</th>
                                                 <th>Zone</th>
                                                 <th>Sous-zone</th>
-                                                <th>Groupe</th>
                                                 <th>Responsables</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($groupes as $groupe)
+                                            @foreach($sous_zones as $sous_zone)
                                             <tr>
                                                 <td class="">{{$loop->index + 1}}</td>
-                                                <td class="">{{$groupe->sousZone()->first()->zone()->first()->nom}}</td>
-                                                <td class="">{{$groupe->sousZone()->first()->nom}}</td>
-                                                <td class="">{{$groupe->nom_groupe}}</td>
+                                                <td class="">{{$sous_zone->zone()->first()->nom}}</td>
+                                                <td class="">{{$sous_zone->nom}}</td>
                                                 <td class="">
-                                                    @foreach($groupe->responsableGroupes()->where('actif', \App\Constantes::ETAT_ACTIF)->cursor() as $responsableGroupe)
-                                                        {{$responsableGroupe->nom}} {{$responsableGroupe->prenom}}
-                                                        ({{$responsableGroupe->pivot->nom_responsabilite}})
+                                                    @foreach($sous_zone->responsableSousZones()->where('actif', \App\Constantes::ETAT_ACTIF)->cursor() as $responsableSousZone)
+                                                        {{$responsableSousZone->nom}} {{$responsableSousZone->prenom}}
+                                                        ({{$responsableSousZone->pivot->nom_responsabilite}})
                                                          <br>
                                                     @endforeach
                                                 </td>
                                                 <td class="td-actions text-right">
-                                                    <form action="{{-- route('responsable_groupes.destroy',$groupe->id) --}}" method="Post">
+                                                    <form action="{{-- route('responsable_sous_zones.destroy',$sous_zone->id) --}}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a href="{{route('responsable_groupes.edit', ['groupe' =>$groupe->id])}}" type="button" rel="tooltip"
+                                                        <a href="{{route('responsable_sous_zones.edit', ['sous_zone' =>$sous_zone->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
                                                         <button type="button" class="btn btn-danger btn-round text-white"
-                                                                data-id="{{ $groupe->id }}"
-                                                                data-href="{{-- route('responsable_groupes.destroy',$groupe->id) --}}"
+                                                                data-id="{{ $sous_zone->id }}"
+                                                                data-href="{{-- route('responsable_sous_zones.destroy',$sous_zone->id) --}}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>

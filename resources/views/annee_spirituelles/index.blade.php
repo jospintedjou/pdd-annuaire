@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Groupe @endsection
+@section('page_title') Année spirituelle @endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des groupes</h4>
+                        <h4 class="card-title">Liste des année spirituelles</h4>
                     </div>
                     <div class="card-body">
                         <div class="toolbar">
@@ -24,41 +24,30 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <th>N°</th>
-                                                <th>Zone</th>
-                                                <th>Sous-zone</th>
-                                                <th>Groupe</th>
-                                                <th>Responsables</th>
+                                                <th>Nom</th>
+                                                <th>Date de début</th>
+                                                <th>Dade de fin</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($groupes as $groupe)
+                                            @foreach($annee_spirituelles as $annee_spirituelle)
                                             <tr>
-                                                <td class="">{{$loop->index + 1}}</td>
-                                                <td class="">{{$groupe->sousZone()->first()->zone()->first()->nom}}</td>
-                                                <td class="">{{$groupe->sousZone()->first()->nom}}</td>
-                                                <td class="">{{$groupe->nom_groupe}}</td>
-                                                <td class="">
-                                                    @foreach($groupe->responsableGroupes()->where('actif', \App\Constantes::ETAT_ACTIF)->cursor() as $responsableGroupe)
-                                                        {{$responsableGroupe->nom}} {{$responsableGroupe->prenom}}
-                                                        ({{$responsableGroupe->pivot->nom_responsabilite}})
-                                                         <br>
-                                                    @endforeach
-                                                </td>
+                                                <td class="">{{$annee_spirituelle->nom}}</td>
+                                                <td class="">{{$annee_spirituelle->date_debut}}</td>
+                                                <td class="">{{$annee_spirituelle->date_fin}}</td>
                                                 <td class="td-actions text-right">
-                                                    <form action="{{-- route('responsable_groupes.destroy',$groupe->id) --}}" method="Post">
+                                                    <form action="{{ route('annee_spirituelles.destroy',$annee_spirituelle->id) }}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a href="{{route('responsable_groupes.edit', ['groupe' =>$groupe->id])}}" type="button" rel="tooltip"
+                                                        <a href="{{route('annee_spirituelles.edit', ['annee_spirituelle' =>$annee_spirituelle->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-danger btn-round text-white"
-                                                                data-id="{{ $groupe->id }}"
-                                                                data-href="{{-- route('responsable_groupes.destroy',$groupe->id) --}}"
+                                                        <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('annee_spirituelles.destroy',$annee_spirituelle->id) }}"
+                                                            data-id="{{ $annee_spirituelle->id }}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>
@@ -109,10 +98,10 @@
             $('.dataTable').DataTable({
                 "pagingType": "full_numbers",
                 "lengthMenu": [
-                    [30, 25, 50, -1],
-                    [30, 25, 50, "All"]
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
                 ],
-                "order": [[ 0, "asc" ]],
+                "order": [[ 0, "desc" ]],
                 responsive: true,
                 language: {
                     search: "_INPUT_",

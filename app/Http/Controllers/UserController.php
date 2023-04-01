@@ -102,7 +102,7 @@ class UserController extends Controller
             //Check if this group already have a "responsable" and throw error if the new value is still "responsable"$user->responsableZones()->where(['zone_id' => $request->input('responsable_zone_id')])
 
             $user->responsableGroupes()->where(['groupe_id' => $request->input('responsabilite_groupe_id')])
-                ->update([ 'actif' => Constantes::ETAT_ACTIF]);
+                ->update([ 'actif' => Constantes::ETAT_INACTIF]);
 
             $user->responsableGroupes()->attach($request->input('responsabilite_groupe_id'), [
                 'nom_responsabilite' => $request->input('responsabilite_groupe'),
@@ -113,7 +113,7 @@ class UserController extends Controller
             //Deletge old responsable sous-zone
 
             $user->responsableSousZones()->where(['sous_zone_id' => $request->input('responsabilite_sous_zone_id')])
-                ->update([ 'actif' => Constantes::ETAT_ACTIF]);
+                ->update([ 'actif' => Constantes::ETAT_INACTIF]);
 
             $user->responsableSousZones()->attach($request->input('responsable_sous_zone_id'), [
                 'nom_responsabilite' => $request->input('responsabilite_sous_zone'),
@@ -123,7 +123,7 @@ class UserController extends Controller
         if(!empty($request->input('responsabilite_zone'))){
             //Check if this zone already have a "responsable" and throw error if the new value is still "responsable"
             $user->responsableZones()->where(['zone_id' => $request->input('responsabilite_zone_id')])
-                ->update([ 'actif' => Constantes::ETAT_ACTIF]);
+                ->update([ 'actif' => Constantes::ETAT_INACTIF]);
 
             $user->responsableZones()->attach($request->input('responsable_zone_id'), [
                 'nom_responsabilite' => $request->input('responsabilite_zone'),
@@ -160,6 +160,7 @@ class UserController extends Controller
         $groupes = Groupe::get();
         $zones = Zone::get();
         $sous_zones = SousZone::get();
+
         return view('users.edit', compact('user', 'niveau_engagements',  'apostolats', 'groupes', 'sous_zones', 'zones'));
 
     }
