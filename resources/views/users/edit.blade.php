@@ -400,7 +400,7 @@
     </div>
 @endsection
 @section('script')
-    <script src="{{asset('js/user.js')}}"></script>
+    <script src="{{asset('js/custom.js')}}"></script>
     <script type="text/javascript">
         $('button:submit').click(function(e){
             e.preventDefault();

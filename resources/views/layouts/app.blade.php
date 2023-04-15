@@ -514,6 +514,7 @@
 <script src="{{asset('js/bootstrap-autocomplete.min.js')}}"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="{{asset('theme-admin/demo/demo.js')}}"></script>
+<script src="{{asset('js/custom.js')}}"></script>
 <script>
     $(document).ready(function() {
     $().ready(function() {

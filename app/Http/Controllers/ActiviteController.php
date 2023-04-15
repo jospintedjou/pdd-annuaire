@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnneeSpirituelle;
 use App\Models\Zone;
 use App\Models\Groupe;
 use App\Models\Activite;
@@ -33,19 +34,15 @@ class ActiviteController extends Controller
      */
     public function create()
     {
-        //
-        $zones = Zone::all();
-        $sous_zones = SousZone::all();
-        $groupes = Groupe::all();
-        $apostolats = Apostolat::all();
-        $categories = CategorieActivite::all();
+        $zones = Zone::get();
+        $sous_zones = SousZone::get();
+        $groupes = Groupe::get();
+        $apostolats = Apostolat::get();
+        $categories = CategorieActivite::get();
+        $annee_spirituelles = AnneeSpirituelle::get();
 
-        return view('activite.create')
-                ->with('zones', $zones)
-                ->with('sous_zones', $sous_zones)
-                ->with('groupes', $groupes)
-                ->with('categories', $categories)
-                ->with('apostolats', $apostolats);
+        return view('activite.create', compact('zones', 'sous_zones', 'groupes',
+                'categories', 'apostolats', 'annee_spirituelles'));
     }
 
     /**
@@ -115,19 +112,15 @@ class ActiviteController extends Controller
      */
     public function edit(Activite $activite)
     {
-        //
-        $zones = Zone::all();
-        $sous_zones = SousZone::all();
-        $groupes = Groupe::all();
-        $apostolats = Apostolat::all();
-        $categories = CategorieActivite::all();
+        $zones = Zone::get();
+        $sous_zones = SousZone::get();
+        $groupes = Groupe::get();
+        $apostolats = Apostolat::get();
+        $categories = CategorieActivite::get();
+        $annee_spirituelles = AnneeSpirituelle::get();
 
-        return view('activite.edit', compact('activite'))
-                ->with('zones', $zones)
-                ->with('sous_zones', $sous_zones)
-                ->with('groupes', $groupes)
-                ->with('categories', $categories)
-                ->with('apostolats', $apostolats);
+        return view('activite.edit', compact('activite', 'zones', 'sous_zones', 'groupes',
+            'categories', 'apostolats', 'annee_spirituelles'));
     }
 
     /**

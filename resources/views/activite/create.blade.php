@@ -19,8 +19,7 @@
                         <div class="card-body">
 
                             <div class="row">
-                                <div class="col-md-8">
-
+                                <div class="col-md-6">
                                     <div class="form-group @error('categorie_activite') has-danger @enderror">
                                         <label for="categorie_activite_id" class="bmd-label-floating @error('categorie_activite') text-danger @enderror">Categorie</label>
 
@@ -40,8 +39,38 @@
                                         </span>
                                         @enderror
                                     </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group @error('nom') has-danger @enderror">
+                                        <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom de l'activité</label>
+                                        <input type="text" name="nom" id="nom" value="{{ old('nom') }}" class="form-control @error('nom') is-invalid @enderror">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group @error('type_activite') has-danger @enderror">
+                                        <label for="type_activite_id" class="bmd-label-floating @error('type_activite') text-danger @enderror">Type</label>
 
-                                    <div class="form-group @error('zone') has-danger @enderror">
+                                        <select name="type_activite_id" id="type_activite" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir le type d'activité">
+                                            @foreach (\App\Constantes::TYPE_ACTIVTIE as $type_activite)
+                                                @if(isset($type_activite))
+                                                    <option value="{{ $type_activite }}">{{ $type_activite }}</option>
+                                                @else
+                                                    <option  selected disabled>Aucun type d'activité trouvé</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('categorie_activite')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group zone-container @error('zone') has-danger @enderror" style="display: none">
                                         <label for="zone" class="bmd-label-floating @error('zone') text-danger @enderror">Zone</label>
 
                                         <select name="zone_id" id="zone" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
@@ -60,8 +89,7 @@
                                         </span>
                                         @enderror
                                     </div>
-
-                                    <div class="form-group @error('sous_zone') has-danger @enderror">
+                                    <div class="form-group sous-zone-container @error('sous_zone') has-danger @enderror"  style="display: none">
                                         <label for="sous_zone_id" class="bmd-label-floating @error('sous_zone') text-danger @enderror">Sous Zone</label>
 
                                         <select name="sous_zone_id" id="sous_zone" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
@@ -80,8 +108,7 @@
                                         </span>
                                         @enderror
                                     </div>
-
-                                    <div class="form-group @error('groupe') has-danger @enderror">
+                                    <div class="form-group groupe-container @error('groupe') has-danger @enderror"  style="display: none">
                                         <label for="groupe_id" class="bmd-label-floating @error('groupe') text-danger @enderror">Groupe</label>
 
                                         <select name="groupe_id" id="groupe" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
@@ -100,66 +127,96 @@
                                         </span>
                                         @enderror
                                     </div>
-
-                                    <div class="@error('date_debut') has-danger @enderror">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group @error('annee_spirituelle') has-danger @enderror">
+                                        <label for="annee_spirituelle" class="bmd-label-floating @error('annee_spirituelle') text-danger @enderror">Année spirituelle</label>
+                                        <select name="annee_spirituelle" id="annee_spirituelle" class="selectpicker col-md-8" data-size="auto" data-style="select-with-transition"
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir l'année spiriruelle">
+                                            @foreach ($annee_spirituelles as $annee_spirituelle)
+                                                @if(isset($annee_spirituelle))
+                                                    <option value="{{ $annee_spirituelle->id }}">{{ $annee_spirituelle->nom }}</option>
+                                                @else
+                                                    <option selected disabled>Aucune année spirituelle trouvée</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('annee_spirituelle')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group @error('date_debut') has-danger @enderror">
                                         <label for="date_debut" class="bmd-label-floating @error('date_debut') text-danger @enderror">Date de debut</label>
                                         <input type="date" name="date_debut" id="date_debut" value="{{ old('heure_debut') }}" class="form-control @error('date_debut') is-invalid @enderror">
                                         @error('date_debut')
                                         <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
+                                    <strong>{{ $message }}</strong>
+                                    </span>
                                         @enderror
                                     </div>
-
-                                    <div class="@error('date_fin') has-danger @enderror">
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group @error('date_fin') has-danger @enderror">
                                         <label for="date_fin" class="bmd-label-floating @error('date_fin') text-danger @enderror">Date de fin</label>
                                         <input type="date" name="date_fin" id="date_fin" value="{{ old('heure_fin') }}" class="form-control @error('date_fin') is-invalid @enderror">
                                         @error('date_fin')
                                         <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
+                                    <strong>{{ $message }}</strong>
+                                    </span>
                                         @enderror
-                                    </div>
-
-                                    <div class="@error('heure_debut') has-danger @enderror">
-                                        <label for="heure_debut" class="bmd-label-floating @error('heure_debut') text-danger @enderror">Heure de Debut</label>
-                                        <input type="time" name="heure_debut" id="heure_debut" value="{{ old('heure_debut') }}" class="form-control @error('heure_debut') is-invalid @enderror">
-                                        @error('heure_debut')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="@error('lieu') has-danger @enderror">
-                                        <label for="lieu" class="bmd-label-floating @error('lieu') text-danger @enderror">Lieu</label>
-                                        <input type="text" name="lieu" id="lieu" value="{{ old('lieu') }}" class="form-control @error('lieu') is-invalid @enderror">
-                                        @error('lieu')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="@error('nom') has-danger @enderror">
-                                        <label for="apostolat" class="form-label @error('apostolat') text-danger @enderror">Apostolats</label>
-                                        <br>
-                                        <select name="apostolat[]" id="apostolat" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir les apostolats" multiple>
-                                            @foreach ($apostolats as $apostolat)
-                                                <option value="{{ $apostolat->id }}">{{$apostolat->nom}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('apostolat')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group @error('nom') has-danger @enderror">
-                                        <button id="btn-send" type="submit" class="btn btn-primary">Envoyer</button>
                                     </div>
                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-4">
+                                     <div class="@error('heure_debut') has-danger @enderror">
+                                         <label for="heure_debut" class="bmd-label-floating @error('heure_debut') text-danger @enderror">Heure de Debut</label>
+                                         <input type="time" name="heure_debut" id="heure_debut" value="{{ old('heure_debut') }}" class="form-control @error('heure_debut') is-invalid @enderror">
+                                         @error('heure_debut')
+                                         <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                        </span>
+                                         @enderror
+                                     </div>
+                                 </div>
+                                 <div class="col-md-4">
+                                     <div class="@error('lieu') has-danger @enderror">
+                                         <label for="lieu" class="bmd-label-floating @error('lieu') text-danger @enderror">Lieu</label>
+                                         <input type="text" name="lieu" id="lieu" value="{{ old('lieu') }}" class="form-control @error('lieu') is-invalid @enderror">
+                                         @error('lieu')
+                                         <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                        </span>
+                                         @enderror
+                                     </div>
+                                 </div>
+                                 <div class="col-md-4">
+                                     <div class="@error('nom') has-danger @enderror">
+                                         <label for="apostolat" class="form-label @error('apostolat') text-danger @enderror">Apostolats</label>
+                                         <br>
+                                         <select name="apostolat[]" id="apostolat" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                 data-style2="btn btn-primary btn-round" data-header="Choisir les apostolats" multiple>
+                                             @foreach ($apostolats as $apostolat)
+                                                 <option value="{{ $apostolat->id }}">{{$apostolat->nom}}</option>
+                                             @endforeach
+                                         </select>
+                                         @error('apostolat')
+                                         <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                        </span>
+                                         @enderror
+                                     </div>
+                                 </div>
+                             </div>
+
+                            <div class="form-group">
+                                <button id="btn-send" type="submit" class="btn btn-primary">Envoyer</button>
                             </div>
 
                             <div class="clearfix"></div>

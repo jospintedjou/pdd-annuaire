@@ -40,7 +40,6 @@ class UserSeeder extends Seeder
             'date_naissance' => date('Y-m-d H:i:s'),
             'etat' => Constantes::ETAT_ACTIF,
             'email' => 'admin@gmail.com',
-            'pays' => Constantes::PAYS_CAMEROUN,
             'ville' => Constantes::VILLE_YAOUNDE,
             'niveau_engagement_id' => 1,
             'role' => Constantes::ROLE_ADMIN,
