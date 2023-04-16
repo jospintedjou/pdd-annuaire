@@ -86,4 +86,7 @@ class Constantes
     const INCARNATEUR                 = 'INCARNATEUR';
     const RESPONSABLE_GENERAL         = 'RESPONSABLE_GENERAL';
 
+    //Types d'activité
+    const TYPE_ACTIVTIE = array('Régionale', 'Zonale', 'Sous-zonale', 'Groupe');
+
 }
