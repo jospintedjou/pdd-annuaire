@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Activit&eacute; @endsection
+@section('page_title') Activité @endsection
 @section('content')
     <div class="content user-level">
         <div class="container-fluid">
@@ -9,7 +9,7 @@
             <form method="post" action="{!! route('activites.store') !!}" id="groupe_form">
                 @csrf
                 <div class="row">
-                <div class="col-md-12">
+                    <div class="col-md-12">
                     <div class="card pb-30">
                         <div class="card-header card-header-primary card-header-text">
                             <div class="card-text">
@@ -27,7 +27,7 @@
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la catégorie">
                                             @foreach ($categories as $categorie_activite)
                                                 @if(isset($categorie_activite))
-                                                    <option value="{{ $categorie_activite->id }}">{{ $categorie_activite->nom }}</option>
+                                                    <option value="{{ $categorie_activite->id }}" @if(old('categorie_activite_id') == $categorie_activite->id) selected @endif>{{ $categorie_activite->nom }}</option>
                                                 @else
                                                     <option  selected disabled>Aucune categorie_activite trouvée</option>
                                                 @endif
@@ -35,7 +35,7 @@
                                         </select>
                                         @error('categorie_activite')
                                         <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                            <strong>{{ $message }}</strong>
                                         </span>
                                         @enderror
                                     </div>
@@ -50,19 +50,19 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group @error('type_activite') has-danger @enderror">
-                                        <label for="type_activite_id" class="bmd-label-floating @error('type_activite') text-danger @enderror">Type</label>
+                                        <label for="type_activite" class="bmd-label-floating @error('type_activite') text-danger @enderror">Type</label>
 
-                                        <select name="type_activite_id" id="type_activite" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                        <select name="type_activite" id="type_activite" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir le type d'activité">
-                                            @foreach (\App\Constantes::TYPE_ACTIVTIE as $type_activite)
+                                            @foreach (\App\Constantes::TYPE_ACTIVITE as $type_activite)
                                                 @if(isset($type_activite))
-                                                    <option value="{{ $type_activite }}">{{ $type_activite }}</option>
+                                                    <option value="{{ $type_activite }}" @if(old('type_activite') == $type_activite) selected @endif>{{ $type_activite }}</option>
                                                 @else
                                                     <option  selected disabled>Aucun type d'activité trouvé</option>
                                                 @endif
                                             @endforeach
                                         </select>
-                                        @error('categorie_activite')
+                                        @error('type_activite')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                         </span>
@@ -70,14 +70,15 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group zone-container @error('zone') has-danger @enderror" style="display: none">
+                                    <div class="form-group zone-container @error('zone') has-danger @enderror"
+                                         style="display: @if(old('type_activite') == \App\Constantes::ACTIVITE_ZONALE) block @else none @endif ">
                                         <label for="zone" class="bmd-label-floating @error('zone') text-danger @enderror">Zone</label>
 
                                         <select name="zone_id" id="zone" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la zone">
                                             @foreach ($zones as $zone)
                                                 @if(isset($zone))
-                                                    <option value="{{ $zone->id }}">{{ $zone->nom }}</option>
+                                                    <option value="{{ $zone->id }}" @if(old('zone_id') == $zone->id) selected @endif>{{ $zone->nom }}</option>
                                                 @else
                                                     <option  selected disabled>Aucune zone trouvée</option>
                                                 @endif
@@ -89,14 +90,15 @@
                                         </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group sous-zone-container @error('sous_zone') has-danger @enderror"  style="display: none">
+                                    <div class="form-group sous-zone-container @error('sous_zone') has-danger @enderror"
+                                         style="display: @if(old('type_activite') == \App\Constantes::ACTIVITE_SOUS_ZONALE) block @else none @endif ">
                                         <label for="sous_zone_id" class="bmd-label-floating @error('sous_zone') text-danger @enderror">Sous Zone</label>
 
                                         <select name="sous_zone_id" id="sous_zone" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la sous zone">
                                             @foreach ($sous_zones as $sous_zone)
                                                 @if(isset($sous_zone))
-                                                    <option value="{{ $sous_zone->id }}">{{ $sous_zone->nom }}</option>
+                                                    <option value="{{ $sous_zone->id }}"  @if(old('sous_zone_id') == $sous_zone->id) selected @endif>{{ $sous_zone->nom }}</option>
                                                 @else
                                                     <option  selected disabled>Aucune sous zone trouvée</option>
                                                 @endif
@@ -108,7 +110,8 @@
                                         </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group groupe-container @error('groupe') has-danger @enderror"  style="display: none">
+                                    <div class="form-group groupe-container @error('groupe') has-danger @enderror"
+                                         style="display: @if(old('type_activite') == \App\Constantes::ACTIVITE_GROUPE) block @else none @endif ">
                                         <label for="groupe_id" class="bmd-label-floating @error('groupe') text-danger @enderror">Groupe</label>
 
                                         <select name="groupe_id" id="groupe" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
@@ -153,7 +156,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group @error('date_debut') has-danger @enderror">
                                         <label for="date_debut" class="bmd-label-floating @error('date_debut') text-danger @enderror">Date de debut</label>
-                                        <input type="date" name="date_debut" id="date_debut" value="{{ old('heure_debut') }}" class="form-control @error('date_debut') is-invalid @enderror">
+                                        <input type="date" name="date_debut" id="date_debut" value="{{ old('date_debut') }}" class="form-control @error('date_debut') is-invalid @enderror">
                                         @error('date_debut')
                                         <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -164,7 +167,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group @error('date_fin') has-danger @enderror">
                                         <label for="date_fin" class="bmd-label-floating @error('date_fin') text-danger @enderror">Date de fin</label>
-                                        <input type="date" name="date_fin" id="date_fin" value="{{ old('heure_fin') }}" class="form-control @error('date_fin') is-invalid @enderror">
+                                        <input type="date" name="date_fin" id="date_fin" value="{{ old('date_fin') }}" class="form-control @error('date_fin') is-invalid @enderror">
                                         @error('date_fin')
                                         <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -197,13 +200,13 @@
                                      </div>
                                  </div>
                                  <div class="col-md-4">
-                                     <div class="@error('nom') has-danger @enderror">
+                                     <div class="@error('apostolat') has-danger @enderror">
                                          <label for="apostolat" class="form-label @error('apostolat') text-danger @enderror">Apostolats</label>
                                          <br>
                                          <select name="apostolat[]" id="apostolat" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
                                                  data-style2="btn btn-primary btn-round" data-header="Choisir les apostolats" multiple>
                                              @foreach ($apostolats as $apostolat)
-                                                 <option value="{{ $apostolat->id }}">{{$apostolat->nom}}</option>
+                                                 <option value="{{ $apostolat->id }}" @if(old('apostolat') && in_array($apostolat->id, old('apostolat'))) selected @endif >{{$apostolat->nom}}</option>
                                              @endforeach
                                          </select>
                                          @error('apostolat')
@@ -223,7 +226,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                </div>
             </form>
         </div>
     </div>

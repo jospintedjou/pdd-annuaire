@@ -12,10 +12,10 @@ class Activite extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['zone_id','sous_zone_id', 'groupe_id', 'type','date_debut', 'date_fin', 'heure_debut','lieu',
-                'categorie_activite_id', 'created_at'];
+    protected $fillable = ['type', 'zone_id','sous_zone_id', 'nom', 'groupe_id','date_debut', 'date_fin', 'heure_debut','lieu',
+                'categorie_activite_id', 'type_activite', 'created_at'];
 
-    private $id_apostolats_concernes=NULL;
+    private $id_apostolats_concernes = NULL;
 
     public function participations()
     {
@@ -48,20 +48,23 @@ class Activite extends Model
             ->withPivot(['user', 'heure_arrivee']);
     }
 
-    public function apostolats(){
-        return $this->hasManyThrough(Apostolat::class, ApostolatConcerne::class, NULL, "id");
+    public function apostolats()
+    {
+        return $this->belongsToMany(Apostolat::class, ApostolatConcerne::class)->withTimestamps();
     }
-
+/*
+    public function apostolats(){
+        return $this->hasMany(Apostolat::class, ApostolatConcerne::class, NULL, "id");
+    }
+*/
     public function id_apostolats(){
-        if( $this->id_apostolats_concernes != NULL)
-            goto exit_point;
-
-        $this->id_apostolats_concernes = array();
-        foreach($this->apostolats as $apostolat){
-            array_push($this->id_apostolats_concernes, $apostolat->id);
+        if( $this->id_apostolats_concernes == NULL){
+            $this->id_apostolats_concernes = array();
+            foreach($this->apostolats as $apostolat){
+                array_push($this->id_apostolats_concernes, $apostolat->id);
+            }
         }
 
-exit_point:
         return $this->id_apostolats_concernes;
     }
 }

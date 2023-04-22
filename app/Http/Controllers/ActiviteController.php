@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constantes;
 use App\Models\AnneeSpirituelle;
 use App\Models\Zone;
 use App\Models\Groupe;
@@ -53,26 +54,47 @@ class ActiviteController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $data = $request->validate([
-            'zone_id' => 'required_without_all:sous_zone_id,groupe_id|exists:zones,id',
-            'sous_zone_id' => 'required_without_all:zone_id,groupe_id|exists:sous_zones,id',
-            'groupe_id' => 'required_without_all:zone_id,sous_zone_id|exists:groupes,id',
             'categorie_activite_id' => 'required|exists:categorie_activites,id',
+            'nom' => 'required',
+            'zone_id' => 'required_if:type_activite,'.Constantes::ACTIVITE_ZONALE.'exists:zones,id',
+            'sous_zone_id' => 'required_if:type_activite,'.Constantes::ACTIVITE_SOUS_ZONALE.'|exists:sous_zones,id',
+            'groupe_id' => 'required_if:type_activite,'.Constantes::ACTIVITE_GROUPE.'|exists:groupes,id',
+            'annee_spirituelle' => 'required|exists:annee_spirituelles,id',
+            'type_activite' => 'required|in:'.Constantes::ACTIVITE_REGIONALE.','.Constantes::ACTIVITE_ZONALE.','.
+                                Constantes::ACTIVITE_SOUS_ZONALE.','.Constantes::ACTIVITE_GROUPE,
             'date_debut' => 'required|date',
-            'date_fin' => 'nullable|date|after:date_debut',
-            'heure_debut' => 'required|date_format:H:i',
+            'date_fin' => 'nullable|date',
+            'heure_debut' => 'required|date_format:H:i:s',
             'lieu' => 'required|string',
             'apostolat' => 'required|array|min:1',
             'apostolat.*' => 'exists:apostolats,id'
         ]);
 
-        if($data['zone_id']){
-            $data['type'] = 'zonale';
-        }else if($data['sous_zone_id']){
-            $data['type'] = 'sous_zonale';
-        }else{
-            $data['type'] = 'groupe';
+        //Let's clear unused inputs depending on the type of activity
+        SWITCH($data['type_activite']){
+            case Constantes::ACTIVITE_REGIONALE:
+                $data['rone_id'] = null;
+                $data['sous_zone_id'] = null;
+                $data['groupe_id'] = null;
+                break;
+            case Constantes::ACTIVITE_ZONALE:
+                $data['sous_zone_id'] = null;
+                $data['groupe_id'] = null;
+                break;
+            case Constantes::ACTIVITE_SOUS_ZONALE:
+                $data['rone_id'] = null;
+                $data['groupe_id'] = null;
+                break;
+            case Constantes::ACTIVITE_GROUPE:
+                $data['rone_id'] = null;
+                $data['sous_zone_id'] = null;
+                break;
+            default:
+                $data['rone_id'] = null;
+                $data['sous_zone_id'] = null;
+                $data['groupe_id'] = null;
+                break;
         }
 
         DB::beginTransaction();
@@ -132,45 +154,66 @@ class ActiviteController extends Controller
      */
     public function update(Request $request, Activite $activite)
     {
-        //
         $data = $request->validate([
-            'zone_id' => 'required_without_all:sous_zone_id,groupe_id|exists:zones,id',
-            'sous_zone_id' => 'required_without_all:zone_id,groupe_id|exists:sous_zones,id',
-            'groupe_id' => 'required_without_all:zone_id,sous_zone_id|exists:groupes,id',
             'categorie_activite_id' => 'required|exists:categorie_activites,id',
+            'nom' => 'required',
+            'zone_id' => 'required_if:type_activite,'.Constantes::ACTIVITE_ZONALE.'exists:zones,id',
+            'sous_zone_id' => 'required_if:type_activite,'.Constantes::ACTIVITE_SOUS_ZONALE.'|exists:sous_zones,id',
+            'groupe_id' => 'required_if:type_activite,'.Constantes::ACTIVITE_GROUPE.'|exists:groupes,id',
+            'annee_spirituelle' => 'required|exists:annee_spirituelles,id',
+            'type_activite' => 'required|in:'.Constantes::ACTIVITE_REGIONALE.','.Constantes::ACTIVITE_ZONALE.','.
+                Constantes::ACTIVITE_SOUS_ZONALE.','.Constantes::ACTIVITE_GROUPE,
             'date_debut' => 'required|date',
-            'date_fin' => 'nullable|date|after:date_debut',
-            'heure_debut' => 'required|date_format:H:i',
+            'date_fin' => 'nullable|date',
+            'heure_debut' => 'required|date_format:H:i:s',
             'lieu' => 'required|string',
             'apostolat' => 'required|array|min:1',
             'apostolat.*' => 'exists:apostolats,id'
         ]);
 
-        if($data['zone_id']){
-            $data['type'] = 'zonale';
-        }else if($data['sous_zone_id']){
-            $data['type'] = 'sous_zonale';
-        }else{
-            $data['type'] = 'groupe';
+        //Let's clear unused inputs depending on the type of activity
+        SWITCH($data['type_activite']){
+            case Constantes::ACTIVITE_REGIONALE:
+                $data['rone_id'] = null;
+                $data['sous_zone_id'] = null;
+                $data['groupe_id'] = null;
+                break;
+            case Constantes::ACTIVITE_ZONALE:
+                $data['sous_zone_id'] = null;
+                $data['groupe_id'] = null;
+                break;
+            case Constantes::ACTIVITE_SOUS_ZONALE:
+                $data['rone_id'] = null;
+                $data['groupe_id'] = null;
+                break;
+            case Constantes::ACTIVITE_GROUPE:
+                $data['rone_id'] = null;
+                $data['sous_zone_id'] = null;
+                break;
+            default:
+                $data['rone_id'] = null;
+                $data['sous_zone_id'] = null;
+                $data['groupe_id'] = null;
+                break;
         }
 
         DB::beginTransaction();
         $activite->update($data);
 
-        ApostolatConcerne::where('activite_id', $activite->id)->delete();
+        $activite->apostolats()->detach();
 
         foreach ($data['apostolat'] as $apostolat) {
-            ApostolatConcerne::create([
+
+            $activite->apostolats()->attach($apostolat, [
                 'categorie_activite_id' => $activite->categorie_activite_id,
-                'activite_id' => $activite->id,
-                'apostolat_id' => $apostolat
+                'activite_id' => $activite->id
             ]);
         }
 
         DB::commit();
 
         return redirect()->route('activites.index')
-            ->with('message', 'Activité modifié avec succes');
+            ->with('message', 'Activité créé avec succes');
     }
 
     /**
@@ -181,7 +224,6 @@ class ActiviteController extends Controller
      */
     public function destroy(Request $request)
     {
-        //
         $id = $request->input('id');
 
         if(!empty($id)){
