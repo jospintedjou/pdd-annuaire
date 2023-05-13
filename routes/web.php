@@ -50,6 +50,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('logs', LogController::class);
     Route::resource('participations', ParticipationController::class);
 
+    //Présence
+    Route::get('/presences', [ActiviteController::class, 'presence'])->name('presences.index');
+    Route::get('/presences-create', [ActiviteController::class, 'createPresence'])->name('presences.create');
+    Route::post('/presences', [ActiviteController::class, 'storePresence'])->name('presences.store');
+
     //responsable groupe
     Route::get('/responsable_groupes', [ResponsableGroupeController::class, 'index'])
         ->name('responsable_groupes.index');

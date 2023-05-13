@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Constantes;
 use App\Models\AnneeSpirituelle;
+use App\Models\Participation;
+use App\Models\User;
 use App\Models\Zone;
 use App\Models\Groupe;
 use App\Models\Activite;
@@ -214,6 +216,44 @@ class ActiviteController extends Controller
 
         return redirect()->route('activites.index')
             ->with('message', 'Activité créé avec succes');
+    }
+
+    /**
+     * Show all activities so that user can go further and record presence
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function presence(Request $request)
+    {
+        $activites = Activite::get();
+
+        return view('presences.index', compact('activites'));
+    }
+
+    public function createPresence(Request $request)
+    {
+        if($request->activite){
+            $activite = Activite::find($request->activite);
+        }else{
+            abort(404);
+        }
+
+        $users = User::where('role', '!=', Constantes::ROLE_ADMIN)->get();
+
+        return view('presences.create', compact('activite', 'users'));
+    }
+
+    public function storePresence(Request $request)
+    {
+        $presence = $request->get();
+
+        $activites = Participation::create([
+            'activite_id' => $request->activite,
+            'user_id' => $request->activite,
+            'heure_arrivee' => $request->activite,
+        ]);
+
+        return view('presence.index', compact('activites'));
     }
 
     /**

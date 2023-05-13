@@ -56,6 +56,30 @@
                 </li>
                 @endif
 
+               <li class="nav-item @if(request()->routeIs('presences*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#presences" aria-expanded="true">
+                        <i class="material-icons">person</i>
+                        <p>Pésence <b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('presences*')) show @endif" id="presences" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('presences.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('presences.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item @if(request()->routeIs('presences.create')) active @endif">
+                                <a class="nav-link" href="{!! route('presences.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
                <li class="nav-item @if(request()->routeIs('annee_spirituelles*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#annee_spirituelles" aria-expanded="true">
                         <i class="material-icons">person</i>
