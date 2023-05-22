@@ -245,15 +245,22 @@ class ActiviteController extends Controller
 
     public function storePresence(Request $request)
     {
-        $presence = $request->get();
-
-        $activites = Participation::create([
-            'activite_id' => $request->activite,
-            'user_id' => $request->activite,
-            'heure_arrivee' => $request->activite,
+        $data = $request->validate([
+            'activite_id' => 'required|exists:activites,id',
+            'user_id' => 'required|exists:users,id',
+            'presence' => 'required'
         ]);
 
-        return view('presence.index', compact('activites'));
+        //Delete existing user's presence for this specific activity
+        $participation = Participation::where(['activite_id' => $request->activite_id,
+            'user_id' => $request->user_id])->delete();
+
+        //Add to database if user is present
+        if($request->presence){
+            Participation::create($data);
+        }
+
+        return response()->json(['status'=>'success']);
     }
 
     /**

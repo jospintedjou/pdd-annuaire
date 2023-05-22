@@ -39,12 +39,46 @@ $(document).ready(function(){
     /**
      * Start check presence in a specific actiivy
     * **/
-    $('.presence-input').change(function () {
-        alert('presence');
+    $('.presence-input').click(function () {
 
-        var tr = $(this).closest(tr),
-            tr1 = $(this).closest(tr);
-        tr.addClass('presence-active');
+        var val = $(this).val(),
+            tr = $(this).closest('tr'),
+            table = $(this).closest('table'),
+            url = table.data('url'),
+            user_id = tr.data('user_id'),
+            activite_id = table.data('activite_id'),
+            presence = $(this).is(':checked') ? 1 : 0,
+            formData = {
+                activite_id: activite_id,
+                user_id: user_id,
+                presence: presence
+            };
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                console.log('data', data);
+                if(presence){
+                    tr.addClass('presence-active');
+                }else {
+                    tr.removeClass('presence-active');
+                }
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+
+        console.log('valor is ', $(this).is(':checked'));
 
     });
     /**

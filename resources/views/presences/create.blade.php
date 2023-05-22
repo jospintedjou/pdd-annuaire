@@ -25,7 +25,9 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <table id="datatables"
-                                               class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                                               data-url="{{route('presences.store')}}"
+                                               data-activite_id="{{$activite->id}}"
+                                               class="table table-no-bordered dataTable dtr-inline"
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
@@ -42,28 +44,25 @@
                                             <tbody>
                                             @foreach($users as $user)
                                                 @if($user)
-                                                <tr>
+                                                <tr  data-user_id="{{$user->id}}">
                                                 <td class="">{{$user->prenom}} {{$user->nom}}</td>
-                                                <!--td class="">
-                                                    <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
-                                                    {{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first()->nom --}}
-                                                </td-->
                                                 <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom }}</td>
                                                 <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
                                                 <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
                                                 <td class="td-actions text-right">
-                                                    <form action="{{ route('users.destroy',$user->id) }}" method="Post">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <div class="form-check">
+                                                    <div class="form-check">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control timepicker" value="{{\Carbon\Carbon::now()}}"/>
                                                             <label class="form-check-label">
-                                                                <input class="form-check-input presence-input" type="checkbox" value="">
+                                                                <input class="form-check-input presence-input" type="checkbox" value="1">
                                                                 <span class="form-check-sign">
                                                                     <span class="check"></span>
                                                                 </span>
                                                             </label>
+
                                                         </div>
-                                                    </form>
+
+                                                    </div>
                                                 </td>
                                             </tr>
                                                 @endif
