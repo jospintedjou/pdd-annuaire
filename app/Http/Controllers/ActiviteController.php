@@ -234,7 +234,8 @@ class ActiviteController extends Controller
     {
         if($request->activite){
             $activite = Activite::find($request->activite);
-        }else{
+        }
+        if(!$activite || !$request->activite){
             abort(404);
         }
 
@@ -248,12 +249,13 @@ class ActiviteController extends Controller
         $data = $request->validate([
             'activite_id' => 'required|exists:activites,id',
             'user_id' => 'required|exists:users,id',
+            'heure_arrivee' => 'required',
             'presence' => 'required'
         ]);
 
         //Delete existing user's presence for this specific activity
         $participation = Participation::where(['activite_id' => $request->activite_id,
-            'user_id' => $request->user_id])->delete();
+            'user_id' => $request->user_id])->forceDelete();
 
         //Add to database if user is present
         if($request->presence){

@@ -47,10 +47,12 @@ $(document).ready(function(){
             url = table.data('url'),
             user_id = tr.data('user_id'),
             activite_id = table.data('activite_id'),
+            heure_arrivee = table.find('.heure_arrivee').val(),
             presence = $(this).is(':checked') ? 1 : 0,
             formData = {
                 activite_id: activite_id,
                 user_id: user_id,
+                heure_arrivee: heure_arrivee,
                 presence: presence
             };
 
@@ -78,7 +80,7 @@ $(document).ready(function(){
             }
         });
 
-        console.log('valor is ', $(this).is(':checked'));
+        console.log('New value is ', $(this).is(':checked'));
 
     });
     /**

@@ -52,8 +52,8 @@ class User extends AuthUser
 
     public function activite()
     {
-        return $this->belongsToMany(Activite::class)->withTimestamps()
-            ->withPivot(['nom_responsabilite', 'actif']);
+        return $this->belongsToMany(Activite::class, Participation::class)->withTimestamps()
+            ->withPivot(['heure_arrivee']);
     }
 
     public function responsableGroupes()
