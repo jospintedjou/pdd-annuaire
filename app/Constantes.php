@@ -62,9 +62,11 @@ class Constantes
     const VICE_RESPONSABLE = 'VICE RESPONSABALE';
     const PREMIER_ADJOINT_RESPONSABLE = '1er Adjoint au Responsable';
     const DEUXIEME_ADJOINT_RESPONSABLE = '2e Adjoint au Responsable';
-    const RESPONSABILITES_ZONE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable');
-    const RESPONSABILITES_SOUS_ZONE = array('SUPERVISEUR', 'RESPONSABLE', 'Vice-Responsable');
-    const RESPONSABILITES_GROUPE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable ', 'EPAULEUR');
+    const TROISIEME_ADJOINT_RESPONSABLE = '3e Adjoint au Responsable';
+    const QUATRIEME_ADJOINT_RESPONSABLE = '4e Adjoint au Responsable';
+    const RESPONSABILITES_ZONE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable', '4e Adjoint au Responsable', 'EPAULEUR');
+    const RESPONSABILITES_SOUS_ZONE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable', '4e Adjoint au Responsable', 'EPAULEUR');
+    const RESPONSABILITES_GROUPE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable', '4e Adjoint au Responsable', 'EPAULEUR');
 
     //Niveau d'engagement
     const SIMPLE                      = 'SIMPLE';
