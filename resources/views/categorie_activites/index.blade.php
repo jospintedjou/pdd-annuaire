@@ -25,6 +25,7 @@
                                             <thead>
                                             <tr>
                                                 <th>Nom</th>
+                                                <th>Type d'activité</th>
                                                 <th>Periodicité</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
                                             </tr>
@@ -33,6 +34,7 @@
                                             @foreach($categorieActivites as $categorie)
                                             <tr>
                                                 <td class="">{{$categorie->nom}}</td>
+                                                <td class="">{{$categorie->type_activite}}</td>
                                                 <td class="">{{$categorie->periodicite}}</td>
                                                 <td class="td-actions text-right">
                                                     <form action="{{ route('categorie_activites.destroy',$categorie->id) }}" method="Post">

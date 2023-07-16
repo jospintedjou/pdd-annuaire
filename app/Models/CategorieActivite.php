@@ -11,7 +11,7 @@ class CategorieActivite extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['nom', 'periodicite'];
+    protected $fillable = ['nom', 'periodicite', 'type_activite'];
 
     public function activites()
     {

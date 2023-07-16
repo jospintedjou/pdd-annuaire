@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constantes;
 use App\Models\CategorieActivite;
 use Illuminate\Http\Request;
 
@@ -42,6 +43,8 @@ class CategorieActiviteController extends Controller
         //
         $data = $request->validate([
             'nom' => 'required|string',
+            'type_activite' => 'required|in:'.Constantes::ACTIVITE_REGIONALE.','.Constantes::ACTIVITE_ZONALE.','.
+                Constantes::ACTIVITE_SOUS_ZONALE.','.Constantes::ACTIVITE_GROUPE,
             'periodicite' => 'required|string'
         ]);
 
@@ -84,10 +87,11 @@ class CategorieActiviteController extends Controller
      */
     public function update(Request $request, CategorieActivite $categorieActivite)
     {
-        //
 
         $data = $request->validate([
             'nom' => 'required|string',
+            'type_activite' => 'required|in:'.Constantes::ACTIVITE_REGIONALE.','.Constantes::ACTIVITE_ZONALE.','.
+                Constantes::ACTIVITE_SOUS_ZONALE.','.Constantes::ACTIVITE_GROUPE,
             'periodicite' => 'required|string'
         ]);
 

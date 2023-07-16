@@ -29,6 +29,7 @@
                                         </span>
                                         @enderror
                                     </div>
+
                                     <div class="@error('periodicite') has-danger @enderror">
                                         <label for="periodicite" class="bmd-label-floating @error('periodicite') text-danger @enderror">Periodicit&eacute;</label>
                                         <select name="periodicite" id="periodicite" value="{{ old('periodicite') }}" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
@@ -45,6 +46,27 @@
                                         @enderror
                                         <br>
                                     </div>
+
+                                    <div class="form-group @error('type_activite') has-danger @enderror">
+                                        <label for="type_activite" class="bmd-label-floating @error('type_activite') text-danger @enderror">Type</label>
+
+                                        <select name="type_activite" id="type_activite" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir le type d'activité">
+                                            @foreach (\App\Constantes::TYPE_ACTIVITE as $type_activite)
+                                                @if(isset($type_activite))
+                                                    <option value="{{ $type_activite }}" @if(old('type_activite') == $type_activite) selected @endif>{{ $type_activite }}</option>
+                                                @else
+                                                    <option  selected disabled>Aucun type d'activité trouvé</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('type_activite')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+
                                     <div class="form-group @error('nom') has-danger @enderror">
                                         <button id="btn-send" type="submit" class="btn btn-primary">Envoyer</button>
                                     </div>

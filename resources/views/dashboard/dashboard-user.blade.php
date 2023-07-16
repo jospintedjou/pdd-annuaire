@@ -43,18 +43,16 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($categorieActivites as $categorieActivite)
+                                @foreach($categorieActivites as $nom => $categorieActivite)
                                     <tr>
                                         <td class="">
-                                            <span class="font-weight-normal">{{$categorieActivite->nom}}</span>
+                                            <span class="font-weight-normal">{{$nom}}</span>
                                         </td>
                                         <td class="">
                                             <span class="font-weight-normal">
-<?php $type = 1; ?>
+
                                                 {{
-                                                $categorieActivite->activites()
-                                                ->where('categorie_activite_id', $categorieActivite->id)
-                                                ->count()
+                                                $categorieActivite['nombreActivite']
                                                 }}
 
                                                 {{--
@@ -72,9 +70,7 @@
                                          <td class="">
                                             <span class="font-weight-normal">
                                                 {{
-                                                $user->activites()
-                                                    ->where('categorie_activite_id', $categorieActivite->id)
-                                                    ->count()
+                                                $categorieActivite['nombreParticipation']
                                                 }}
                                             </span>
                                         </td>
