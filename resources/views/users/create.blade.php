@@ -17,7 +17,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="container">
+                            <div-- class="container">
                                 <div class="row">
                                     <div class="form-group col-md-5 @error('nom') has-danger @enderror">
                                         <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
@@ -234,6 +234,7 @@
                                     </div>
                                 </div><!-- row -->
 
+                                <!-- >
                                 <div class="row">
                                     <div class="form-group col-md-6 @error('responsabilite_groupe_id') has-danger @enderror">
                                         <label for="responsabilite_groupe_id" class="bmd-label-floating @error('responsabilite_groupe_id') text-danger @enderror">Responsable de Groupe ?</label>
@@ -277,9 +278,9 @@
                                         @enderror
                                     </div>
 
-                                </div><!-- row -->
+                                </div--><!-- row -->
 
-                                <div class="row">
+                                <!--div class="row">
                                     <div class="form-group col-md-6 @error('responsable_sous_zone_id') has-danger @enderror">
                                         <label for="responsable_sous_zone_id" class="bmd-label-floating @error('responsable_sous_zone_id') text-danger @enderror">Responsable de Sous-zone?</label>
 
@@ -320,9 +321,9 @@
                                             </span>
                                         @enderror
                                     </div>
-                                </div><!-- row -->
+                                </div--><!-- row -->
 
-                                <div class="row">
+                                <!--div class="row">
                                     <div class="form-group col-md-6 @error('responsable_zone_id') has-danger @enderror">
                                         <label for="responsable_zone_id" class="bmd-label-floating @error('responsable_zone_id') text-danger @enderror">Responsable Zone?</label>
 
@@ -363,9 +364,9 @@
                                             </span>
                                         @enderror
                                     </div>
-                                </div><!-- row -->
+                                </div>
 
-                            </div><!-- container -->
+                            </div--><!-- container -->
 
                             <div class="clearfix"></div>
                             <div class="row text-center">

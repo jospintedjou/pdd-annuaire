@@ -1,6 +1,5 @@
 $(document).ready(function(){
 
-    console.log('hello');
     /**
      * Start show/hide zone,sous-zone & region containers in activite form
      * **/
@@ -79,9 +78,6 @@ $(document).ready(function(){
                 console.log(data);
             }
         });
-
-        console.log('New value is ', $(this).is(':checked'));
-
     });
     /**
      * End check presence in a specific actiivy

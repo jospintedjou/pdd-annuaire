@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constantes;
+use App\Interfaces\OrderRepositoryInterface;
 use App\Models\Apostolat;
 use App\Models\ApostolatUser;
 use App\Models\Groupe;
@@ -20,6 +21,7 @@ use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -98,6 +100,7 @@ class UserController extends Controller
             ]);
         }
 
+        /*
         if(!empty($request->input('responsabilite_groupe'))){
             //Check if this group already have a "responsable" and throw error if the new value is still "responsable"$user->responsableZones()->where(['zone_id' => $request->input('responsable_zone_id')])
 
@@ -129,11 +132,17 @@ class UserController extends Controller
                 'nom_responsabilite' => $request->input('responsabilite_zone'),
                 'actif' => Constantes::ETAT_ACTIF
             ]);
+        }
+        */
 
+        if($request->filled('to') && $request->filled('activite_id')){
+            return redirect()->route('presences.create', ['activite' =>$request->activite_id])
+                    ->with('success','Utilisateur créé avec succès.');
+        }else{
+            return redirect()->route('users.index')
+                    ->with('success','Utilisateur créé avec succès.');
         }
 
-        return redirect()->route('users.index')
-            ->with('success','Utilisateur créé avec succès.');
     }
 
     /**

@@ -29,13 +29,13 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <th>Nom</th>
-                                                <th>Zone</th>
-                                                <th>Sous-zone</th>
-                                                <th>Groupe</th>
-                                                <th>Date d'inscr.</th>
-                                                <th>Niveau d'engagement</th>
-                                                <th class="disabled-sorting text-right sorting">
+                                                <th width="10%">Nom</th>
+                                                <th width="10%">Zone</th>
+                                                <th width="10%">Sous-zone</th>
+                                                <th width="10%">Groupe</th>
+                                                <!--th>Date d'inscr.</th-->
+                                                <th width="10%">Niveau d'engagement</th>
+                                                <th width="10%" class="disabled-sorting text-right sorting">
                                                     Actions
                                                 </th>
                                             </tr>
@@ -51,12 +51,17 @@
                                                 </td>
                                                 <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom }}</td>
                                                 <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
-                                                <td class="">{{$user->created_at}}</td>
+                                                <!--td class="">{{$user->created_at}}</td-->
                                                 <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
                                                 <td class="td-actions text-right">
                                                     <form action="{{ route('users.destroy',$user->id) }}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
+                                                        <a href="{{route('statistiques_membre', ['user' =>$user->id])}}" type="button" rel="tooltip"
+                                                           class="btn btn-primary btn-round" data-original-title="" title="statistiques">
+                                                            <i class="material-icons">bar_chart</i>
+                                                            <div class="ripple-container"></div>
+                                                        </a>
                                                         <a href="{{route('users.edit', ['user' =>$user->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
@@ -86,14 +91,36 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation de la suppression</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Etes-vous sûr de vouloir supprimer cet élément?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary btn-ok">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
             // Setup - add a text input to each footer cell
-            $('.dataTable thead th').each(function () {
+            $('.dataTable thead th:not(:last)').each(function () {
                 var title = $(this).text();
-                $(this).append('<input type="text" placeholder="Search ' + title + '" />');
+                $(this).append('<br/><input style="width:100%" type="text" placeholder="Rechercher par ' + title + '" />');
             });
 
             // DataTable

@@ -77,7 +77,7 @@
                                             <select name="zone_id" id="zone" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir la zone">
                                                 @foreach ($zones as $zone)
-                                                    @if(isset($zone))
+                                                    @if($activite->zone)
                                                         <option value="{{ $zone->id }}" @if($activite->zone->id == $zone->id) selected @endif>{{ $zone->nom }}</option>
                                                     @else
                                                         <option  selected disabled>Aucune zone trouvée</option>
@@ -97,7 +97,7 @@
                                             <select name="sous_zone_id" id="sous_zone" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir la sous zone">
                                                 @foreach ($sous_zones as $sous_zone)
-                                                    @if(isset($sous_zone))
+                                                    @if($activite->sousZone)
                                                         <option value="{{ $sous_zone->id }}" @if($activite->sousZone->id == $sous_zone->id) selected @endif>{{ $sous_zone->nom }}</option>
                                                     @else
                                                         <option  selected disabled>Aucune sous zone trouvée</option>

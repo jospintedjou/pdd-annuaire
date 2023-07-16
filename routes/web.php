@@ -17,6 +17,7 @@ use App\Http\Controllers\NiveauEngagementController;
 use App\Http\Controllers\CategorieActiviteController;
 use App\Http\Controllers\ResponsableGroupeController;
 use App\Http\Controllers\ResponsableSousZoneController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +85,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         ->name('responsable_zones.edit');
     Route::put('/responsable_zones/{zone}', [ResponsableZoneController::class, 'update'])
         ->name('responsable_zones.update');
+
+    //Stats
+     Route::get('/statistiques_membre', [DashboardController::class, 'index'])
+         ->name('statistiques_membre');
 
     //Route::resource('responsable_groupes', ResponsableGroupeController::class);
    // Route::resource('responsable_sous_zones', ResponsableSousZoneController::class);

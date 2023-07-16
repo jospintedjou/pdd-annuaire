@@ -235,7 +235,7 @@
                                     </div>
                                 </div><!-- row -->
 
-                                <div class="row">
+                                <!--div class="row">
 
                                     <div class="form-group col-md-6 @error('responsabilite_groupe_id') has-danger @enderror">
                                         <label for="responsabilite_groupe_id" class="bmd-label-floating @error('responsabilite_groupe_id') text-danger @enderror">Responsable de Groupe ?</label>
@@ -283,9 +283,9 @@
                                             </span>
                                         @enderror
                                     </div>
-                                </div><!-- row -->
+                                </div--><!-- row -->
 
-                                <div class="row">
+                                <!--div class="row">
                                     <div class="form-group col-md-6 @error('responsable_sous_zone_id') has-danger @enderror">
                                         <label for="responsable_sous_zone_id" class="bmd-label-floating @error('responsable_sous_zone_id') text-danger @enderror">Responsable de Sous-zone?</label>
                                         <select name="responsable_sous_zone_id" id="responsable_sous_zone_id" class="selectpicker col-md-7" data-size="auto" data-style="select-with-transition"
@@ -332,9 +332,9 @@
                                             </span>
                                         @enderror
                                     </div>
-                                </div><!-- row -->
+                                </div--><!-- row -->
 
-                                <div class="row">
+                                <!--div class="row">
                                     <div class="form-group col-md-6 @error('responsable_zone_id') has-danger @enderror">
                                         <label for="responsable_zone_id" class="bmd-label-floating @error('responsable_zone_id') text-danger @enderror">Responsable Zone?</label>
 
@@ -381,7 +381,7 @@
                                             </span>
                                         @enderror
                                     </div>
-                                </div><!-- row -->
+                                </div--><!-- row -->
 
                             </div><!-- container -->
 

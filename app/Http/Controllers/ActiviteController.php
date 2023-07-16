@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constantes;
 use App\Models\AnneeSpirituelle;
+use App\Models\NiveauEngagement;
 use App\Models\Participation;
 use App\Models\User;
 use App\Models\Zone;
@@ -232,6 +233,7 @@ class ActiviteController extends Controller
 
     public function createPresence(Request $request)
     {
+        $activite = '';
         if($request->activite){
             $activite = Activite::find($request->activite);
         }
@@ -241,7 +243,13 @@ class ActiviteController extends Controller
 
         $users = User::where('role', '!=', Constantes::ROLE_ADMIN)->get();
 
-        return view('presences.create', compact('activite', 'users'));
+        $niveau_engagements = NiveauEngagement::get();
+        $apostolats = Apostolat::orderBy('nom')->get();
+        $groupes = Groupe::orderBy('nom_groupe')->get();
+        $zones = Zone::orderBy('nom')->get();
+        $sous_zones = SousZone::orderBy('nom')->get();
+
+        return view('presences.create', compact('activite', 'users', 'niveau_engagements', 'apostolats', 'groupes', 'sous_zones', 'zones'));
     }
 
     public function storePresence(Request $request)

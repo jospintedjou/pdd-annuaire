@@ -11,6 +11,7 @@ use App\Constantes;
 class User extends AuthUser
 {
     use HasFactory;
+    use HasFactory;
     use SoftDeletes;
 
     protected $fillable = ['nom', 'prenom', 'adresse', 'telephone1', 'telephone2', 'sexe', 'date_naissance', 'etat', 'email',
@@ -50,7 +51,25 @@ class User extends AuthUser
             ->withPivot(['actif']);
     }
 
-    public function activite()
+    /* Get user actual actif group */
+    public function groupeActif()
+    {
+        return $this->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first();
+    }
+
+    /* Actual user's zone */
+    public function zone()
+    {
+        return $this->groupes()->where('actif', Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first();
+    }
+
+    /* Actual user's zone */
+    public function sousZone()
+    {
+        return $this->groupes()->where('actif', Constantes::ETAT_ACTIF)->first()->sousZone()->first();
+    }
+
+    public function activites()
     {
         return $this->belongsToMany(Activite::class, Participation::class)->withTimestamps()
             ->withPivot(['heure_arrivee']);

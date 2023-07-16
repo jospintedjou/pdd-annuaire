@@ -784,6 +784,19 @@ $(document).ready(function(){
         $(this).find('.btn-ok').data('href', $(e.relatedTarget).data('href'));
         $(this).find('.btn-ok').data('id', $(e.relatedTarget).data('id'));
     });
+
+    /*
+    Clear all iputs on modal close
+     */
+    $('#add-user').on('hidden.bs.modal', function (e) {
+        $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+                .find("input[type=checkbox], input[type=radio]")
+                .prop("checked", "")
+                .end();
+    })
 });
 </script>
 <!--End confirm delete modal -->
