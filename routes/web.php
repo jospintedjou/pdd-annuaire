@@ -18,6 +18,7 @@ use App\Http\Controllers\CategorieActiviteController;
 use App\Http\Controllers\ResponsableGroupeController;
 use App\Http\Controllers\ResponsableSousZoneController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ResponsabiliteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     Route::resource('niveau_engagements', NiveauEngagementController::class);
     Route::resource('apostolats', ApostolatController::class);
+    Route::resource('responsabilite', ResponsabiliteController::class);
     Route::resource('annee_spirituelles', AnneeSpirituelleController::class);
     Route::resource('categorie_activites', CategorieActiviteController::class);
     Route::resource('activites', ActiviteController::class);
@@ -65,8 +67,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         ->name('responsable_groupes.edit');
     Route::put('/responsable_groupes/{groupe}', [ResponsableGroupeController::class, 'update'])
         ->name('responsable_groupes.update');
-
-    //responsable sous-zone
+    
+        
+        //responsable sous-zone
     Route::get('/responsable_sous_zones', [ResponsableSousZoneController::class, 'index'])
         ->name('responsable_sous_zones.index');
     Route::get('/responsable_sous_zones/create', [ResponsableSousZoneController::class, 'create'])
