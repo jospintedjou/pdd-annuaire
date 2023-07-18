@@ -14,7 +14,9 @@ class ResponsabiliteController extends Controller
      */
     public function index()
     {
-        //
+        $responsabilites = Responsabilite::get();
+        
+        return view('responsabilite.index',compact('responsabilites'));
     }
 
     /**
@@ -24,7 +26,7 @@ class ResponsabiliteController extends Controller
      */
     public function create()
     {
-        //
+        return view('responsabilite.create');
     }
 
     /**
@@ -35,7 +37,15 @@ class ResponsabiliteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required',
+        ]);
+
+        Responsabilite::create($request->all());
+        
+        return redirect()->route('responsabilite.index')
+                ->with('success', 'Responsabilité créé avec succès.');
+    
     }
 
     /**
@@ -46,7 +56,7 @@ class ResponsabiliteController extends Controller
      */
     public function show(Responsabilite $responsabilite)
     {
-        //
+        return view('responsabilite.show',compact('responsabilite'));
     }
 
     /**
@@ -57,7 +67,7 @@ class ResponsabiliteController extends Controller
      */
     public function edit(Responsabilite $responsabilite)
     {
-        //
+        return view('responsabilite.edit',compact('responsabilite'));
     }
 
     /**
@@ -69,7 +79,14 @@ class ResponsabiliteController extends Controller
      */
     public function update(Request $request, Responsabilite $responsabilite)
     {
-        //
+        $request->validate([
+            'nom' => 'required'
+        ]);
+
+        $responsabilite->update($request->all());
+
+        return redirect()->route('responsabilite.index')
+            ->with('success','Responsabilité mise à jour avec succès');
     }
 
     /**
@@ -78,8 +95,19 @@ class ResponsabiliteController extends Controller
      * @param  \App\Models\Responsabilite  $responsabilite
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Responsabilite $responsabilite)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->input('id');
+
+        if(!empty($id)){
+            Responsabilite::find($id)->delete();
+            return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+                JSON_UNESCAPED_UNICODE);
+        }
+
     }
+    
 }

@@ -222,6 +222,28 @@
                 <li class="nav-item @if(request()->routeIs('responsable_zones*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#responsable-zones" aria-expanded="true">
                         <i class="material-icons">person</i>
+                        <p>Responsabilité<b class="caret"></b> </p>
+                    </a>
+                    <div class="collapse @if(request()->routeIs('responsabilite*')) show @endif" id="responsable-zones" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('responsabilite.index')) active @endif" >
+                                <a class="nav-link" href="{!! route('responsabilite.index') !!}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+                            <li class="nav-item @if(request()->routeIs('responsabilite.create')) active @endif">
+                                <a class="nav-link" href="{!! route('responsabilite.create') !!}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item @if(request()->routeIs('responsable_zones*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#responsable-zones" aria-expanded="true">
+                        <i class="material-icons">person</i>
                         <p>Responsable de zones <b class="caret"></b> </p>
                     </a>
                     <div class="collapse @if(request()->routeIs('responsable_zones*')) show @endif" id="responsable-zones" style="">
@@ -248,6 +270,7 @@
                                     <span class="sidebar-normal"> Lister </span>
                                 </a>
                             </li>
+                            
                         </ul>
                     </div>
                 </li>
