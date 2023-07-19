@@ -219,12 +219,12 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item @if(request()->routeIs('responsable_zones*')) active @endif">
-                    <a class="nav-link" data-toggle="collapse" href="#responsable-zones" aria-expanded="true">
+                <li class="nav-item @if(request()->routeIs('responsabilite*')) active @endif">
+                    <a class="nav-link" data-toggle="collapse" href="#responsabilite" aria-expanded="true">
                         <i class="material-icons">person</i>
                         <p>Responsabilité<b class="caret"></b> </p>
                     </a>
-                    <div class="collapse @if(request()->routeIs('responsabilite*')) show @endif" id="responsable-zones" style="">
+                    <div class="collapse @if(request()->routeIs('responsabilite*')) show @endif" id="responsabilite" style="">
                         <ul class="nav">
                             <li class="nav-item @if(request()->routeIs('responsabilite.index')) active @endif" >
                                 <a class="nav-link" href="{!! route('responsabilite.index') !!}">
@@ -241,6 +241,7 @@
                         </ul>
                     </div>
                 </li>
+
                 <li class="nav-item @if(request()->routeIs('responsable_zones*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#responsable-zones" aria-expanded="true">
                         <i class="material-icons">person</i>
