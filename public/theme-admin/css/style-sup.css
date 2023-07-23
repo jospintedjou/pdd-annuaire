@@ -1,0 +1,40 @@
+/*
+=========================================================
+ GEV85 Admin Panel CSS - v1.0.0
+=========================================================*/
+
+ .test{
+  border:1px solid red;
+ }
+.card-salarie-item a:hover{
+  color: #2a900e !important;
+  border: 1px solid #2a900e;
+  box-shadow: 0 5px 5px #8a9d93;
+}
+.card .ul-adherents>li{
+  background: #65ce48;
+}
+.btn-sa:hover{
+  background-color:#2a7c17 !important;
+}
+.numero-utile-users-ul li{
+  border: 1px solid #2a900e;
+}
+.card hr{
+  background-color: #0b460b;
+}
+.carousel-indicators button{
+  border: 1px solid #2a900e !important;
+}
+.carousel-indicators active{
+  border: 1px solid #2a900e !important;
+}
+.card-icon-img{
+  background-color: #2a900e !important;
+}
+.all-notifications .list-item{
+  border: 1px solid #2a900e;
+}
+.all-notifications .list-item-nonlu{
+  background-color: #eefcf0;
+}
