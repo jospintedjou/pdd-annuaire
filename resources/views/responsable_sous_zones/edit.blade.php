@@ -43,7 +43,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @foreach(\App\Constantes::RESPONSABILITES_SOUS_ZONE as $responsabilite_sous_zone)
+                                    @foreach($responsabilite as $responsabilite_sous_zone)
                                         <div class="row">
                                             <div class="form-group col-md-6 @error('responsabilite_sous_zones') has-danger @enderror">
                                                 <label for="responsabilite_sous_zones" class="bmd-label-floating @error('responsabilite_sous_zones') text-danger @enderror">Responsabilité dans la sous-zone</label>
@@ -51,9 +51,9 @@
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
                                                     <option value="">Aucune</option>
 
-                                                        <option value="{{ $responsabilite_sous_zone }}"
+                                                        <option value="{{ $responsabilite_sous_zone->nom}}"
                                                             {{$sous_zone->responsableSousZones()->where(['actif' => \App\Constantes::ETAT_ACTIF, 'nom_responsabilite' => $responsabilite_sous_zone])->exists() ? "selected" : ""}}>
-                                                            {{$responsabilite_sous_zone}}
+                                                            {{$responsabilite_sous_zone->nom}}
                                                         </option>
                                                 </select>
                                                 @error('responsabilite_sous_zones')

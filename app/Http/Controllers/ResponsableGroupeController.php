@@ -9,7 +9,7 @@ use App\Models\SousZone;
 use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Http\Request;
-
+use App\Models\Responsabilite;
 class ResponsableGroupeController extends Controller
 {
     /**
@@ -73,10 +73,11 @@ class ResponsableGroupeController extends Controller
     public function edit(Request $request)
     {
         $groupe = Groupe::find($request->groupe);
+        $responsabilite = Responsabilite::all();
         $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
                     ->orderBy('nom')->get();
         if(!empty($request)){
-            return view('responsable_groupes.edit',compact('groupe', 'users'));
+            return view('responsable_groupes.edit',compact('groupe', 'users', 'responsabilite'));
         }else{
             abort(404);
         }

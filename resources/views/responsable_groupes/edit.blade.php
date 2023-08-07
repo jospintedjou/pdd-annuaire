@@ -48,7 +48,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @foreach(\App\Constantes::RESPONSABILITES_GROUPE as $responsabiliteGroupe)
+                                    @foreach($responsabilite as $responsabiliteGroupe)
                                         <div class="row">
                                             <div class="form-group col-md-6 @error('responsabilite_groupes') has-danger @enderror">
                                                 <label for="responsabilite_groupes" class="bmd-label-floating @error('responsabilite_groupes') text-danger @enderror">Responsabilité dans le groupe</label>
@@ -56,9 +56,9 @@
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
                                                     <option value="">Aucune</option>
 
-                                                        <option value="{{ $responsabiliteGroupe }}"
+                                                        <option value="{{ $responsabiliteGroupe->nom }}"
                                                             {{$groupe->responsableGroupes()->where(['actif' => \App\Constantes::ETAT_ACTIF, 'nom_responsabilite' => $responsabiliteGroupe])->exists() ? "selected" : ""}}>
-                                                            {{$responsabiliteGroupe}}
+                                                            {{$responsabiliteGroupe->nom}}
                                                         </option>
                                                 </select>
                                                 @error('responsabilite_groupes')
