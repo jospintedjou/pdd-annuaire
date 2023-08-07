@@ -13,18 +13,23 @@
     <link rel="icon" type="image/png" href="{{asset('theme-admin/img/favicon.png')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <!-- CSS Files -->
     <link href="{{asset('theme-admin/css/material-dashboard.min.css').'?v=2.1.2'}}" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="{{asset('theme-admin/demo/demo.css')}}" rel="stylesheet" />
 
+    <link href="{{asset('theme-admin/css/style-sup.css')}}" rel="stylesheet" />
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <link href="{{asset('theme-admin/css/main.css')}}" rel="stylesheet" />
     @yield('style')
     <!-- Styles -->
     <!--link href="{ asset('css/app.css') }}" rel="stylesheet"-->
@@ -48,12 +53,30 @@
         <div class="sidebar-wrapper">
             <ul class="nav">
                 @if(auth()->user()->isAdmin())
-                <li class="nav-item @if(request()->routeIs('dashboard*')) active @endif">
-                    <a class="nav-link" href="{!! route('dashboard', ['id'=>encrypt(auth()->user()->id)]) !!}">
-                        <i class="material-icons">dashboard</i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
+
+                    <li class="nav-item @if(request()->routeIs('statistiques_generale*')) active @endif">
+                        <a class="nav-link" data-toggle="collapse" href="#dashboard" aria-expanded="true">
+                            <i class="material-icons">person</i>
+                            <p>Tableau de bord <b class="caret"></b> </p>
+                        </a>
+                        <div class="collapse @if(request()->routeIs('statistiques_generale*')) show @endif" id="dashboard" style="">
+                            <ul class="nav">
+                                <li class="nav-item @if(request()->routeIs('statistiques_generale')) active @endif" >
+                                    <a class="nav-link" href="{!! route('statistiques_generale', ['id'=>encrypt(auth()->user()->id)]) !!}">
+                                        <span class="sidebar-mini"> L </span>
+                                        <span class="sidebar-normal"> Stats Zonales </span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item @if(request()->routeIs('statistiques_generale')) active @endif">
+                                    <a class="nav-link" href="{!! route('statistiques_generale', ['id'=>encrypt(auth()->user()->id)]) !!}">
+                                        <span class="sidebar-mini"> A </span>
+                                        <span class="sidebar-normal"> Stats des groupes </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                 @endif
 
                <li class="nav-item @if(request()->routeIs('presences*')) active @endif">
@@ -824,6 +847,257 @@ $(document).ready(function(){
 });
 </script>
 <!--End confirm delete modal -->
+
+<!-- Datatable in french -->
+<script>
+    datatable_fr = {
+        "emptyTable": "Aucune donnée disponible dans le tableau",
+        "loadingRecords": "Chargement...",
+        "processing": "Traitement...",
+        "select": {
+            "rows": {
+                "_": "%d lignes sélectionnées",
+                "1": "1 ligne sélectionnée"
+            },
+            "cells": {
+                "1": "1 cellule sélectionnée",
+                "_": "%d cellules sélectionnées"
+            },
+            "columns": {
+                "1": "1 colonne sélectionnée",
+                "_": "%d colonnes sélectionnées"
+            }
+        },
+        "autoFill": {
+            "cancel": "Annuler",
+            "fill": "Remplir toutes les cellules avec <i>%d<\/i>",
+            "fillHorizontal": "Remplir les cellules horizontalement",
+            "fillVertical": "Remplir les cellules verticalement"
+        },
+        "searchBuilder": {
+            "conditions": {
+                "date": {
+                    "after": "Après le",
+                    "before": "Avant le",
+                    "between": "Entre",
+                    "empty": "Vide",
+                    "not": "Différent de",
+                    "notBetween": "Pas entre",
+                    "notEmpty": "Non vide",
+                    "equals": "Égal à"
+                },
+                "number": {
+                    "between": "Entre",
+                    "empty": "Vide",
+                    "gt": "Supérieur à",
+                    "gte": "Supérieur ou égal à",
+                    "lt": "Inférieur à",
+                    "lte": "Inférieur ou égal à",
+                    "not": "Différent de",
+                    "notBetween": "Pas entre",
+                    "notEmpty": "Non vide",
+                    "equals": "Égal à"
+                },
+                "string": {
+                    "contains": "Contient",
+                    "empty": "Vide",
+                    "endsWith": "Se termine par",
+                    "not": "Différent de",
+                    "notEmpty": "Non vide",
+                    "startsWith": "Commence par",
+                    "equals": "Égal à",
+                    "notContains": "Ne contient pas",
+                    "notEndsWith": "Ne termine pas par",
+                    "notStartsWith": "Ne commence pas par"
+                },
+                "array": {
+                    "empty": "Vide",
+                    "contains": "Contient",
+                    "not": "Différent de",
+                    "notEmpty": "Non vide",
+                    "without": "Sans",
+                    "equals": "Égal à"
+                }
+            },
+            "add": "Ajouter une condition",
+            "button": {
+                "0": "Recherche avancée",
+                "_": "Recherche avancée (%d)"
+            },
+            "clearAll": "Effacer tout",
+            "condition": "Condition",
+            "data": "Donnée",
+            "deleteTitle": "Supprimer la règle de filtrage",
+            "logicAnd": "Et",
+            "logicOr": "Ou",
+            "title": {
+                "0": "Recherche avancée",
+                "_": "Recherche avancée (%d)"
+            },
+            "value": "Valeur",
+            "leftTitle": "Désindenter le critère",
+            "rightTitle": "Indenter le critère"
+        },
+        "searchPanes": {
+            "clearMessage": "Effacer tout",
+            "count": "{total}",
+            "title": "Filtres actifs - %d",
+            "collapse": {
+                "0": "Volet de recherche",
+                "_": "Volet de recherche (%d)"
+            },
+            "countFiltered": "{shown} ({total})",
+            "emptyPanes": "Pas de volet de recherche",
+            "loadMessage": "Chargement du volet de recherche...",
+            "collapseMessage": "Réduire tout",
+            "showMessage": "Montrer tout"
+        },
+        "buttons": {
+            "collection": "Collection",
+            "colvis": "Visibilité colonnes",
+            "colvisRestore": "Rétablir visibilité",
+            "copy": "Copier",
+            "copySuccess": {
+                "1": "1 ligne copiée dans le presse-papier",
+                "_": "%d lignes copiées dans le presse-papier"
+            },
+            "copyTitle": "Copier dans le presse-papier",
+            "csv": "CSV",
+            "excel": "Excel",
+            "pageLength": {
+                "-1": "Afficher toutes les lignes",
+                "_": "Afficher %d lignes",
+                "1": "Afficher 1 ligne"
+            },
+            "pdf": "PDF",
+            "print": "Imprimer",
+            "copyKeys": "Appuyez sur ctrl ou u2318 + C pour copier les données du tableau dans votre presse-papier.",
+            "createState": "Créer un état",
+            "removeAllStates": "Supprimer tous les états",
+            "removeState": "Supprimer",
+            "renameState": "Renommer",
+            "savedStates": "États sauvegardés",
+            "stateRestore": "État %d",
+            "updateState": "Mettre à jour"
+        },
+        "decimal": ",",
+        "datetime": {
+            "previous": "Précédent",
+            "next": "Suivant",
+            "hours": "Heures",
+            "minutes": "Minutes",
+            "seconds": "Secondes",
+            "unknown": "-",
+            "amPm": [
+                "am",
+                "pm"
+            ],
+            "months": {
+                "0": "Janvier",
+                "2": "Mars",
+                "3": "Avril",
+                "4": "Mai",
+                "5": "Juin",
+                "6": "Juillet",
+                "8": "Septembre",
+                "9": "Octobre",
+                "10": "Novembre",
+                "1": "Février",
+                "11": "Décembre",
+                "7": "Août"
+            },
+            "weekdays": [
+                "Dim",
+                "Lun",
+                "Mar",
+                "Mer",
+                "Jeu",
+                "Ven",
+                "Sam"
+            ]
+        },
+        "editor": {
+            "close": "Fermer",
+            "create": {
+                "title": "Créer une nouvelle entrée",
+                "button": "Nouveau",
+                "submit": "Créer"
+            },
+            "edit": {
+                "button": "Editer",
+                "title": "Editer Entrée",
+                "submit": "Mettre à jour"
+            },
+            "remove": {
+                "button": "Supprimer",
+                "title": "Supprimer",
+                "submit": "Supprimer",
+                "confirm": {
+                    "_": "Êtes-vous sûr de vouloir supprimer %d lignes ?",
+                    "1": "Êtes-vous sûr de vouloir supprimer 1 ligne ?"
+                }
+            },
+            "multi": {
+                "title": "Valeurs multiples",
+                "info": "Les éléments sélectionnés contiennent différentes valeurs pour cette entrée. Pour modifier et définir tous les éléments de cette entrée à la même valeur, cliquez ou tapez ici, sinon ils conserveront leurs valeurs individuelles.",
+                "restore": "Annuler les modifications",
+                "noMulti": "Ce champ peut être modifié individuellement, mais ne fait pas partie d'un groupe. "
+            },
+            "error": {
+                "system": "Une erreur système s'est produite (<a target=\"\\\" rel=\"nofollow\" href=\"\\\">Plus d'information<\/a>)."
+            }
+        },
+        "stateRestore": {
+            "removeSubmit": "Supprimer",
+            "creationModal": {
+                "button": "Créer",
+                "order": "Tri",
+                "paging": "Pagination",
+                "scroller": "Position du défilement",
+                "search": "Recherche",
+                "select": "Sélection",
+                "columns": {
+                    "search": "Recherche par colonne",
+                    "visible": "Visibilité des colonnes"
+                },
+                "name": "Nom :",
+                "searchBuilder": "Recherche avancée",
+                "title": "Créer un nouvel état",
+                "toggleLabel": "Inclus :"
+            },
+            "renameButton": "Renommer",
+            "duplicateError": "Il existe déjà un état avec ce nom.",
+            "emptyError": "Le nom ne peut pas être vide.",
+            "emptyStates": "Aucun état sauvegardé",
+            "removeConfirm": "Voulez vous vraiment supprimer %s ?",
+            "removeError": "Échec de la suppression de l'état.",
+            "removeJoiner": "et",
+            "removeTitle": "Supprimer l'état",
+            "renameLabel": "Nouveau nom pour %s :",
+            "renameTitle": "Renommer l'état"
+        },
+        "info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+        "infoEmpty": "Affichage de 0 à 0 sur 0 entrées",
+        "infoFiltered": "(filtrées depuis un total de _MAX_ entrées)",
+        "lengthMenu": "Afficher _MENU_ entrées",
+        "paginate": {
+            "first": "Première",
+            "last": "Dernière",
+            "next": "Suivante",
+            "previous": "Précédente"
+        },
+        "zeroRecords": "Aucune entrée correspondante trouvée",
+        "aria": {
+            "sortAscending": " : activer pour trier la colonne par ordre croissant",
+            "sortDescending": " : activer pour trier la colonne par ordre décroissant"
+        },
+        "infoThousands": " ",
+        "search": "Rechercher :",
+        "thousands": " "
+    };
+</script>
+<!-- Datatable in french -->
+
 @yield('script')
 </body>
 </html>

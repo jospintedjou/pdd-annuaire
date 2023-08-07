@@ -41,6 +41,13 @@ class Constantes
     //PAYS
     const PAYS_CAMEROUN = 'CAMEROUN';
 
+    //Periodes
+    const PERIODE_JOURNALIERE = 'Journalière';
+    const PERIODE_HEBDOMADAIRE = 'Hebdomadaire';
+    const PERIODE_MENSUELLE = 'Mensuelle';
+    const PERIODE_TRIMESTRIELLE = 'Trimestrielle';
+    const PERIODE_ANNUELLE = 'Annuelle';
+
     //VILLE
     const VILLE_YAOUNDE = 'YAOUNDE';
 

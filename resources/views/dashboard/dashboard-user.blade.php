@@ -1,34 +1,98 @@
 @extends('layouts.app')
-@section('page_title') Tableau de bord @endsection
+@section('page_title') Tableau de bord de <span class="text-primary">{{$user->nom}} {{$user->prenom}}</span>  @endsection
 @section('content')
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <!-- BO Membres -->
+                <!-- Start Infos Membres -->
                 <div class="col-xl-4 col-sm-6">
                     <div class="card card-stats card-ht">
-                        <div class="card-header card-header-green card-header-icon">
+                        <div class="card-header card-header-primary card-header-icon">
                             <div class="card-icon">
                                 <i class="bi bi-people-fill"></i>
                             </div>
-                            <p class="card-category">Membres</p>
-                            <h4 class="card-title f-w-400">1</h4>
+                            <p class="card-category">Infos Membre</p>
 
                         </div>
                         <div class="card-footer">
+                            <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                                   style="width: 100%;" width="100%" cellspacing="0">
+                                <tr>
+                                    <td>Nom</td> <td>{{$user->nom}} {{$user->prenom}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Groupe</td> <td>{{$user->groupeActif()->nom_groupe}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Zone</td> <td>{{$user->zone()->nom}}</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <!-- END BO Membres -->
+                <!-- END Infos Membres -->
+
+                <!-- Start Infos Membres -->
+                <div class="col-xl-4 col-sm-6">
+                    <div class="card card-stats card-ht">
+                        <div class="card-header card-header-primary card-header-icon">
+                            <div class="card-icon">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <p class="card-category">Accompagnement Spirituel</p>
+
+                        </div>
+                        <div class="card-footer">
+                            <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                                   style="width: 100%;" width="100%" cellspacing="0">
+                                <thead></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Effectué?</td>
+                                        <td>Oui</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Infos Membres -->
+
+                <!-- Start Infos Membres -->
+                <div class="col-xl-4 col-sm-6">
+                    <div class="card card-stats card-ht">
+                        <div class="card-header card-header-primary card-header-icon">
+                            <div class="card-icon">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <p class="card-category">Centre de retraite</p>
+
+                        </div>
+                        <div class="card-footer">
+                            <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                                   style="width: 100%;" width="100%" cellspacing="0">
+                                <thead></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>centre de retraite payé?</td>
+                                        <td>Oui</td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Infos Membres -->
 
             </div>
             
             <div class="row">
                 <!-- Présence -->
-                <div class="col-xl-8 col-sm-6">
+                <div class="col-xl-12 col-sm-6">
                     <div class="card mt-0 card-h-md">
                         <div class="card-header card-header-light">
-                            <h4 class="card-title" style="color:#3c3c3b">Statistiques de présence</h4>
+                            <h4 class="card-title" style="color:#3c3c3b">Statistiques de présence de {{$user->nom}} {{$user->prenom}}</h4>
                         </div>
                         <div class="card-body table-responsive">
 
@@ -38,8 +102,9 @@
                                 <thead>
                                 <tr>
                                     <th width="20%">Activité</th>
-                                    <th width="10%">Sessions</th>
                                     <th width="10%">Participation</th>
+                                    <th width="10%">Total de séances</th>
+                                    <th width="10%">Pourcentage</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -50,28 +115,17 @@
                                         </td>
                                         <td class="">
                                             <span class="font-weight-normal">
-
-                                                {{
-                                                $categorieActivite['nombreActivite']
-                                                }}
-
-                                                {{--
-                                                $categorieActivite->activites()
-                                                ->where('categorie_activite_id', $categorieActivite->id)
-                                                ->where(['type_activite'=>\App\Constantes::ACTIVITE_REGIONALE])
-                                                ->orWhere(['type_activite'=>\App\Constantes::ACTIVITE_ZONALE, 'zone_id'=>$user->zone()->first()->id])
-                                                ->orWhere(['type_activite'=>\App\Constantes::ACTIVITE_SOUS_ZONALE, 'sous_zone_id'=>$user->groupeActif()->sousZone()->first()->id])
-                                                ->orWhere(['type_activite'=>\App\Constantes::ACTIVITE_GROUPE, 'groupe_id'=>$user->groupeActif()->first()->id])
-                                                ->count()
-                                                --}}
-
+                                                {{$categorieActivite['nombreParticipation']}}
                                             </span>
                                         </td>
-                                         <td class="">
+                                        <td class="">
                                             <span class="font-weight-normal">
-                                                {{
-                                                $categorieActivite['nombreParticipation']
-                                                }}
+                                                {{$categorieActivite['nombreActivite']}}
+                                            </span>
+                                        </td>
+                                        <td class="">
+                                            <span class="font-weight-normal">
+                                                {{$categorieActivite['stats']}}%
                                             </span>
                                         </td>
 
@@ -88,22 +142,6 @@
                 </div>
                 <!-- END Présence -->
 
-                <!-- OFFRES EMPLOI -->
-                <div class="col-xl-4 col-sm-6">
-                    <div class="card card-stats ">
-                        <div class="card-header card-header-primary card-header-icon">
-                            <div class="card-icon">
-                                <i class="bi bi-briefcase-fill"></i>
-                            </div>
-                            <p class="card-category">Offres d'emplois</p>
-                            <h4 class="card-title f-w-400">10</h4>
-                        </div>
-                        <div class="card-footer">
-
-                        </div>
-                    </div>
-                </div>
-                <!--End OFFRES EMPLOI -->
             </div>
 
         </div>

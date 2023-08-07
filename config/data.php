@@ -55,10 +55,10 @@ return [
      */
 
      'periods' => [
-         'Une fois',
          'Journalière',
          'Hebdomadaire',
          'Mensuelle',
+         'Trimestrielle',
          'Annuelle'
      ]
 ];

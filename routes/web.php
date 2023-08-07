@@ -67,9 +67,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         ->name('responsable_groupes.edit');
     Route::put('/responsable_groupes/{groupe}', [ResponsableGroupeController::class, 'update'])
         ->name('responsable_groupes.update');
-    
-        
-        //responsable sous-zone
+
+    //responsable sous-zone
     Route::get('/responsable_sous_zones', [ResponsableSousZoneController::class, 'index'])
         ->name('responsable_sous_zones.index');
     Route::get('/responsable_sous_zones/create', [ResponsableSousZoneController::class, 'create'])
@@ -90,8 +89,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         ->name('responsable_zones.update');
 
     //Stats
-     Route::get('/statistiques_membre', [DashboardController::class, 'index'])
+     Route::get('/statistiques_membre', [DashboardController::class, 'userDashboard'])
          ->name('statistiques_membre');
+     Route::get('/statistiques_generale', [DashboardController::class, 'dashboard'])
+         ->name('statistiques_generale');
 
     //Route::resource('responsable_groupes', ResponsableGroupeController::class);
    // Route::resource('responsable_sous_zones', ResponsableSousZoneController::class);
