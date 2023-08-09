@@ -27,7 +27,7 @@ class Groupe extends Model
     public function responsableGroupes()
     {
         return $this->belongsToMany(User::class, 'responsable_groupe')->withTimestamps()
-            ->withPivot(['nom_responsabilite', 'actif']);
+            ->withPivot(['responsabilite_id', 'actif']);
     }
 
     public function activites()

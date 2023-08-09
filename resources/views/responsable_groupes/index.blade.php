@@ -42,7 +42,11 @@
                                                 <td class="">
                                                     @foreach($groupe->responsableGroupes()->where('actif', \App\Constantes::ETAT_ACTIF)->cursor() as $responsableGroupe)
                                                         {{$responsableGroupe->nom}} {{$responsableGroupe->prenom}}
-                                                        ({{$responsableGroupe->pivot->nom_responsabilite}})
+                                                        @php
+                                                            $responsabilite = \App\Models\Responsabilite::find($responsableGroupe->pivot->responsabilite_id);
+                                                        @endphp
+
+                                                        ({{ !empty($responsabilite) ? $responsabilite->nom : "" }})
                                                          <br>
                                                     @endforeach
                                                 </td>

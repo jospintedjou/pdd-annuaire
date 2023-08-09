@@ -18,13 +18,11 @@ class Responsabilite extends Model
     }
 
 
-
     public function responsableSousZones()
     {
         return $this->belongsToMany(User::class, 'responsable_sous_zone')->withTimestamps()
             ->withPivot(['nom_responsabilite', 'actif']);
     }
-
 
     public function responsableGroupes()
     {

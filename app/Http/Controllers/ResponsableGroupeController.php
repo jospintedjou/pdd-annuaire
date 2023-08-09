@@ -73,11 +73,11 @@ class ResponsableGroupeController extends Controller
     public function edit(Request $request)
     {
         $groupe = Groupe::find($request->groupe);
-        $responsabilite = Responsabilite::all();
+        $responsabilites = Responsabilite::all();
         $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
                     ->orderBy('nom')->get();
         if(!empty($request)){
-            return view('responsable_groupes.edit',compact('groupe', 'users', 'responsabilite'));
+            return view('responsable_groupes.edit',compact('groupe', 'users', 'responsabilites'));
         }else{
             abort(404);
         }
@@ -96,22 +96,26 @@ class ResponsableGroupeController extends Controller
 
         $data = $request->validate([
             'groupe_id' =>  'required',
-            'responsabilite_groupes' => 'array',
-            'responsable_groupe_ids' => 'array'
+            'responsabilite_groupes' => 'array'
         ]);
 
         $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->get();
         $groupe = Groupe::find($request->groupe_id);
 
-        foreach($request->responsabilite_groupes as $key => $responsabiliteGroupe){
-            if($key !== '' ){
-                $groupe->responsableGroupes()->where(['nom_responsabilite' => $responsabiliteGroupe])
+        foreach($request->responsabilite_groupes as $responsabiliteId => $responsableId){
+            if($responsabiliteId){
+                //If the chosen responsability was used in that group, we just disable it
+                $groupe->responsableGroupes()->where(['responsabilite_id' => $responsabiliteId])
                     ->update([ 'actif' => Constantes::ETAT_INACTIF]);
 
-                $groupe->responsableGroupes()->attach($request->responsable_groupe_ids[$key], [
-                    'nom_responsabilite' => $responsabiliteGroupe,
-                    'actif' => Constantes::ETAT_ACTIF
-                ]);
+                if($responsableId){
+                    //We are saving the new responsability for the group
+                    $groupe->responsableGroupes()->attach($responsableId, [
+                        'responsabilite_id' => $responsabiliteId,
+                        'actif' => Constantes::ETAT_ACTIF
+                    ]);
+                }
+
             }
         }
 
