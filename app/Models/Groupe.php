@@ -16,7 +16,7 @@ class Groupe extends Model
     public function users()
     {
         return $this->belongsToMany(User::class)
-            ->withPivot(['user_id', 'groupe_id', 'actif', 'date_arrivee']);
+            ->withPivot(['user_id', 'groupe_id', 'actif', 'date_entree']);
     }
 
     public function sousZone()

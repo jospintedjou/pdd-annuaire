@@ -59,19 +59,27 @@
                             <i class="material-icons">person</i>
                             <p>Tableau de bord <b class="caret"></b> </p>
                         </a>
-                        <div class="collapse @if(request()->routeIs('statistiques_generale*')) show @endif" id="dashboard" style="">
+                        <div class="collapse @if(request()->routeIs('statistiques_zone*') || request()->routeIs('statistiques_groupe*')
+                         || request()->routeIs('statistiques_memebre*')) show @endif" id="dashboard" style="">
                             <ul class="nav">
-                                <li class="nav-item @if(request()->routeIs('statistiques_generale')) active @endif" >
-                                    <a class="nav-link" href="{!! route('statistiques_generale', ['id'=>encrypt(auth()->user()->id)]) !!}">
+                                <li class="nav-item @if(request()->routeIs('statistiques_zone.index')) active @endif" >
+                                    <a class="nav-link" href="{!! route('statistiques_zone.index', ['id'=>encrypt(auth()->user()->id)]) !!}">
                                         <span class="sidebar-mini"> L </span>
                                         <span class="sidebar-normal"> Stats Zonales </span>
                                     </a>
                                 </li>
 
-                                <li class="nav-item @if(request()->routeIs('statistiques_generale')) active @endif">
-                                    <a class="nav-link" href="{!! route('statistiques_generale', ['id'=>encrypt(auth()->user()->id)]) !!}">
+                                <li class="nav-item @if(request()->routeIs('statistiques_groupe.index')) active @endif">
+                                    <a class="nav-link" href="{!! route('statistiques_groupe.index', ['id'=>encrypt(auth()->user()->id)]) !!}">
                                         <span class="sidebar-mini"> A </span>
                                         <span class="sidebar-normal"> Stats des groupes </span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item @if(request()->routeIs('statistiques_membre.index')) active @endif">
+                                    <a class="nav-link" href="{!! route('statistiques_membre.index', ['id'=>encrypt(auth()->user()->id)]) !!}">
+                                        <span class="sidebar-mini"> A </span>
+                                        <span class="sidebar-normal"> Stats des membres </span>
                                     </a>
                                 </li>
                             </ul>
