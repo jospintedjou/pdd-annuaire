@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Tableau de bord de <span class="text-primary">{{$user->nom}} {{$user->prenom}}</span>  @endsection
+@section('page_title') Tableau de bord des <span class="text-primary">Groupes</span>  @endsection
 @section('content')
     <div class="content">
         <div class="container-fluid">
@@ -11,22 +11,12 @@
                             <div class="card-icon">
                                 <i class="bi bi-people-fill"></i>
                             </div>
-                            <p class="card-category">Infos Membre</p>
+                            <p class="card-category">Nombre Total de Membres</p>
+                            <h4 class="card-title f-w-400">{{$nombreMembres}}</h4>
 
                         </div>
                         <div class="card-footer">
-                            <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
-                                   style="width: 100%;" width="100%" cellspacing="0">
-                                <tr>
-                                    <td>Nom</td> <td>{{$user->nom}} {{$user->prenom}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Groupe</td> <td>{{$user->groupeActif()->nom_groupe}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Zone</td> <td>{{$user->zone()->nom}}</td>
-                                </tr>
-                            </table>
+
                         </div>
                     </div>
                 </div>
@@ -39,20 +29,12 @@
                             <div class="card-icon">
                                 <i class="bi bi-people-fill"></i>
                             </div>
-                            <p class="card-category">Accompagnement Spirituel</p>
+                            <p class="card-category">Accompagnements Spirituels</p>
+                            <h4 class="card-title f-w-400">{{$nombreMembres}} (100%)</h4>
 
                         </div>
                         <div class="card-footer">
-                            <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
-                                   style="width: 100%;" width="100%" cellspacing="0">
-                                <thead></thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Effectué?</td>
-                                        <td>Oui</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
                         </div>
                     </div>
                 </div>
@@ -66,20 +48,10 @@
                                 <i class="bi bi-people-fill"></i>
                             </div>
                             <p class="card-category">Centre de retraite</p>
-
+                            <h4 class="card-title f-w-400">{{$nombreMembres}} (100%)</h4>
                         </div>
                         <div class="card-footer">
-                            <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
-                                   style="width: 100%;" width="100%" cellspacing="0">
-                                <thead></thead>
-                                <tbody>
-                                    <tr>
-                                        <td>centre de retraite payé?</td>
-                                        <td>Oui</td>
-                                    </tr>
-                                </tbody>
 
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -92,7 +64,7 @@
                 <div class="col-xl-12 col-sm-6">
                     <div class="card mt-0 card-h-md">
                         <div class="card-header card-header-light">
-                            <h4 class="card-title" style="color:#3c3c3b">Statistiques de présence de {{$user->nom}} {{$user->prenom}}</h4>
+                            <h4 class="card-title" style="color:#3c3c3b">LIste des groupes</h4>
                         </div>
                         <div class="card-body table-responsive">
 
@@ -101,32 +73,32 @@
                                    style="width: 100%;" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th width="20%">Activité</th>
-                                    <th width="10%">Participation</th>
-                                    <th width="10%">Total de séances</th>
-                                    <th width="10%">Pourcentage</th>
+                                    <th width="20%">Groupes</th>
+                                    <th width="20%">Zone</th>
+                                    <th width="10%">Membres</th>
+                                    <th width="10%">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($categorieActivites as $nom => $categorieActivite)
+                                @foreach($groupes as $groupe)
                                     <tr>
                                         <td class="">
-                                            <span class="font-weight-normal">{{$nom}}</span>
+                                            <span class="font-weight-normal">{{$groupe->nom_groupe}}</span>
+                                        </td>
+                                        <td class="">
+                                            <span class="font-weight-normal">{{$groupe->sousZone->zone->nom}}</span>
                                         </td>
                                         <td class="">
                                             <span class="font-weight-normal">
-                                                {{$categorieActivite['nombreParticipation']}}
+                                              {{$groupe->users()->count()}}
                                             </span>
                                         </td>
-                                        <td class="">
-                                            <span class="font-weight-normal">
-                                                {{$categorieActivite['nombreActivite']}}
-                                            </span>
-                                        </td>
-                                        <td class="">
-                                            <span class="font-weight-normal">
-                                                {{$categorieActivite['stats']}}%
-                                            </span>
+                                        <td class="td-actions text-right">
+                                            <a href="{{route('statistiques_groupe', ['groupe' =>$groupe->id])}}" type="button" rel="tooltip"
+                                               class="btn btn-primary btn-round" data-original-title="" title="statistiques">
+                                                <i class="material-icons">bar_chart</i>
+                                                <div class="ripple-container"></div>
+                                            </a>
                                         </td>
 
                                     </tr>
@@ -141,7 +113,6 @@
                     </div>
                 </div>
                 <!-- END Présence -->
-
             </div>
 
         </div>
