@@ -17,7 +17,9 @@ use App\Http\Controllers\NiveauEngagementController;
 use App\Http\Controllers\CategorieActiviteController;
 use App\Http\Controllers\ResponsableGroupeController;
 use App\Http\Controllers\ResponsableSousZoneController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardZoneController;
+use App\Http\Controllers\DashboardGroupeController;
+use App\Http\Controllers\DashboardMembreController;
 use App\Http\Controllers\ResponsabiliteController;
 
 /*
@@ -89,21 +91,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         ->name('responsable_zones.update');
 
     //Stats
-    Route::get('/statistiques_membre.index', [DashboardController::class, 'userDashboardIndex'])
+    Route::get('/statistiques_membre.index', [DashboardMembreController::class, 'index'])
         ->name('statistiques_membre.index');
-    Route::get('/statistiques_membre', [DashboardController::class, 'userDashboard'])
+    Route::get('/statistiques_membre', [DashboardMembreController::class, 'dashboard'])
          ->name('statistiques_membre');
 
-    Route::get('/statistiques_groupe.index', [DashboardController::class, 'GroupeDashboardIndex'])
+    Route::get('/statistiques_groupe.index', [DashboardGroupeController::class, 'index'])
         ->name('statistiques_groupe.index');
-     Route::get('/statistiques_groupe', [DashboardController::class, 'GroupeDashboard'])
+     Route::get('/statistiques_groupe', [DashboardGroupeController::class, 'dashboard'])
          ->name('statistiques_groupe');
 
-    Route::get('/statistiques_zone.index', [DashboardController::class, 'ZoneDashboardIndex'])
+    Route::get('/statistiques_zone.index', [DashboardZoneController::class, 'index'])
         ->name('statistiques_zone.index');
-    Route::get('/statistiques_zone', [DashboardController::class, 'ZoneDashboard'])
+    Route::get('/statistiques_zone', [DashboardZoneController::class, 'dashboard'])
          ->name('statistiques_zone');
-
 
     //Route::resource('responsable_groupes', ResponsableGroupeController::class);
    // Route::resource('responsable_sous_zones', ResponsableSousZoneController::class);

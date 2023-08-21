@@ -266,6 +266,7 @@
                                         <select name="responsabilite_groupe" id="responsabilite_groupe" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
                                             <option value="">Aucune</option>
+                                            {{--}}
                                             @foreach (\App\Constantes::RESPONSABILITES_GROUPE as $responsabilite)
                                                 @if(isset($responsabilite))
                                                     <?php $userResponsabiliteGroupe = $user->responsableGroupes()->where(['actif'=>\App\Constantes::ETAT_ACTIF])->first() ?>
@@ -276,6 +277,7 @@
                                                     <option  selected disabled>Aucune responsabilité trouvé</option>
                                                 @endif
                                             @endforeach
+                                             {{--}}
                                         </select>
                                         @error('groupe_id')
                                             <span class="invalid-feedback" role="alert">
@@ -315,6 +317,7 @@
                                         <select name="responsabilite_sous_zone" id="responsabilite_sous_zone" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
                                             <option value="">Aucune</option>
+                                             {{--}}
                                             @foreach (\App\Constantes::RESPONSABILITES_SOUS_ZONE as $responsabilite)
                                                 @if(isset($responsabilite))
                                                     <?php $userResponsabiliteSousZone = $user->responsableSousZones()->where(['actif'=>\App\Constantes::ETAT_ACTIF])->first(); ?>
@@ -325,6 +328,7 @@
                                                     <option selected disabled>Aucune responsabilité trouvé</option>
                                                 @endif
                                             @endforeach
+                                             {{--}}
                                         </select>
                                         @error('responsabilite_sous_zone')
                                             <span class="invalid-feedback" role="alert">
@@ -363,7 +367,7 @@
                                         <select name="responsabilite_zone" id="responsabilite_zone" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
                                             <option value="">Aucune</option>
-
+                                            {{--}}
                                             @foreach (\App\Constantes::RESPONSABILITES_ZONE as $responsabilite)
                                                 @if(isset($responsabilite))
                                                     <option value="{{ $responsabilite }}"
@@ -374,6 +378,7 @@
                                                     <option  selected disabled>Aucune responsabilité trouvée</option>
                                                 @endif
                                             @endforeach
+                                             {{--}}
                                         </select>
                                         @error('responsabilite_zone')
                                             <span class="invalid-feedback" role="alert">

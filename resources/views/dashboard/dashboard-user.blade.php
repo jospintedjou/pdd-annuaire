@@ -108,29 +108,31 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($categorieActivites as $nom => $categorieActivite)
-                                    <tr>
-                                        <td class="">
-                                            <span class="font-weight-normal">{{$nom}}</span>
-                                        </td>
-                                        <td class="">
-                                            <span class="font-weight-normal">
-                                                {{$categorieActivite['nombreParticipation']}}
-                                            </span>
-                                        </td>
-                                        <td class="">
-                                            <span class="font-weight-normal">
-                                                {{$categorieActivite['nombreActivite']}}
-                                            </span>
-                                        </td>
-                                        <td class="">
-                                            <span class="font-weight-normal">
-                                                {{$categorieActivite['stats']}}%
-                                            </span>
-                                        </td>
+                                @if(sizeof($categorieActivites))
+                                    @foreach($categorieActivites as $nom => $categorieActivite)
+                                        <tr>
+                                            <td class="">
+                                                <span class="font-weight-normal">{{$nom}}</span>
+                                            </td>
+                                            <td class="">
+                                                <span class="font-weight-normal">
+                                                    {{$categorieActivite['nombreParticipation']}}
+                                                </span>
+                                            </td>
+                                            <td class="">
+                                                <span class="font-weight-normal">
+                                                    {{$categorieActivite['nombreActivite']}}
+                                                </span>
+                                            </td>
+                                            <td class="">
+                                                <span class="font-weight-normal">
+                                                    {{$categorieActivite['stats']}}%
+                                                </span>
+                                            </td>
 
-                                    </tr>
-                                @endforeach
+                                        </tr>
+                                    @endforeach
+                                @endif
                                 </tbody>
                             </table>
 
@@ -143,6 +145,82 @@
                 <!-- END Présence -->
 
             </div>
+
+
+            <!-- Start Stats detais -->
+            <div class="row">
+                <div class="card mt-0 card-h-md">
+                    <div class="card-header card-header-light">
+                        <h4 class="card-title" style="color:#3c3c3b">Statistiques détaillées {{$user->nom}} {{$user->prenom}}</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+                        <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper d-flex">
+                                <ul  class="nav flex-column nav-pills text-center"
+                                     id="v-pills-tab"
+                                     role="tablist"
+                                     aria-orientation="vertical">
+
+                                    @foreach($categorieActivitesDetails as $nom => $categorieActivite)
+                                        <li class="nav-item0">
+                                            <a class="nav-link @if($loop->first) active @endif" href="#{{trim($nom)}}" data-toggle="tab">{{$nom}}</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+
+                                <div class="tab-content border rounded p-3 w-100">
+                                    @if(sizeof($categorieActivitesDetails))
+                                        @foreach($categorieActivitesDetails as $nom => $categorieActivite)
+                                            <div class="tab-pane @if($loop->first) active @endif" id="{{trim($nom)}}">
+                                                <p>
+                                                <table
+                                                        class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                                                        style="width: 100%;" width="100%" cellspacing="0">
+                                                    <thead>
+                                                    <tr>
+                                                        <th width="20%">Activité</th>
+                                                        <th width="10%">Participation</th>
+                                                        <th width="10%">Total de séances</th>
+                                                        <th width="10%">Pourcentage</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach($categorieActivite as $nom => $activite)
+                                                        <tr>
+                                                            <td class="">
+                                                                <span class="font-weight-normal">{{$nom}}</span>
+                                                            </td>
+                                                            <td class="">
+                                                                <span class="font-weight-normal">
+                                                                    {{ $activite['nombreParticipation'] }}
+                                                                </span>
+                                                            </td>
+                                                            <td class="">
+                                                                <span class="font-weight-normal">
+                                                                    {{ $activite['nombreActivite'] }}
+                                                                </span>
+                                                            </td>
+                                                            <td class="">
+                                                                <span class="font-weight-normal">
+                                                                    {{ $activite['stats'] }}%
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                                </p>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Stats detais -->
 
         </div>
     </div>

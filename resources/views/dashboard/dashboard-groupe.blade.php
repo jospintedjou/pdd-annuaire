@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Tableau de bord de <span class="text-primary">{{$groupe->nom}}</span>  @endsection
+@section('page_title') Tableau de bord de <span class="text-primary">{{$groupe->nom_groupe}}</span>  @endsection
 @section('content')
     <div class="content">
         <div class="container-fluid">
@@ -64,7 +64,7 @@
                 <div class="col-xl-12 col-sm-6">
                     <div class="card mt-0 card-h-md">
                         <div class="card-header card-header-light">
-                            <h4 class="card-title" style="color:#3c3c3b">Statistiques de présence {{$groupe->nom}}</h4>
+                            <h4 class="card-title" style="color:#3c3c3b">Statistiques de présence {{$groupe->nom_groupe}}</h4>
                         </div>
                         <div class="card-body table-responsive">
 
@@ -80,33 +80,35 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($categorieActivites as $nom => $categorieActivite)
-                                    <tr>
-                                        <td class="">
-                                            <span class="font-weight-normal">{{$nom}}</span>
-                                        </td>
-                                        <td class="">
-                                            <span class="font-weight-normal">
-                                                {{ $categorieActivite['nombreParticipation'] }}
-                                            </span>
-                                        </td>
-                                        <td class="">
-                                            <span class="font-weight-normal">
+                                @if(sizeof($categorieActivites))
+                                    @foreach($categorieActivites as $nom => $categorieActivite)
+                                        <tr>
+                                            <td class="">
+                                                <span class="font-weight-normal">{{$nom}}</span>
+                                            </td>
+                                            <td class="">
+                                                <span class="font-weight-normal">
+                                                    {{ $categorieActivite['nombreParticipation'] }}
+                                                </span>
+                                            </td>
+                                            <td class="">
+                                                <span class="font-weight-normal">
 
-                                                {{ $categorieActivite['nombreActivite'] }}
+                                                    {{ $categorieActivite['nombreActivite'] }}
 
-                                            </span>
-                                        </td>
-                                         <td class="">
-                                            <span class="font-weight-normal">
+                                                </span>
+                                            </td>
+                                             <td class="">
+                                                <span class="font-weight-normal">
 
-                                                {{ $categorieActivite['stats'] }}%
+                                                    {{ $categorieActivite['stats'] }}%
 
-                                            </span>
-                                        </td>
+                                                </span>
+                                            </td>
 
-                                    </tr>
-                                @endforeach
+                                        </tr>
+                                    @endforeach
+                                @endif
                                 </tbody>
                             </table>
 
@@ -122,7 +124,7 @@
             <div class="row">
                 <div class="card mt-0 card-h-md">
                     <div class="card-header card-header-light">
-                        <h4 class="card-title" style="color:#3c3c3b">Statistiques détaillées {{$groupe->nom}}</h4>
+                        <h4 class="card-title" style="color:#3c3c3b">Statistiques détaillées {{$groupe->nom_groupe}}</h4>
                     </div>
                     <div class="card-body">
                         <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
@@ -132,57 +134,60 @@
                                      id="v-pills-tab"
                                      role="tablist"
                                      aria-orientation="vertical">
-                                    @foreach($categorieActivites as $nom => $categorieActivite)
-                                    <li class="nav-item0">
-                                        <a class="nav-link @if($loop->first) active @endif" href="#{{trim($nom)}}" data-toggle="tab">{{$nom}}</a>
-                                    </li>
+
+                                    @foreach($categorieActivitesDetails as $nom => $categorieActivite)
+                                        <li class="nav-item0">
+                                            <a class="nav-link @if($loop->first) active @endif" href="#{{trim($nom)}}" data-toggle="tab">{{$nom}}</a>
+                                        </li>
                                     @endforeach
                                 </ul>
 
                                 <div class="tab-content border rounded p-3 w-100">
-                                    @foreach($categorieActivites as $nom => $categorieActivite)
-                                        <div class="tab-pane @if($loop->first) active @endif" id="{{trim($nom)}}">
-                                            <p>
-                                            <table
-                                                   class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
-                                                   style="width: 100%;" width="100%" cellspacing="0">
-                                                <thead>
-                                                <tr>
-                                                    <th width="20%">Activité</th>
-                                                    <th width="10%">Participation</th>
-                                                    <th width="10%">Total de séances</th>
-                                                    <th width="10%">Pourcentage</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @foreach($categorieActivites as $nom => $categorieActivite)
+                                    @if(sizeof($categorieActivitesDetails))
+                                        @foreach($categorieActivitesDetails as $nom => $categorieActivite)
+                                            <div class="tab-pane @if($loop->first) active @endif" id="{{trim($nom)}}">
+                                                <p>
+                                                <table
+                                                        class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                                                        style="width: 100%;" width="100%" cellspacing="0">
+                                                    <thead>
                                                     <tr>
-                                                        <td class="">
-                                                            <span class="font-weight-normal">{{$nom}}</span>
-                                                        </td>
-                                                        <td class="">
-                                                            <span class="font-weight-normal">
-                                                                {{ $categorieActivite['nombreParticipation'] }}
-                                                            </span>
-                                                        </td>
-                                                        <td class="">
-                                                            <span class="font-weight-normal">
-                                                                {{ $categorieActivite['nombreActivite'] }}
-                                                            </span>
-                                                        </td>
-                                                        <td class="">
-                                                            <span class="font-weight-normal">
-                                                                {{ $categorieActivite['stats'] }}%
-                                                            </span>
-                                                        </td>
+                                                        <th width="20%">Activité</th>
+                                                        <th width="10%">Participation</th>
+                                                        <th width="10%">Total de séances</th>
+                                                        <th width="10%">Pourcentage</th>
                                                     </tr>
-                                                @endforeach
-                                                </tbody>
-                                            </table>
-                                            </p>
-                                        </div>
-                                    @endforeach
-                                    </div>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach($categorieActivite as $nom => $activite)
+                                                        <tr>
+                                                            <td class="">
+                                                                <span class="font-weight-normal">{{$nom}}</span>
+                                                            </td>
+                                                            <td class="">
+                                                                <span class="font-weight-normal">
+                                                                    {{ $activite['nombreParticipation'] }}
+                                                                </span>
+                                                            </td>
+                                                            <td class="">
+                                                                <span class="font-weight-normal">
+                                                                    {{ $activite['nombreActivite'] }}
+                                                                </span>
+                                                            </td>
+                                                            <td class="">
+                                                                <span class="font-weight-normal">
+                                                                    {{ $activite['stats'] }}%
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                                </p>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>

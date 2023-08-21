@@ -64,7 +64,7 @@
                 <div class="col-xl-12 col-sm-6">
                     <div class="card mt-0 card-h-md">
                         <div class="card-header card-header-light">
-                            <h4 class="card-title" style="color:#3c3c3b">LIste des zones</h4>
+                            <h4 class="card-title" style="color:#3c3c3b">LIste des membres</h4>
                         </div>
                         <div class="card-body table-responsive">
 
@@ -90,7 +90,7 @@
                                         <tr>
                                             <td class="">{{$user->prenom}} {{$user->nom}}</td>
                                             <td class="">
-                                                <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
+                                                <?php //dd($user->groupes) ?>
                                                 {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first()->nom }}
                                             </td>
                                             <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom }}</td>
@@ -111,13 +111,6 @@
                                                         <i class="material-icons">edit</i>
                                                         <div class="ripple-container"></div>
                                                     </a>
-                                                    <!-- Button trigger modal -->
-                                                    <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('users.destroy',$user->id) }}"
-                                                            data-id="{{ $user->id }}"
-                                                            data-toggle="modal" data-target="#confirm-delete">
-                                                        <i class="material-icons">close</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>
 
                                                 </form>
                                             </td>
