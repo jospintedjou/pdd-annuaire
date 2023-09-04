@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Fiche de présence {{$activite->nom}} @endsection
+@section('page_title') {{$rubrique->nom}} @endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Fiche de présence {{$activite->nom}}</h4>
+                        <h4 class="card-title">{{$rubrique->nom}}</h4>
                     </div>
                     <div class="card-body">
                         @if ($message = Session::get('success'))
@@ -31,8 +31,8 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <table id="datatables"
-                                               data-url="{{route('presences.store')}}"
-                                               data-activite_id="{{$activite->id}}"
+                                               data-url="{{route('evaluations.store')}}"
+                                               data-rubrique_id="{{$rubrique->id}}"
                                                class="table table-no-bordered dataTable dtr-inline"
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
@@ -42,40 +42,27 @@
                                                 <!--th>Sous-zone</th-->
                                                 <th>Groupe</th>
                                                 <th>Niveau d'engagement</th>
-                                                <th>Heure</th>
                                                 <th class="disabled-sorting text-right sorting">
-                                                    Présent?
+                                                    {{$rubrique->nom}}?
                                                 </th>
                                             </tr>
                                             </thead>
 
+
                                             <tbody>
                                             @foreach($users as $user)
-                                                <tr class="@if($user->activites()->where('activite_id', $activite->id)->exists()) presence-active @endif" data-user_id="{{$user->id}}">
+                                                <tr class="@if($user->rubriques()->where('rubrique_id', $rubrique->id)->exists()) presence-active @endif" data-user_id="{{$user->id}}">
                                                     <td class="">
                                                         {{$user->prenom}} {{$user->nom}}</td>
                                                     <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
                                                     <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
                                                     <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
-                                                    <td class="">
-                                                        <div class="form-check">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control timepicker heure_arrivee"
-                                                                       step="3600" min="00:00" max="23:59" pattern="[0-2][0-9]:[0-5][0-9]"
-                                                                       value="@if($user->activites()->where('activite_id', $activite->id)->exists())
-                                                                               {{$user->activites()->where('activite_id', $activite->id)->first()->pivot->heure_arrivee}}
-                                                                               @else
-                                                                                {{\Carbon\Carbon::now()}}
-                                                                               @endif"/>
-                                                            </div>
-                                                        </div>
-                                                    </td>
                                                     <td class="td-actions text-right">
                                                         <div class="form-check">
                                                             <div class="form-group">
                                                                 <label class="form-check-label">
-                                                                    <input class="form-check-input presence-checkbox" type="checkbox" value="1"
-                                                                           @if($user->activites()->where('activite_id', $activite->id)->exists()) checked @endif>
+                                                                    <input class="form-check-input evaluation-checkbox" type="checkbox" value="1"
+                                                                           @if($user->rubriques()->where('rubrique_id', $rubrique->id)->exists()) checked @endif>
                                                                 <span class="form-check-sign">
                                                                     <span class="check"></span>
                                                                 </span>
@@ -121,8 +108,8 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="container">
-                                                <input type="hidden" name="activite_id" value="{{$activite->id}}">
-                                                <input type="hidden" name="to" value="{{route('presences.create', ['activite_id' =>$activite->id])}}">
+                                                <input type="hidden" name="rubrique_id" value="{{$rubrique->id}}">
+                                                <input type="hidden" name="to" value="{{route('presences.create', ['rubrique_id' =>$rubrique->id])}}">
                                                 <div class="row">
                                                     <div class="form-group col-md-5 @error('nom') has-danger @enderror">
                                                         <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>

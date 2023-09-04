@@ -21,6 +21,8 @@ use App\Http\Controllers\DashboardZoneController;
 use App\Http\Controllers\DashboardGroupeController;
 use App\Http\Controllers\DashboardMembreController;
 use App\Http\Controllers\ResponsabiliteController;
+use App\Http\Controllers\RubriqueController;
+use App\Http\Controllers\EvaluationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,11 +56,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('groupes', GroupeController::class);
     Route::resource('logs', LogController::class);
     Route::resource('participations', ParticipationController::class);
+    Route::resource('rubriques', RubriqueController::class);
 
     //Présence
     Route::get('/presences', [ActiviteController::class, 'presence'])->name('presences.index');
     Route::get('/presences-create', [ActiviteController::class, 'createPresence'])->name('presences.create');
     Route::post('/presences', [ActiviteController::class, 'storePresence'])->name('presences.store');
+
+    //Evaluation
+    Route::get('/evaluations', [EvaluationController::class, 'index'])->name('evaluations.index');
+    Route::get('/evaluations-create', [EvaluationController::class, 'create'])->name('evaluations.create');
+    Route::post('/evaluations', [EvaluationController::class, 'store'])->name('evaluations.store');
 
     //responsable groupe
     Route::get('/responsable_groupes', [ResponsableGroupeController::class, 'index'])

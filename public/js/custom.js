@@ -38,7 +38,7 @@ $(document).ready(function(){
     /**
      * Start check presence in a specific actiivy
     * **/
-    $('.presence-input').click(function () {
+    $('.presence-checkbox').click(function () {
 
         var val = $(this).val(),
             tr = $(this).closest('tr'),
@@ -69,6 +69,52 @@ $(document).ready(function(){
             success: function (data) {
                 console.log('data', data);
                 if(presence){
+                    tr.addClass('presence-active');
+                }else {
+                    tr.removeClass('presence-active');
+                }
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    });
+    /**
+     * End check presence in a specific actiivy
+    * **/
+
+    /**
+     * Start check presence in a specific actiivy
+    * **/
+    $('.evaluation-checkbox').click(function () {
+
+        var val = $(this).val(),
+            tr = $(this).closest('tr'),
+            table = $(this).closest('table'),
+            url = table.data('url'),
+            user_id = tr.data('user_id'),
+            rubrique_id = table.data('rubrique_id'),
+            evaluation = $(this).is(':checked') ? 1 : 0,
+            formData = {
+                rubrique_id: rubrique_id,
+                user_id: user_id,
+                evaluation: evaluation
+            };
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                console.log('data', data);
+                if(evaluation){
                     tr.addClass('presence-active');
                 }else {
                     tr.removeClass('presence-active');

@@ -75,6 +75,11 @@ class User extends AuthUser
             ->withPivot(['heure_arrivee']);
     }
 
+    public function rubriques()
+    {
+        return $this->belongsToMany(Rubrique::class, Evaluation::class)->withTimestamps();
+    }
+
     public function responsableGroupes()
     {
         return $this->belongsToMany(Groupe::class, 'responsable_groupe')->withTimestamps()
