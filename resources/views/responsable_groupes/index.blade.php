@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Groupe @endsection
+@section('page_title') Responsables de Groupes @endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des groupes</h4>
+                        <h4 class="card-title">Liste des responsables de groupes</h4>
                     </div>
                     <div class="card-body">
                         <div class="toolbar">

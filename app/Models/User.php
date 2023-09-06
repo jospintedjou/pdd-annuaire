@@ -83,19 +83,19 @@ class User extends AuthUser
     public function responsableGroupes()
     {
         return $this->belongsToMany(Groupe::class, 'responsable_groupe')->withTimestamps()
-            ->withPivot(['nom_responsabilite', 'actif']);
+            ->withPivot(['responsabilite_id', 'actif']);
     }
 
     public function responsableSousZones()
     {
         return $this->belongsToMany(SousZone::class, 'responsable_sous_zone')->withTimestamps()
-            ->withPivot(['nom_responsabilite', 'actif']);
+            ->withPivot(['responsabilite_id', 'actif']);
     }
 
     public function responsableZones()
     {
         return $this->belongsToMany(Zone::class, 'responsable_zone')->withTimestamps()
-            ->withPivot(['nom_responsabilite', 'actif']);
+            ->withPivot(['responsabilite_id', 'actif']);
     }
 
     /**============ End Model Relation functions ==============**/
