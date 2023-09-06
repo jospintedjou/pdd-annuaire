@@ -38,8 +38,12 @@
                                                 <td class="">
                                                     @foreach($zone->responsableZones()->where('actif', \App\Constantes::ETAT_ACTIF)->cursor() as $responsableZone)
                                                         {{$responsableZone->nom}} {{$responsableZone->prenom}}
-                                                        ({{$responsableZone->pivot->nom_responsabilite}})
-                                                         <br>
+                                                        @php
+                                                        $responsabilite = \App\Models\Responsabilite::find($responsableZone->pivot->responsabilite_id);
+                                                        @endphp
+
+                                                        ({{ !empty($responsabilite) ? $responsabilite->nom : "" }})
+                                                        <br>
                                                     @endforeach
                                                 </td>
                                                 <td class="td-actions text-right">

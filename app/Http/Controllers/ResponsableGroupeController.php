@@ -41,16 +41,7 @@ class ResponsableGroupeController extends Controller
      */
     public function store(Request $request)
     {
-        /*$data = $request->validate([
-            'groupe_id' =>  'required',
-            'user_id' => 'required'
-        ]);
 
-        //We are storing the user data in database
-        $user = User::create($data);
-
-        return redirect()->route('responsable_groupes.index')
-            ->with('success','Responsables mis ç jour avec succès.');*/
     }
 
     /**
@@ -99,7 +90,7 @@ class ResponsableGroupeController extends Controller
             'responsabilite_groupes' => 'array'
         ]);
 
-        $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->get();
+        //$users = User::where(['etat'=>Constantes::ETAT_ACTIF])->get();
         $groupe = Groupe::find($request->groupe_id);
 
         foreach($request->responsabilite_groupes as $responsabiliteId => $responsableId){

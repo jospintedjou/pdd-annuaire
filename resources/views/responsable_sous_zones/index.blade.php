@@ -40,8 +40,12 @@
                                                 <td class="">
                                                     @foreach($sous_zone->responsableSousZones()->where('actif', \App\Constantes::ETAT_ACTIF)->cursor() as $responsableSousZone)
                                                         {{$responsableSousZone->nom}} {{$responsableSousZone->prenom}}
-                                                        ({{$responsableSousZone->pivot->nom_responsabilite}})
-                                                         <br>
+                                                        @php
+                                                        $responsabilite = \App\Models\Responsabilite::find($responsableSousZone->pivot->responsabilite_id);
+                                                        @endphp
+
+                                                        ({{ !empty($responsabilite) ? $responsabilite->nom : "" }})
+                                                        <br>
                                                     @endforeach
                                                 </td>
                                                 <td class="td-actions text-right">

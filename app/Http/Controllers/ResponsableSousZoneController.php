@@ -61,12 +61,13 @@ class ResponsableSousZoneController extends Controller
      */
     public function edit(Request $request)
     {
+
         $sous_zone = SousZone::find($request->sous_zone);
-        $responsabilite = Responsabilite::all();
+        $responsabilites = Responsabilite::all();
         $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
             ->orderBy('nom')->get();
         if(!empty($request)){
-            return view('responsable_sous_zones.edit',compact('sous_zone', 'users', 'responsabilite'));
+            return view('responsable_sous_zones.edit',compact('sous_zone', 'users', 'responsabilites'));
         }else{
             abort(404);
         }
@@ -83,22 +84,23 @@ class ResponsableSousZoneController extends Controller
     {
         $data = $request->validate([
             'sous_zone_id' =>  'required',
-            'responsabilite_sous_zones' => 'array',
-            'responsable_sous_zone_ids' => 'array'
+            'responsabilite_sous_zones' => 'array'
         ]);
 
         //$users = User::where(['etat'=>Constantes::ETAT_ACTIF])->get();
         $sous_zone = SousZone::find($request->sous_zone_id);
 
-        foreach($request->responsabilite_sous_zones as $key => $responsabiliteSousZone){
-            if($key !== '' ){
-                $sous_zone->responsableSousZones()->where(['nom_responsabilite' => $responsabiliteSousZone])
+        foreach($request->responsabilite_sous_zones as $responsabiliteId => $responsableId){
+            if($responsabiliteId){
+                $sous_zone->responsableSousZones()->where(['responsabilite_id' => $responsabiliteId])
                     ->update([ 'actif' => Constantes::ETAT_INACTIF]);
-
-                $sous_zone->responsableSousZones()->attach($request->responsable_sous_zone_ids[$key], [
-                    'nom_responsabilite' => $responsabiliteSousZone,
-                    'actif' => Constantes::ETAT_ACTIF
-                ]);
+                if($responsableId){
+                    //We are saving the new responsability for the group
+                    $sous_zone->responsableSousZones()->attach($responsableId, [
+                        'responsabilite_id' => $responsabiliteId,
+                        'actif' => Constantes::ETAT_ACTIF
+                    ]);
+                }
             }
         }
 

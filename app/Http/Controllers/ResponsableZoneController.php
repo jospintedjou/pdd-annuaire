@@ -63,11 +63,11 @@ class ResponsableZoneController extends Controller
     public function edit(Request $request)
     {
         $zone = Zone::find($request->zone);
-        $responsabilite = Responsabilite::all();
+        $responsabilites = Responsabilite::all();
         $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
             ->orderBy('nom')->get();
         if(!empty($request)){
-            return view('responsable_zones.edit',compact('zone', 'users', 'responsabilite'));
+            return view('responsable_zones.edit',compact('zone', 'users', 'responsabilites'));
         }else{
             abort(404);
         }
@@ -86,21 +86,21 @@ class ResponsableZoneController extends Controller
         $data = $request->validate([
             'zone_id' =>  'required',
             'responsabilite_zones' => 'array',
-            'responsable_zone_ids' => 'array'
         ]);
 
         //$users = User::where(['etat'=>Constantes::ETAT_ACTIF])->get();
         $zone = Zone::find($request->zone_id);
-
-        foreach($request->responsabilite_zones as $key => $responsabiliteZone){
-            if($key !== '' ){
-                $zone->responsableZones()->where(['nom_responsabilite' => $responsabiliteZone])
+        foreach($request->responsabilite_zones as $responsabiliteId => $responsableId){
+            if($responsabiliteId){
+                //If the chosen responsability was used in that group, we just disable it
+                $zone->responsableZones()->where(['responsabilite_id' => $responsabiliteId])
                     ->update([ 'actif' => Constantes::ETAT_INACTIF]);
-
-                $zone->responsableZones()->attach($request->responsable_zone_ids[$key], [
-                    'nom_responsabilite' => $responsabiliteZone,
-                    'actif' => Constantes::ETAT_ACTIF
-                ]);
+                if($responsableId){
+                    $zone->responsableZones()->attach($responsableId, [
+                        'responsabilite_id' => $responsabiliteId,
+                        'actif' => Constantes::ETAT_ACTIF
+                    ]);
+                }
             }
         }
 

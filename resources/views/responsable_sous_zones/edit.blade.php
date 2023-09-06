@@ -43,37 +43,21 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @foreach($responsabilite as $responsabilite_sous_zone)
-                                        <div class="row">
-                                            <div class="form-group col-md-6 @error('responsabilite_sous_zones') has-danger @enderror">
-                                                <label for="responsabilite_sous_zones" class="bmd-label-floating @error('responsabilite_sous_zones') text-danger @enderror">Responsabilité dans la sous-zone</label>
-                                                <select name="responsabilite_sous_zones[{{ $loop->index }}]" id="" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
-                                                        data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
-                                                    <option value="">Aucune</option>
 
-                                                        <option value="{{ $responsabilite_sous_zone->nom}}"
-                                                            {{$sous_zone->responsableSousZones()->where(['actif' => \App\Constantes::ETAT_ACTIF, 'nom_responsabilite' => $responsabilite_sous_zone])->exists() ? "selected" : ""}}>
-                                                            {{$responsabilite_sous_zone->nom}}
-                                                        </option>
-                                                </select>
-                                                @error('responsabilite_sous_zones')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
+                                    <div class="row">
+                                    @foreach($responsabilites as $responsabilite)
+                                        <div class="col-md-6">
+                                            <div class="form-group @error('responsabilite_sous_zones') has-danger @enderror">
+                                                <label for="responsabilite_sous_zones" class="bmd-label-floating @error('responsabilite_sous_zones') text-danger @enderror">{{$responsabilite->nom}}</label>
 
-                                            <div class="form-group col-md-6 @error('responsable_sous_zone_ids') has-danger @enderror">
-                                                <label for="responsable_groupe_ids" class="bmd-label-floating @error('responsable_sous_zone_ids') text-danger @enderror">Responsable de Sous-zone ?</label>
-                                                <?php //dd($users); ?>
-                                                <select name="responsable_sous_zone_ids[{{ $loop->index }}]" id="" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
+                                                <select name="responsabilite_sous_zones[{{$responsabilite->id}}]" id="" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir le responsable">
                                                     <option value="">Aucun</option>
 
                                                     @foreach ($users as $user)
                                                         @if(isset($user))
                                                             <option value="{{ $user->id }}"
-                                                                    {{$sous_zone->responsableSousZones()->where(['actif' => \App\Constantes::ETAT_ACTIF, 'nom_responsabilite' => $responsabilite_sous_zone, 'user_id' => $user->id])->exists() ? "selected" : ""}}>
+                                                                    {{$sous_zone->responsableSousZones()->where(['actif' => \App\Constantes::ETAT_ACTIF, 'responsabilite_id' => $responsabilite->id, 'user_id' => $user->id])->exists() ? "selected" : ""}}>
                                                                 {{$user->nom}} {{$user->prenom}}
                                                             </option>
                                                         @else
@@ -81,15 +65,16 @@
                                                         @endif
                                                     @endforeach
                                                 </select>
-                                                @error('responsable_sous_zone_ids')
+
+                                                @error('responsabilite_sous_zones')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                                 @enderror
                                             </div>
-
-                                        </div><!-- row -->
+                                        </div><!-- col-md-6 -->
                                     @endforeach
+                                    </div><!-- row -->
                                     <button type="submit" class="btn btn-primary pull-right">Modifier</button>
                                     <div class="clearfix"></div>
                                  </div>

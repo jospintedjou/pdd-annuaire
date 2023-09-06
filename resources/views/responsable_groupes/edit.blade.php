@@ -79,7 +79,7 @@
                                             </div>
                                         </div><!-- col-md-6 -->
                                     @endforeach
-                                    </div>
+                                    </div><!-- row -->
                                     <button type="submit" class="btn btn-primary pull-right">Modifier</button>
                                     <div class="clearfix"></div>
                                  </div>
