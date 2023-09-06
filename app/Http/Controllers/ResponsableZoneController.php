@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constantes;
+use App\Models\Responsabilite;
 use App\Models\ResponsableZone;
 use App\Models\User;
 use App\Models\Zone;
@@ -62,13 +63,15 @@ class ResponsableZoneController extends Controller
     public function edit(Request $request)
     {
         $zone = Zone::find($request->zone);
+        $responsabilite = Responsabilite::all();
         $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
             ->orderBy('nom')->get();
         if(!empty($request)){
-            return view('responsable_zones.edit',compact('zone', 'users'));
+            return view('responsable_zones.edit',compact('zone', 'users', 'responsabilite'));
         }else{
             abort(404);
         }
+        
     }
 
     /**

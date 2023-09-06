@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Responsabilite;
 use App\Constantes;
 use App\Models\ResponsableSousZone;
 use App\Models\SousZone;
@@ -62,10 +62,11 @@ class ResponsableSousZoneController extends Controller
     public function edit(Request $request)
     {
         $sous_zone = SousZone::find($request->sous_zone);
+        $responsabilite = Responsabilite::all();
         $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
             ->orderBy('nom')->get();
         if(!empty($request)){
-            return view('responsable_sous_zones.edit',compact('sous_zone', 'users'));
+            return view('responsable_sous_zones.edit',compact('sous_zone', 'users', 'responsabilite'));
         }else{
             abort(404);
         }

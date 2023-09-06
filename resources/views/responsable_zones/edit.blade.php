@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Responsables zone {{$zone->nom}} @endsection
+@section('page_title') Responsables {{$zone->nom}}  @endsection
 @section('content')
     <div class="content">
         <div class="container-fluid">
@@ -26,23 +26,22 @@
 
                                                 <select name="zone_id" id="zone_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir la zone">
-
-                                                       <option value="{{$zone->id}}" selected>{{$zone->nom}}</option>
+                                                    <option value="{{$zone->id}}" selected>{{$zone->nom}}</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    @foreach(\App\Constantes::RESPONSABILITES_ZONE as $responsabilite_zone)
+                                    @foreach($responsabilite as $responsabilite_zone)
                                         <div class="row">
                                             <div class="form-group col-md-6 @error('responsabilite_zones') has-danger @enderror">
                                                 <label for="responsabilite_zones" class="bmd-label-floating @error('responsabilite_zones') text-danger @enderror">Responsabilité dans la zone</label>
                                                 <select name="responsabilite_zones[{{ $loop->index }}]" id="" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
-                                                    <option value="">Aucune</option>
+                                                    <option value="" >Aucun</option>
 
-                                                        <option value="{{ $responsabilite_zone }}"
+                                                        <option value="{{ $responsabilite_zone->nom }}"
                                                             {{$zone->responsableZones()->where(['actif' => \App\Constantes::ETAT_ACTIF, 'nom_responsabilite' => $responsabilite_zone])->exists() ? "selected" : ""}}>
-                                                            {{$responsabilite_zone}}
+                                                            {{$responsabilite_zone->nom}}
                                                         </option>
                                                 </select>
                                                 @error('responsabilite_zones')

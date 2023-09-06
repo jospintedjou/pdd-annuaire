@@ -48,37 +48,21 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @foreach(\App\Constantes::RESPONSABILITES_GROUPE as $responsabiliteGroupe)
-                                        <div class="row">
-                                            <div class="form-group col-md-6 @error('responsabilite_groupes') has-danger @enderror">
-                                                <label for="responsabilite_groupes" class="bmd-label-floating @error('responsabilite_groupes') text-danger @enderror">Responsabilité dans le groupe</label>
-                                                <select name="responsabilite_groupes[{{ $loop->index }}]" id="" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
-                                                        data-style2="btn btn-primary btn-round" data-header="Choisir la responsabilité">
-                                                    <option value="">Aucune</option>
 
-                                                        <option value="{{ $responsabiliteGroupe }}"
-                                                            {{$groupe->responsableGroupes()->where(['actif' => \App\Constantes::ETAT_ACTIF, 'nom_responsabilite' => $responsabiliteGroupe])->exists() ? "selected" : ""}}>
-                                                            {{$responsabiliteGroupe}}
-                                                        </option>
-                                                </select>
-                                                @error('responsabilite_groupes')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
+                                    <div class="row">
+                                    @foreach($responsabilites as $responsabilite)
+                                        <div class="col-md-6">
+                                            <div class="form-group @error('responsabilite_groupes') has-danger @enderror">
+                                                <label for="responsabilite_groupes" class="bmd-label-floating @error('responsabilite_groupes') text-danger @enderror">{{$responsabilite->nom}}</label>
 
-                                            <div class="form-group col-md-6 @error('responsable_groupe_id') has-danger @enderror">
-                                                <label for="responsable_groupe_ids" class="bmd-label-floating @error('responsable_groupe_id') text-danger @enderror">Responsable de Groupe ?</label>
-                                                <?php //dd($users); ?>
-                                                <select name="responsable_groupe_ids[{{ $loop->index }}]" id="" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
+                                                <select name="responsabilite_groupes[{{$responsabilite->id}}]" id="" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir le responsable">
                                                     <option value="">Aucun</option>
 
                                                     @foreach ($users as $user)
                                                         @if(isset($user))
                                                             <option value="{{ $user->id }}"
-                                                                    {{$groupe->responsableGroupes()->where(['actif' => \App\Constantes::ETAT_ACTIF, 'nom_responsabilite' => $responsabiliteGroupe, 'user_id' => $user->id])->exists() ? "selected" : ""}}>
+                                                                    {{$groupe->responsableGroupes()->where(['actif' => \App\Constantes::ETAT_ACTIF, 'responsabilite_id' => $responsabilite->id, 'user_id' => $user->id])->exists() ? "selected" : ""}}>
                                                                 {{$user->nom}} {{$user->prenom}}
                                                             </option>
                                                         @else
@@ -86,15 +70,16 @@
                                                         @endif
                                                     @endforeach
                                                 </select>
-                                                @error('responsable_groupe_id')
+
+                                                @error('responsabilite_groupes')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                                 @enderror
                                             </div>
-
-                                        </div><!-- row -->
+                                        </div><!-- col-md-6 -->
                                     @endforeach
+                                    </div>
                                     <button type="submit" class="btn btn-primary pull-right">Modifier</button>
                                     <div class="clearfix"></div>
                                  </div>
