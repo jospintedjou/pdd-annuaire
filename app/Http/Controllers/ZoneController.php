@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SousZone;
 use App\Models\Zone;
 use Illuminate\Http\Request;
 
@@ -116,5 +117,30 @@ class ZoneController extends Controller
             return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
                 JSON_UNESCAPED_UNICODE);
         }
+    }
+
+    /**
+     * Return all sous-zone of a zone by id.
+     *
+     * @param  \App\Models\Zone  $zone
+     * @return \Illuminate\Http\Response
+     */
+    public function getSousZone(Request $request)
+    {
+
+        $str = "";
+        $zone_id = $request->input('zone_id');
+        $sousZones = SousZone::where('zone_id', $zone_id)->get();
+
+        if(!empty($sousZones)){
+            foreach($sousZones as $sousZone){
+                $str .= "<option value=".$sousZone->id.">".$sousZone->nom."</option>";
+            }
+        }else{
+            $str = "<option value=''>Aucune</option>";
+        }
+
+        return response()->json(['status'=>'success', 'data'=>$str], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+            JSON_UNESCAPED_UNICODE);
     }
 }

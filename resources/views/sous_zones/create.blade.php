@@ -23,7 +23,9 @@
                                     <div class=" @error('zone_id') has-danger @enderror">
                                         <label for="zone_id" class="form-label @error('zone_id') text-danger @enderror">Zone</label>
                                         <br>
-                                        <select name="zone_id" id="zone_id" value="{{ old('zone_id') }}" class="form-control @error('zone_id') is-invalid @enderror">
+                                        <select name="zone_id" id="zone_id" value="{{ old('zone_id') }}"
+                                                data-style="select-with-transition" data-actions-box="true" data-live-search="true"
+                                                class="selectpicker form-control @error('zone_id') is-invalid @enderror">
                                             <option value="" disabled selected>-- <i>Choisir dans la liste</i></option>
                                             @foreach ($zones as $zone)
                                                 @if(isset($zone))

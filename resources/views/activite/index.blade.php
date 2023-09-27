@@ -24,7 +24,8 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <th>Categorie</th>
+                                                <th>Activité</th>
+                                                <!--th>Categorie</th-->
                                                 <th>Concern&eacute;s</th>
                                                 <th>Date Debut</th>
                                                 <th>Date Fin</th>
@@ -36,12 +37,13 @@
                                             <tbody>
                                             @foreach($activites as $activite)
                                             <tr>
-                                                <td class="">{{$activite->categorieActivite->nom}}</td>
+                                                <td class="">{{$activite->nom}}</td>
+                                                <!--td class="">{{--$activite->categorieActivite->nom--}}</td-->
                                                 <td class="">
                                                     @if ($activite->zone_id)
-                                                    Zone de {{$activite->zone->nom}}
+                                                    {{$activite->zone->nom}}
                                                     @elseif ($activite->sous_zone_id)
-                                                    Sous Zone de {{$activite->sousZone->nom}}
+                                                    {{$activite->sousZone->nom}}
                                                     @else
                                                     Groupe de {{$activite->groupe->nom_groupe}}
                                                     @endif

@@ -22,9 +22,11 @@
                                     <div class="col-md-8">
 
                                         <div class="form-group @error('zone_id') has-danger @enderror">
-                                            <label for="zone_id" class="bmd-label-floating @error('zone_id') text-danger @enderror">Zone</label>
+                                            <label for="zone_id" class="bmd-label-floating0 @error('zone_id') text-danger @enderror">Zone</label>
 
-                                            <select name="zone_id" id="zone_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                            <select name="zone_id" id="zone_id"
+                                                    data-url="{{route('get_sous_zone')}}" class="selectpicker col-md-10 zone" data-size="auto" data-style="select-with-transition"
+                                                    data-actions-box="true" data-live-search="true"
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir la zone">
                                                 @foreach ($zones as $zone)
                                                     @if(isset($zone))
@@ -42,9 +44,10 @@
                                         </div>
 
                                         <div class="form-group @error('sous_zone_id') has-danger @enderror">
-                                            <label for="sous_zone_id" class="bmd-label-floating @error('sous_zone_id') text-danger @enderror">Sous-zone</label>
+                                            <label for="sous_zone_id" class="bmd-label-floating0 @error('sous_zone_id') text-danger @enderror">Sous-zone</label>
 
-                                            <select name="sous_zone_id" id="sous_zone_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                            <select name="sous_zone_id" id="sous_zone" class="selectpicker col-md-10 sous-zone" data-size="auto" data-style="select-with-transition"
+                                                    data-actions-box="true" data-live-search="true"
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir la sous zone">
                                                 @foreach ($sous_zones as $sous_zone)
                                                     @if(isset($sous_zone))

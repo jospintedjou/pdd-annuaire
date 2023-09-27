@@ -116,8 +116,9 @@
 
                                 <div class="row">
                                     <div class="form-group col-md-4 @error('categorie_sociale') has-danger @enderror">
-                                        <label for="categorie_sociale" class="bmd-label-floating col-12 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
+                                        <label for="categorie_sociale" class="bmd-label-floating0 col-12 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
                                         <select name="categorie_sociale" id="categorie_sociale" class="selectpicker  col-12" data-size="auto" data-style="select-with-transition"
+                                                data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir">
                                             @foreach (\App\Constantes::CATEGORIE_SOCIALES as $categorie_sociale)
                                                 @if(isset($categorie_sociale))
@@ -135,8 +136,9 @@
                                     </div>
                                     <?php //dd($user->apostolats()->pluck('apostolat_id')->toArray()); ?>
                                     <div class="form-group col-md-4 @error('apostolat_id') has-danger @enderror">
-                                        <label for="apostolat_id" class="bmd-label-floating  col-12 @error('apostolat_id') text-danger @enderror">Apostolat</label>
+                                        <label for="apostolat_id" class="bmd-label-floating0 col-12 @error('apostolat_id') text-danger @enderror">Apostolat</label>
                                         <select name="apostolat_id[]" id="apostolat_id" class="selectpicker  col-12" data-size="auto" data-style="select-with-transition"
+                                                data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir l'apostolat" multiple>
                                             @foreach ($apostolats as $apostolat)
                                                 @if(isset($apostolat))
@@ -154,8 +156,9 @@
                                     </div>
 
                                     <div class="form-group col-md-4 @error('niveau_engagement_id') has-danger @enderror">
-                                        <label for="niveau_engagement_id" class="bmd-label-floating  col-12 @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
+                                        <label for="niveau_engagement_id" class="bmd-label-floating0 col-12 @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
                                         <select name="niveau_engagement_id" id="niveau_engagement_id" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
+                                                data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir">
                                             @foreach ($niveau_engagements as $niveau_engagement)
                                                 @if(isset($niveau_engagement))
@@ -176,9 +179,10 @@
                                 <div class="row">
 
                                     <div class="form-group col-md-4 @error('groupe_id') has-danger @enderror">
-                                        <label for="groupe_id" class="bmd-label-floating @error('groupe_id') text-danger @enderror">Groupe</label>
+                                        <label for="groupe_id" class="bmd-label-floating0 @error('groupe_id') text-danger @enderror">Groupe</label>
 
                                         <select name="groupe_id" id="groupe_id" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
+                                                data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir le groupe">
                                             @foreach ($groupes as $groupe)
                                                 @if(isset($groupe))

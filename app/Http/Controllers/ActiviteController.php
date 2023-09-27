@@ -69,7 +69,7 @@ class ActiviteController extends Controller
                                 Constantes::ACTIVITE_SOUS_ZONALE.','.Constantes::ACTIVITE_GROUPE,
             'date_debut' => 'required|date',
             'date_fin' => 'nullable|date',
-            'heure_debut' => 'required|date_format:H:i',
+            'heure_debut' => 'required|date_format:H:i:s',
             'lieu' => 'required|string',
             'apostolat' => 'required|array|min:1',
             'apostolat.*' => 'exists:apostolats,id'
@@ -162,14 +162,14 @@ class ActiviteController extends Controller
             'categorie_activite_id' => 'required|exists:categorie_activites,id',
             'nom' => 'required',
             'zone_id' => 'required_if:type_activite,'.Constantes::ACTIVITE_ZONALE.'exists:zones,id',
-            'sous_zone_id' => 'required_if:type_activite,'.Constantes::ACTIVITE_SOUS_ZONALE.'|exists:sous_zones,id',
+            'sous_zone_id' => 'required_if:type_activite,'.Constantes::ACTIVITE_SOUS_ZONALE.'|exists:sous_zones, ',
             'groupe_id' => 'required_if:type_activite,'.Constantes::ACTIVITE_GROUPE.'|exists:groupes,id',
             'annee_spirituelle' => 'required|exists:annee_spirituelles,id',
             'type_activite' => 'required|in:'.Constantes::ACTIVITE_REGIONALE.','.Constantes::ACTIVITE_ZONALE.','.
                 Constantes::ACTIVITE_SOUS_ZONALE.','.Constantes::ACTIVITE_GROUPE,
             'date_debut' => 'required|date',
             'date_fin' => 'nullable|date',
-            'heure_debut' => 'required|date_format:H:i',
+            'heure_debut' => 'required|date_format:H:i:s',
             'lieu' => 'required|string',
             'apostolat' => 'required|array|min:1',
             'apostolat.*' => 'exists:apostolats,id'

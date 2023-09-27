@@ -21,15 +21,17 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group @error('zone') has-danger @enderror">
-                                        <label for="zone" class="bmd-label-floating @error('zone') text-danger @enderror">Zone</label>
+                                        <label for="zone" class="bmd-label-floating0 @error('zone') text-danger @enderror">Zone</label>
 
-                                        <select name="zone_id" id="zone" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                        <select name="zone_id" id="zone" class="selectpicker col-md-10 zone"
+                                                data-url="{{route('get_sous_zone')}}" data-size="auto" data-style="select-with-transition"
+                                                data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la catégorie">
                                             @foreach ($zones as $zone)
                                                 @if(isset($zone))
                                                     <option value="{{ $zone->id }}">{{ $zone->nom }}</option>
                                                 @else
-                                                    <option  selected disabled>Aucune zone trouvée</option>
+                                                    <option selected disabled>Aucune zone trouvée</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -41,15 +43,17 @@
                                     </div>
 
                                     <div class="form-group @error('sous_zone') has-danger @enderror">
-                                        <label for="sous_zone" class="bmd-label-floating @error('sous_zone') text-danger @enderror">Sous-zone</label>
+                                        <label for="sous_zone" class="bmd-label-floating0 @error('sous_zone') text-danger @enderror">Sous-zone</label>
 
-                                        <select name="sous_zone_id" id="sous_zone" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                        <select name="sous_zone_id" id="sous_zone" class="selectpicker col-md-10 sous-zone"
+                                                data-actions-box="true" data-live-search="true"
+                                                data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir la catégorie">
                                             @foreach ($sous_zones as $sous_zone)
                                                 @if(isset($sous_zone))
                                                     <option value="{{ $sous_zone->id }}">{{ $sous_zone->nom }}</option>
                                                 @else
-                                                    <option  selected disabled>Aucune sous zone trouvée</option>
+                                                    <option selected disabled>Aucune sous zone trouvée</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -81,7 +85,7 @@
                                     <div class="@error('jour_reunion') has-danger @enderror">
                                         <label for="jour_reunion" class="bmd-label-floating @error('jour_reunion') text-danger @enderror">Jour de Reunion</label>
                                         <select name="jour_reunion" id="jour_reunion" value="{{ old('jour_reunion') }}"  class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
-                                            data-style2="btn btn-primary btn-round" data-header="Choisir le jour">
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir le jour">
                                             <option value="Lundi">Lundi</option>
                                             <option value="Mardi">Mardi</option>
                                             <option value="Mercredi">Mercredi</option>

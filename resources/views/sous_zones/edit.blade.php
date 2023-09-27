@@ -24,7 +24,9 @@
                                         <div class="form-group @error('zone_id') has-danger @enderror">
                                             <label for="zone_id" class="bmd-label-floating @error('zone_id') text-danger @enderror">Zone</label>
 
-                                            <select name="zone_id" id="zone_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                            <select name="zone_id" id="zone_id" class="selectpicker col-md-10"
+                                                    data-actions-box="true" data-live-search="true"
+                                                    data-size="auto" data-style="select-with-transition"
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir la zone">
                                                 @foreach ($zones as $zone)
                                                     @if(isset($zone))

@@ -18,6 +18,8 @@ use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Excel;
+use App\Imports\ImportUser;
 
 class UserController extends Controller
 {
@@ -32,6 +34,16 @@ class UserController extends Controller
         $users = User::where('role', '!=', Constantes::ROLE_ADMIN)->get();
 
         return view('users.index',compact('users'));
+    }
+
+    /**
+     * Save imported data from Excel File.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function import(Request $request){
+        Excel::import(new ImportUser, $request->file('file')->store('files'));
+        return redirect()->back();
     }
 
     /**

@@ -6,6 +6,17 @@
             @component('helpers.alert')
                 .
             @endcomponent
+            <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group mb-4">
+                    <div class="custom-file text-left">
+                        <input type="file" name="file" class="custom-file-input" id="customFile">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+                </div>
+                <button class="btn btn-primary">Import Users</button>
+                <a class="btn btn-success" href="{{ route('export-users') }}">Export Users</a>
+            </form>
             <form method="post" action="{!! route('users.store') !!}">
                 @csrf
             <div class="row">
@@ -38,8 +49,9 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-3 @error('sexe') has-danger @enderror">
-                                        <label for="sexe" class="bmd-label-floating @error('sexe') text-danger @enderror">Sexe</label>
+                                        <label for="sexe" class="bmd-label-floating0 @error('sexe') text-danger @enderror">Sexe</label>
                                         <select name="sexe" id="sexe" class="selectpicker col-md-8" data-size="auto" data-style="select-with-transition"
+                                                data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir le sexe">
                                             <option value="{{\App\Constantes::SEXE_MASCULIN}}">Homme</option>
                                             <option value="{{\App\Constantes::SEXE_FEMININ}}">Femme</option>
@@ -115,8 +127,9 @@
 
                                 <div class="row">
                                     <div class="form-group col-md-4 @error('categorie_sociale') has-danger @enderror">
-                                        <label for="categorie_sociale" class="bmd-label-floating col-12 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
+                                        <label for="categorie_sociale" class="bmd-label-floating0 col-12 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
                                         <select name="categorie_sociale" id="categorie_sociale" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
+                                                data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir">
                                             @foreach (\App\Constantes::CATEGORIE_SOCIALES as $categorie_sociale)
                                                 @if(isset($categorie_sociale))
@@ -134,8 +147,9 @@
                                     </div>
 
                                     <div class="form-group col-md-4 @error('apostolat_id') has-danger @enderror">
-                                        <label for="apostolat_id" class="bmd-label-floating col-12 @error('apostolat_id') text-danger @enderror">Apostolat</label>
+                                        <label for="apostolat_id" class="bmd-label-floating0 col-12 @error('apostolat_id') text-danger @enderror">Apostolat</label>
                                         <select name="apostolat_id[]" id="apostolat_id" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
+                                                data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir l'apostolat" multiple>
                                             @foreach ($apostolats as $apostolat)
                                                 @if(isset($apostolat))
@@ -153,8 +167,9 @@
                                     </div>
 
                                     <div class="form-group col-md-4 @error('niveau_engagement_id') has-danger @enderror">
-                                        <label for="niveau_engagement_id" class="bmd-label-floating col-12 @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
+                                        <label for="niveau_engagement_id" class="bmd-label-floating0 col-12 @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
                                         <select name="niveau_engagement_id" id="niveau_engagement_id" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
+                                                data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir">
                                             @foreach ($niveau_engagements as $niveau_engagement)
                                                 @if(isset($niveau_engagement))
@@ -175,9 +190,10 @@
                                 <div class="row">
 
                                     <div class="form-group col-md-4 @error('groupe_id') has-danger @enderror">
-                                        <label for="groupe_id" class="bmd-label-floating @error('groupe_id') text-danger @enderror">Groupe</label>
+                                        <label for="groupe_id" class="bmd-label-floating0 @error('groupe_id') text-danger @enderror">Groupe</label>
 
                                         <select name="groupe_id" id="groupe_id" class="selectpicker col-md-8" data-size="auto" data-style="select-with-transition"
+                                                data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir le groupe">
                                             @foreach ($groupes as $groupe)
                                                 @if(isset($groupe))

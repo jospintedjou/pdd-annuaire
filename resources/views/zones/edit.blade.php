@@ -23,9 +23,10 @@
 
 
                                         <div class="form-group @error('continent') has-danger @enderror">
-                                            <label for="continent" class="bmd-label-floating @error('continent') text-danger @enderror">Continent</label>
+                                            <label for="continent" class="bmd-label-floating0 @error('continent') text-danger @enderror">Continent</label>
 
                                             <select name="continent" id="continent" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                    data-actions-box="true" data-live-search="true"
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir le continent">
                                                 @foreach (config('data.continents') as $continent)
                                                     @if(isset($continent))
@@ -43,9 +44,10 @@
                                         </div>
 
                                         <div class="form-group @error('pays') has-danger @enderror">
-                                            <label for="pays" class="bmd-label-floating @error('pays') text-danger @enderror">Pays</label>
+                                            <label for="pays" class="bmd-label-floating0 @error('pays') text-danger @enderror">Pays</label>
 
                                             <select name="pays" id="pays" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                    data-actions-box="true" data-live-search="true"
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir le pays">
                                                 @foreach (config('data.countries') as $pays)
                                                     @if(isset($pays))
@@ -63,15 +65,16 @@
                                         </div>
 
                                         <div class="form-group @error('ville') has-danger @enderror">
-                                            <label for="ville" class="bmd-label-floating @error('ville') text-danger @enderror">VIlle</label>
+                                            <label for="ville" class="bmd-label-floating0 @error('ville') text-danger @enderror">VIlle</label>
 
                                             <select name="ville" id="ville" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
-                                                    data-style2="btn btn-primary btn-round" data-header="Choisir le type d'assujetti">
+                                                    data-actions-box="true" data-live-search="true"
+                                                    data-actions-box="true" data-live-search="true"data-style2="btn btn-primary btn-round" data-header="Choisir le type d'assujetti">
                                                 @foreach (config('data.towns') as $ville)
                                                     @if(isset($ville))
                                                         <option value="{{ $ville }}"  value="{{ $continent }}" {{$continent == $zone->ville ? 'selected'  : '' }}>{{ $ville }}</option>
                                                     @else
-                                                        <option  selected disabled>Aucune ville trouvée</option>
+                                                        <option selected disabled>Aucune ville trouvée</option>
                                                     @endif
                                                 @endforeach
                                             </select>

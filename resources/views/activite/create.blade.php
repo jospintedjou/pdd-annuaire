@@ -183,8 +183,8 @@
                                          <input type="time" name="heure_debut" id="heure_debut" value="{{ old('heure_debut') }}" class="form-control @error('heure_debut') is-invalid @enderror">
                                          @error('heure_debut')
                                          <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
+                                            <strong>{{ $message }}</strong>
+                                         </span>
                                          @enderror
                                      </div>
                                  </div>

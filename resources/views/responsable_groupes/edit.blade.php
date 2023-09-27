@@ -22,11 +22,11 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group @error('zone_id') has-danger @enderror">
-                                                <label for="zone_id" class="bmd-label-floating @error('zone_id') text-danger @enderror">Zone</label>
+                                                <label for="zone_id" class="bmd-label-floating0 col-md-10 @error('zone_id') text-danger @enderror">Zone</label>
 
                                                 <select name="zone_id" id="zone_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                        data-actions-box="true" data-live-search="true"
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir la zone" disabled>
-
                                                        <option value="{{$groupe->sousZone()->first()->zone()->first()->id}}" selected>{{$groupe->sousZone()->first()->zone()->first()->nom}}</option>
                                                 </select>
                                             </div>
@@ -34,9 +34,10 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group @error('groupe_id') has-danger @enderror">
-                                                <label for="groupe_id" class="bmd-label-floating @error('groupe_id') text-danger @enderror">Groupe</label>
+                                                <label for="groupe_id" class="bmd-label-floating0 col-md-10 @error('groupe_id') text-danger @enderror">Groupe</label>
 
                                                 <select name="groupe_id" id="groupe_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                        data-actions-box="true" data-live-search="true"
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir le groupe">
                                                     <option value="{{$groupe->id}}" selected>{{$groupe->nom_groupe}}</option>
                                                 </select>
@@ -53,9 +54,10 @@
                                     @foreach($responsabilites as $responsabilite)
                                         <div class="col-md-6">
                                             <div class="form-group @error('responsabilite_groupes') has-danger @enderror">
-                                                <label for="responsabilite_groupes" class="bmd-label-floating @error('responsabilite_groupes') text-danger @enderror">{{$responsabilite->nom}}</label>
+                                                <label for="responsabilite_groupes" class="bmd-label-floating0 col-md-8 @error('responsabilite_groupes') text-danger @enderror">{{$responsabilite->nom}}</label>
 
-                                                <select name="responsabilite_groupes[{{$responsabilite->id}}]" id="" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
+                                                <select name="responsabilite_groupes[{{$responsabilite->id}}]" id="" class="selectpicker col-md-8" data-size="auto" data-style="select-with-transition"
+                                                        data-actions-box="true" data-live-search="true"
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir le responsable">
                                                     <option value="">Aucun</option>
 

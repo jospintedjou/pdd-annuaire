@@ -1,8 +1,33 @@
 $(document).ready(function(){
+    /** Start show/hide password **/
+    var clicked = 0;
+    $(".toggle-password").click(function (e) {
+        e.preventDefault();
+
+        $(this).toggleClass("toggle-password");
+        if (clicked == 0) {
+            $(this).find('.material-icons').html('visibility_off');
+            $(this).closest('.wrap-input100').find('.fa').attr('class', 'fa fa-eye-slash');
+            clicked = 1;
+        } else {
+            $(this).find('.material-icons').html('visibility');
+            $(this).closest('.wrap-input100').find('.fa').attr('class', 'fa fa-eye');
+            clicked = 0;
+        }
+
+        var input = $($(this).data("toggle"));
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    });
+    /** End show/hide password **/
 
     /**
      * Start show/hide zone,sous-zone & region containers in activite form
      * **/
+
     const typeRegion = 'Régionale', typeZone = 'Zonale', typeSousZone = 'Sous-zonale',typeGroupe = 'Groupe';
     var zoneContainer = $('.zone-container');
     var sousZoneContainer = $('.sous-zone-container');
@@ -83,9 +108,9 @@ $(document).ready(function(){
      * End check presence in a specific actiivy
     * **/
 
-    /**
-     * Start check presence in a specific actiivy
-    * **/
+    /**--------------------------------------------
+    *  Start check presence in a specific actiivy  *
+    *--------------------------------------------**/
     $('.evaluation-checkbox').click(function () {
 
         var val = $(this).val(),
@@ -125,8 +150,45 @@ $(document).ready(function(){
             }
         });
     });
-    /**
-     * End check presence in a specific actiivy
-    * **/
+    /**--------------------------------------------
+     *  End check presence in a specific actiivy  *
+     *--------------------------------------------**/
+
+    /**-------------------------------------------------
+    *  Start dependant dropdown for sous-zone & group  *
+    *-------------------------------------------------**/
+    $('.zone').on('change', function () {
+
+        var zone_id = $(this).val(),
+            url = $(this).closest('select').data('url');
+
+        formData = {
+            zone_id: zone_id
+        };
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                var sousZone = $('#sous_zone');
+                sousZone.html(data.data);
+                sousZone.selectpicker('refresh');
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    });
+    /**-------------------------------------------------
+     *  End dependant dropdown for sous-zone & group  *
+     *-------------------------------------------------**/
 
 });

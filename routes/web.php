@@ -118,9 +118,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
    // Route::resource('responsable_sous_zones', ResponsableSousZoneController::class);
    // Route::resource('responsable_zones', ResponsableZoneController::class);
 
+    Route::post('/get-sous-zone', [ZoneController::class, 'getSousZone'])
+        ->name('get_sous_zone');
+
     Route::resource('sous_zones', SousZoneController::class);
     Route::resource('zones', ZoneController::class);
     Route::resource('users', UserController::class);
+
+    Route::post('/import',[UserController::class,'import'])->name('import');
+    Route::get('/export-users',[UserController::class,'exportUsers'])->name('export-users');
 
 });
 

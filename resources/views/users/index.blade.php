@@ -18,7 +18,7 @@
                             </div>
                         @endif
                         <div class="toolbar">
-                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <!--  Here you can write extra buttons/actions for the toolbar              -->
                         </div>
                         <div class="material-datatables">
                             <div id="datatables_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -31,10 +31,10 @@
                                             <tr>
                                                 <th width="10%">Nom</th>
                                                 <th width="10%">Zone</th>
-                                                <th width="10%">Sous-zone</th>
                                                 <th width="10%">Groupe</th>
                                                 <!--th>Date d'inscr.</th-->
-                                                <th width="10%">Niveau d'engagement</th>
+                                                <th width="10%">Catégorie Soc.</th>
+                                                <th width="10%">Niveau d'enga.</th>
                                                 <th width="10%" class="disabled-sorting text-right sorting">
                                                     Actions
                                                 </th>
@@ -49,9 +49,10 @@
                                                     <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
                                                     {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first()->nom }}
                                                 </td>
-                                                <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom }}</td>
+                                                <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
                                                 <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
                                                 <!--td class="">{{$user->created_at}}</td-->
+                                                <td class="">{{  $user->categorie_sociale }}</td>
                                                 <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
                                                 <td class="td-actions text-right">
                                                     <form action="{{ route('users.destroy',$user->id) }}" method="Post">

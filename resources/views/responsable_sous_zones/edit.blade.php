@@ -22,20 +22,21 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group @error('zone_id') has-danger @enderror">
-                                                <label for="zone_id" class="bmd-label-floating @error('zone_id') text-danger @enderror">Zone</label>
+                                                <label for="zone_id" class="bmd-label-floating0 col-md-10 @error('zone_id') text-danger @enderror">Zone</label>
 
                                                 <select name="zone_id" id="zone_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
-                                                        data-style2="btn btn-primary btn-round" data-header="Choisir la zone" disabled>
-
-                                                       <option value="{{$sous_zone->zone()->first()->id}}" selected>{{$sous_zone->zone()->first()->nom}}</option>
+                                                    data-actions-box="true" data-live-search="true"
+                                                    data-style2="btn btn-primary btn-round" data-header="Choisir la zone" disabled>
+                                                     <option value="{{$sous_zone->zone()->first()->id}}" selected>{{$sous_zone->zone()->first()->nom}}</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group @error('sous_zone_id') has-danger @enderror">
-                                                <label for="zone_id" class="bmd-label-floating @error('sous_zone_id') text-danger @enderror">Sous-Zone</label>
+                                                <label for="zone_id" class="bmd-label-floating0 col-md-10 @error('sous_zone_id') text-danger @enderror">Sous-Zone</label>
 
                                                 <select name="sous_zone_id" id="sous_zone_id" class="selectpicker col-md-10" data-size="auto" data-style="select-with-transition"
+                                                    data-actions-box="true" data-live-search="true"
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir la sous-zone">
 
                                                        <option value="{{$sous_zone->id}}" selected>{{$sous_zone->nom}}</option>
@@ -48,9 +49,10 @@
                                     @foreach($responsabilites as $responsabilite)
                                         <div class="col-md-6">
                                             <div class="form-group @error('responsabilite_sous_zones') has-danger @enderror">
-                                                <label for="responsabilite_sous_zones" class="bmd-label-floating @error('responsabilite_sous_zones') text-danger @enderror">{{$responsabilite->nom}}</label>
+                                                <label for="responsabilite_sous_zones" class="bmd-label-floating0 col-md-8 @error('responsabilite_sous_zones') text-danger @enderror">{{$responsabilite->nom}}</label>
 
-                                                <select name="responsabilite_sous_zones[{{$responsabilite->id}}]" id="" class="selectpicker col-md-6" data-size="auto" data-style="select-with-transition"
+                                                <select name="responsabilite_sous_zones[{{$responsabilite->id}}]" id="" class="selectpicker col-md-8" data-size="auto" data-style="select-with-transition"
+                                                        data-actions-box="true" data-live-search="true"
                                                         data-style2="btn btn-primary btn-round" data-header="Choisir le responsable">
                                                     <option value="">Aucun</option>
 
