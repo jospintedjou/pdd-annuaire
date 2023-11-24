@@ -135,7 +135,9 @@ tbody>tr{
     margin-right: 5px !important;
     margin-bottom: -13px !important;
 }
-
+.presence-active{
+    background: limegreen;
+}
 /*********************************/
 /* Start Forum Message Style     */
 /**********************************/

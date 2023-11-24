@@ -40,7 +40,7 @@ Auth::routes();
 Route::get('/clear', [App\Http\Controllers\CacheController::class, 'clear'])->name('clear');
 Route::get('/clear', [App\Http\Controllers\CacheController::class, 'cache'])->name('cache');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('homepage');
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
 Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');

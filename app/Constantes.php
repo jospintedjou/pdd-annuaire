@@ -28,6 +28,10 @@ class Constantes
     //SEXE
     const SEXE_MASCULIN = 'M';
     const SEXE_FEMININ = 'F';
+    //ROLE
+    const ROLE_ADMIN = 'ADMIN';
+    const ROLE_MEMBRE = 'MEMBRE';
+    const ROLE_UTILISATEUR = 'UTILISATEUR';
 
     //Apostolat
     const APOSTOLAT_ENFANTS = "APOSTOLAT DES ENFANTS";
@@ -50,10 +54,6 @@ class Constantes
 
     //VILLE
     const VILLE_YAOUNDE = 'YAOUNDE';
-
-    //Role
-    const ROLE_ADMIN = 'ADMIN';
-    const ROLE_UTILISATEUR = 'UTILISATEUR';
 
     //Categories Sociales
     const ELEVE = 'ELEVE';

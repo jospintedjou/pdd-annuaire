@@ -10,8 +10,13 @@
                 @csrf
                 <div class="form-group mb-4">
                     <div class="custom-file text-left">
-                        <input type="file" name="file" class="custom-file-input" id="customFile">
+                        <input type="file" name="file" class="custom-file-input" id="customFile" required>
                         <label class="custom-file-label" for="customFile">Choose file</label>
+                        @error('file')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
                     </div>
                 </div>
                 <button class="btn btn-primary">Import Users</button>

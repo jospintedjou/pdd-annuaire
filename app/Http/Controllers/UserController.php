@@ -18,7 +18,7 @@ use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
-use Maatwebsite\Excel\Excel;
+use \Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ImportUser;
 
 class UserController extends Controller
@@ -42,6 +42,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function import(Request $request){
+        $data = $request->validate([
+            'file' =>  'required||mimes:xlsx,csv',
+        ]);
+
+        //dd($request->file('file')->store('files'));
         Excel::import(new ImportUser, $request->file('file')->store('files'));
         return redirect()->back();
     }
@@ -69,7 +74,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
         $data = $request->validate([
                 'nom' =>  'required',
                 'prenom' => 'string|nullable',
