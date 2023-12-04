@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use \Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ImportUser;
+use Maatwebsite\Excel\HeadingRowImport;
 
 class UserController extends Controller
 {
@@ -43,11 +44,57 @@ class UserController extends Controller
      */
     public function import(Request $request){
         $data = $request->validate([
-            'file' =>  'required||mimes:xlsx,csv',
+            'file' =>  'required||mimes:xls,xlsx,csv',
         ]);
 
+        $updateFile = $request->file('file');
+        $path = $updateFile->getRealPath();
+        //$path = $updateFile->getClientOriginalName();
+
+        $originalHeadings = (new HeadingRowImport(2))->toArray($path);
+        $originalHeadings = array_change_key_case($originalHeadings, CASE_LOWER)[0][0];
+
+        //dd($originalHeadings);
+
+        $headings_arr =  ["pays", "zone", "sous_zone", "groupe", "noms", "prenoms", "sexe",
+            "statut_matrimonial", "categorie", "niveau_dengagement_2021", "niveau_dengagement_2022",
+            "niveau_dengagement_2023", "profession_classe", "specialite_filiere", "ville",
+            "telephone_whatsapp", "email"
+        ];
+
+        //Check if the excel file has all needed headings
+        $fileHasError = 0;
+        $fileErrors = "";
+        foreach($headings_arr as $heading){
+            if(!in_array($heading, $originalHeadings)){
+                $fileErrors .= "Le fichier ne contient pas la colonne $heading \n";
+            }
+        }
+
+        if($fileHasError){
+            throw ValidationException::withMessages(['file' => 'This value is incorrect']);
+        }
+
+        //dd($fileErrors);
+
+        //$datas = Excel::import(new ProductsImport($request->suppliers_id),request()->file('file'));
+
         //dd($request->file('file')->store('files'));
-        Excel::import(new ImportUser, $request->file('file')->store('files'));
+
+        try {
+            $excelData = Excel::import(new ImportUser, $request->file('file')->store('files'));
+            //dd($excelData);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+
+            foreach ($failures as $failure) {
+                $failure->row(); // row that went wrong
+                $failure->attribute(); // either heading key (if using heading row concern) or column index
+                $failure->errors(); // Actual error messages from Laravel validator
+                $failure->values(); // The values of the row that has failed.
+            }
+        }
+
         return redirect()->back();
     }
 

@@ -14,8 +14,8 @@ class User extends AuthUser
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['nom', 'prenom', 'adresse', 'telephone1', 'telephone2', 'sexe', 'date_naissance', 'etat', 'email',
-        'profession', 'pays', 'ville', 'quartier', 'niveau_engagement_id', 'role', 'categorie_sociale',
+    protected $fillable = ['nom', 'prenom', 'adresse', 'telephone1', 'telephone2', 'sexe', 'date_naissance',
+        'etat', 'email', 'profession', 'pays', 'ville', 'quartier', 'niveau_engagement_id', 'role', 'categorie_sociale',
         'email_verified_at', 'password', 'date_entree'];
 
     /**================== Start Custom functions ===========================**/

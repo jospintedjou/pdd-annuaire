@@ -3,12 +3,55 @@
 namespace App\Imports;
 
 use App\Constantes;
+use App\Models\Apostolat;
+use App\Models\Groupe;
+use App\Models\NiveauEngagement;
 use App\Models\User;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 
 class ImportUser implements ToModel, WithHeadingRow
 {
+
+    /**
+     * @param  int $headingRow
+     */
+    public function __construct()
+    {
+    }
+
+    public function rules(): array
+    {
+        /*$headings_arr =  ["pays", "zone", "sous_zone", "groupe", "noms", "prenoms", "sexe",
+            "statut_matrimonial", "categorie", "niveau_dengagement_2021", "niveau_dengagement_2022",
+            "niveau_dengagement_2023", "profession_classe", "specialite_filiere", "ville",
+            "telephone_whatsapp", "email"
+        ];*/
+
+        $nameConcat = $this->noms.$this->prenoms;
+        dd($nameConcat);
+
+        return [
+            'zone' => 'required|exists:zones,nom',
+        ];
+
+        /*
+         * return [
+            'zone' => Rule::exists('zones', 'nom'),
+            'sous_zone' => Rule::exists('sous_zones', 'nom'),
+            'groupe' => Rule::exists('groupes', 'nom'),
+            'sexe' => Rule::in(["Masculin", "Feminin"]),
+            'noms' => Rule::uniqueUser('noms', 'prenoms'),
+            'sexe' => Rule::in([Constantes::SEXE_MASCULIN, Constantes::SEXE_FEMININ]),
+            'niveau_dengagement_2023' => Rule::exists('sous_zones', 'nom'),
+            'profession_classe' => Rule::exists('sous_zones', 'nom'),
+        ];
+        */
+    }
+
+
     /**
     * @param array $row
     *
@@ -16,25 +59,43 @@ class ImportUser implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        dd($row['noms']);
+        //dd($row[1]);
+        //Validate file header
+
+        $niveau_engagement = NiveauEngagement::where('nom', $row['niveau_dengagement_2023'])->first();
+        $niveau_engagement_id = $niveau_engagement ? $niveau_engagement->id : NULL;
+        $groupe = Groupe::where('nom_groupe', $row['groupe'])->first();
+        $groupe_id = $groupe ? $groupe->id : NULL;
+
+        $sexe = $row['sexe'] == "Masculin" ? Constantes::SEXE_MASCULIN : Constantes::SEXE_FEMININ;
+        $apostolat_id = 1;
+
+        //dd($row['telephone_whatsapp']);
+
+        //Store User Group
+        /*$user->groupes()->attach($request->input('groupe_id'), [
+            'actif' => Constantes::ETAT_ACTIF
+        ]);*/
+
+        //Add specialite_filiere in user
         return new User([
             'nom' => $row['noms'],
             'prenom' => $row['prenoms'],
-            'adresse' => $row[2],
-            'telephone1' => $row[3],
-            'telephone2' => $row[4],
-            'sexe' => $row[5],
-            'email' => $row[6],
-            'profession' => $row[7],
-            'quartier' => $row[8],
-            'niveau_engagement_id' => $row[9],
-            'categorie_sociale' => $row[10],
-            'apostolat_id' => $row[11],
-            'groupe_id' => $row[12],
+            'adresse' => "",
+            'telephone1' => $row['telephone_whatsapp'],
+            'telephone2' => "",
+            'sexe' => $sexe,
+            'email' => $row['email'],
+            'profession' => $row['profession_classe'],
+            'quartier' => "",
+            'niveau_engagement_id' => $niveau_engagement_id,
+            'categorie_sociale' => "",
+            'groupe_id' => $groupe_id,
             'role' => Constantes::ROLE_MEMBRE,
-            'date_entree' => Constantes::ROLE_MEMBRE,
+            'date_entree' => NULL,
         ]);
     }
+
     public function headingRow(): int
     {
         return 2;
