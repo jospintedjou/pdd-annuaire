@@ -30,19 +30,24 @@ class ImportUser implements ToModel, WithHeadingRow
             "telephone_whatsapp", "email"
         ];*/
 
-        $nameConcat = $this->noms.$this->prenoms;
-        dd($nameConcat);
+        //$nameConcat = $this->noms.$this->prenoms;
+        //dd($nameConcat);
 
-        return [
-            'zone' => 'required|exists:zones,nom',
+       return [
+            '*.zone' => ['required', 'exists:zones,nom'],
+            '*.sous_zone' => ['required', 'exists:sous_zones,nom'],
+            '*.groupe' => ['required', 'exists:groupes,nom'],
+            '*.noms' => ['required', 'exists:noms,nom'],
+            '*.sexe' => ['required', 'in:'.Constantes::SEXE_MASCULIN.','.Constantes::SEXE_FEMININ.',SOCIAL'],
+            '*.niveau_dengagement_2023' => ['required', 'exists:niveau_engagements,nom'],
+            '*.profession_classe' => ['required', 'min:2'],
         ];
 
         /*
-         * return [
-            'zone' => Rule::exists('zones', 'nom'),
+         return [
+            '*.zone' => Rule::exists('zones', 'nom'),
             'sous_zone' => Rule::exists('sous_zones', 'nom'),
             'groupe' => Rule::exists('groupes', 'nom'),
-            'sexe' => Rule::in(["Masculin", "Feminin"]),
             'noms' => Rule::uniqueUser('noms', 'prenoms'),
             'sexe' => Rule::in([Constantes::SEXE_MASCULIN, Constantes::SEXE_FEMININ]),
             'niveau_dengagement_2023' => Rule::exists('sous_zones', 'nom'),
@@ -51,7 +56,6 @@ class ImportUser implements ToModel, WithHeadingRow
         */
     }
 
-
     /**
     * @param array $row
     *
@@ -59,7 +63,7 @@ class ImportUser implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        //dd($row[1]);
+
         //Validate file header
 
         $niveau_engagement = NiveauEngagement::where('nom', $row['niveau_dengagement_2023'])->first();
@@ -70,7 +74,7 @@ class ImportUser implements ToModel, WithHeadingRow
         $sexe = $row['sexe'] == "Masculin" ? Constantes::SEXE_MASCULIN : Constantes::SEXE_FEMININ;
         $apostolat_id = 1;
 
-        //dd($row['telephone_whatsapp']);
+       //dd($row['noms']);
 
         //Store User Group
         /*$user->groupes()->attach($request->input('groupe_id'), [
