@@ -140,8 +140,8 @@ class UserController extends Controller
                 'date_entree' => 'string'
             ]);
 
-        $data['role'] = "MEMBRE";
-        $data['password'] = \Illuminate\Support\Facades\Hash::make($request->input('passsword'));
+        $data['role'] = Constantes::ROLE_MEMBRE;
+        $data['password'] = \Illuminate\Support\Facades\Hash::make($request->input('password'));
 
         //We are storing the user data in database
         $user = User::create($data);
@@ -266,7 +266,7 @@ class UserController extends Controller
         ]);
 
         $data['role'] = "MEMBRE"; //Must be "membre" or "responsable groupe" or "responsable sous-zone" or "responsable zone"
-        $data['password'] = $request->filled('passsword') ? \Illuminate\Support\Facades\Hash::make($request->input('passsword')) : $user->password;
+        $data['password'] = $request->filled('password') ? \Illuminate\Support\Facades\Hash::make($request->input('password')) : $user->password;
 
         //We are storing the user data in database
         $user->update($data);
