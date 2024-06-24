@@ -30,6 +30,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link href="{{asset('theme-admin/css/main.css')}}" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css" rel="stylesheet" />
     @yield('style')
     <!-- Styles -->
     <!--link href="{ asset('css/app.css') }}" rel="stylesheet"-->
@@ -62,21 +64,21 @@
                         <div class="collapse @if(request()->routeIs('statistiques_zone*') || request()->routeIs('statistiques_groupe*')
                          || request()->routeIs('statistiques_membre*')) show @endif" id="dashboard" style="">
                             <ul class="nav">
-                                <li class="nav-item @if(request()->routeIs('statistiques_zone.index')) active @endif" >
+                                <li class="nav-item @if(request()->routeIs('statistiques_zone*')) active @endif" >
                                     <a class="nav-link" href="{!! route('statistiques_zone.index', ['id'=>encrypt(auth()->user()->id)]) !!}">
                                         <span class="sidebar-mini"> L </span>
                                         <span class="sidebar-normal"> Stats Zonales </span>
                                     </a>
                                 </li>
 
-                                <li class="nav-item @if(request()->routeIs('statistiques_groupe.index')) active @endif">
+                                <li class="nav-item @if(request()->routeIs('statistiques_groupe*')) active @endif">
                                     <a class="nav-link" href="{!! route('statistiques_groupe.index', ['id'=>encrypt(auth()->user()->id)]) !!}">
                                         <span class="sidebar-mini"> A </span>
                                         <span class="sidebar-normal"> Stats des groupes </span>
                                     </a>
                                 </li>
 
-                                <li class="nav-item @if(request()->routeIs('statistiques_membre.index')) active @endif">
+                                <li class="nav-item @if(request()->routeIs('statistiques_membre*')) active @endif">
                                     <a class="nav-link" href="{!! route('statistiques_membre.index', ['id'=>encrypt(auth()->user()->id)]) !!}">
                                         <span class="sidebar-mini"> A </span>
                                         <span class="sidebar-normal"> Stats des membres </span>
@@ -599,7 +601,15 @@
 <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
 <script src="{{asset('theme-admin/js/plugins/bootstrap-datetimepicker.min.js')}}"></script>
 <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-<script src="{{asset('theme-admin/js/plugins/jquery.dataTables.min.js')}}"></script>
+<--script src="{{--asset('theme-admin/js/plugins/jquery.dataTables.min.js')--}}"><!--/script-->
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
 <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
 <script src="{{asset('theme-admin/js/plugins/bootstrap-tagsinput.js')}}"></script>
 <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->

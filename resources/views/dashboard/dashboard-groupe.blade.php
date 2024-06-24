@@ -69,7 +69,7 @@
                         <div class="card-body table-responsive">
 
                             <table id="datatables"
-                                   class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                                   class="display nowrap table00 table-striped00 table-no-bordered00 table-hover00 dataTable dtr-inline"
                                    style="width: 100%;" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
@@ -201,6 +201,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.dataTable').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: ['copy', 'csv', 'excel', 'print']
+                    }
+                },
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [10, 25, 50, -1],

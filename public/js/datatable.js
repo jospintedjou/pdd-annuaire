@@ -1,6 +1,11 @@
 $(document).ready(function () {
     //console.log($('#datatables').html());
-    $('.dataTable').DataTable({
+    $('.dataTable12').DataTable({
+        layout: {
+            topStart: {
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+            }
+        },
         "pagingType": "full_numbers",
         "lengthMenu": [
             [10, 25, 50, -1],
@@ -13,6 +18,17 @@ $(document).ready(function () {
             searchPlaceholder: "Search records",
         }
     });
+
+    /*
+    new DataTable('#example', {
+        layout: {
+            topStart: {
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+            }
+        }
+    });
+    */
+
     /*
     //var table = $('#datatable').DataTable();
 

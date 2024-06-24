@@ -202,6 +202,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.dataTable').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: ['copy', 'csv', 'excel', 'print']
+                    }
+                },
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [10, 25, 50, -1],

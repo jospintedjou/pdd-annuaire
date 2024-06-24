@@ -117,7 +117,26 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
+            $fileName = 'TABLEAU DES STATISTIQUES GLOBALES DES ZONES';
             $('.dataTable').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                extend: 'csv',
+                                filename: $fileName,
+                            },
+                            {
+                                extend: 'excel',
+                                filename: $fileName
+                            },
+                            {
+                                extend: 'print',
+                                filename: $fileName
+                            }
+                        ]
+                    }
+                },
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [10, 25, 50, -1],
