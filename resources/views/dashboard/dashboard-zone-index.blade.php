@@ -123,14 +123,17 @@
                     topStart: {
                         buttons: [
                             {
+                                title: null,
                                 extend: 'csv',
                                 filename: $fileName,
                             },
                             {
+                                title: null,
                                 extend: 'excel',
                                 filename: $fileName
                             },
                             {
+                                title: null,
                                 extend: 'print',
                                 filename: $fileName
                             }

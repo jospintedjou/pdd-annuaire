@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('page_title') Tableau de bord de <span class="text-primary">{{$user->nom}} {{$user->prenom}}</span>  @endsection
 @section('content')
-    <div class="content">
+    <div class="content" data-fullname="{{$user->nom}} {{$user->prenom}}">
         <div class="container-fluid">
             <div class="row">
                 <!-- Start Infos Membres -->
@@ -15,7 +15,7 @@
 
                         </div>
                         <div class="card-footer">
-                            <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                            <table class="table table-striped table-no-bordered table-hover dtr-inline"
                                    style="width: 100%;" width="100%" cellspacing="0">
                                 <tr>
                                     <td>Nom</td> <td>{{$user->nom}} {{$user->prenom}}</td>
@@ -43,7 +43,7 @@
 
                         </div>
                         <div class="card-footer">
-                            <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                            <table class="table table-striped table-no-bordered table-hover dtr-inline"
                                    style="width: 100%;" width="100%" cellspacing="0">
                                 <thead></thead>
                                 <tbody>
@@ -69,7 +69,7 @@
 
                         </div>
                         <div class="card-footer">
-                            <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                            <table class="table table-striped table-no-bordered table-hover dtr-inline"
                                    style="width: 100%;" width="100%" cellspacing="0">
                                 <thead></thead>
                                 <tbody>
@@ -228,23 +228,24 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-           var $fileName = 'TABLEAU DES STATISTIQUES DE ';
-           //var $userName = json($user->name);
-           //console.log('userName', $userName);
-
-           $('.dataTable').DataTable({
+            var $name = $("[data-fullname]").length ? $("[data-fullname]").attr("data-fullname") : "";
+            var $fileName = 'TABLEAU DES STATISTIQUES DE '+$name;
+            $('.dataTable').DataTable({
                 layout: {
                     topStart: {
                         buttons: [
                             {
+                                title: null,
                                 extend: 'csv',
                                 filename: $fileName,
                             },
                             {
+                                title: null,
                                 extend: 'excel',
                                 filename: $fileName
                             },
                             {
+                                title: null,
                                 extend: 'print',
                                 filename: $fileName
                             }

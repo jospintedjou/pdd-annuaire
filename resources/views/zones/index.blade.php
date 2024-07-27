@@ -98,19 +98,46 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-            //console.log($('.dataTable').html());
+            $fileName = 'LISTE DES ZONES';
             $('.dataTable').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                title: null,
+                                extend: 'csv',
+                                filename: $fileName,
+                                exportOptions: {
+                                    columns: ':not(:last-child)',
+                                }
+                            },
+                            {
+                                title: null,
+                                extend: 'excel',
+                                filename: $fileName,
+                                exportOptions: {
+                                    columns: ':not(:last-child)',
+                                }
+                            },
+                            {
+                                title: null,
+                                extend: 'print',
+                                filename: $fileName,
+                                exportOptions: {
+                                    columns: ':not(:last-child)',
+                                }
+                            }
+                        ]
+                    }
+                },
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
                 ],
-                "order": [[ 0, "desc" ]],
+                "order": [[ 0, "asc" ]],
                 responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records",
-                }
+                language: datatable_fr
             });
         });
     </script>

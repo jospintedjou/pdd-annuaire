@@ -118,6 +118,8 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
+            $fileName = 'TABLEAU DES STATISTIQUES GLOBALES DES MEMBRES';
+
             // Setup - add a text input to each footer cell
             $('.dataTable thead th:not(:last)').each(function () {
                 var title = $(this).text();
@@ -126,6 +128,36 @@
 
             // DataTable
             var table = $('.dataTable').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                title: null,
+                                extend: 'csv',
+                                filename: $fileName,
+                                exportOptions: {
+                                    columns: ':not(:last-child)',
+                                }
+                            },
+                            {
+                                title: null,
+                                extend: 'excel',
+                                filename: $fileName,
+                                exportOptions: {
+                                    columns: ':not(:last-child)',
+                                }
+                            },
+                            {
+                                title: null,
+                                extend: 'print',
+                                filename: $fileName,
+                                exportOptions: {
+                                    columns: ':not(:last-child)',
+                                }
+                            }
+                        ]
+                    }
+                },
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [10, 25, 50, -1],

@@ -136,7 +136,7 @@ tbody>tr{
     margin-bottom: -13px !important;
 }
 .presence-active{
-    background: limegreen;
+    background: limegreen !important;
 }
 /*********************************/
 /* Start Forum Message Style     */

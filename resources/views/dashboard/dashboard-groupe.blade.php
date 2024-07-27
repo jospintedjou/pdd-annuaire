@@ -200,10 +200,27 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
+            $fileName = 'TABLEAU DES STATISTIQUES DE GROUPE';
             $('.dataTable').DataTable({
                 layout: {
                     topStart: {
-                        buttons: ['copy', 'csv', 'excel', 'print']
+                        buttons: [
+                            {
+                                title: null,
+                                extend: 'csv',
+                                filename: $fileName,
+                            },
+                            {
+                                title: null,
+                                extend: 'excel',
+                                filename: $fileName
+                            },
+                            {
+                                title: null,
+                                extend: 'print',
+                                filename: $fileName
+                            }
+                        ]
                     }
                 },
                 "pagingType": "full_numbers",

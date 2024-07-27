@@ -121,20 +121,23 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-            $fileName = 'TABLEAU DES STATISTIQUES GLOBALES DES GROUPES';
+            var $fileName = 'TABLEAU DES STATISTIQUES GLOBALES DES GROUPES';
             $('.dataTable').DataTable({
                 layout: {
                     topStart: {
                         buttons: [
                             {
+                                title: null,
                                 extend: 'csv',
                                 filename: $fileName,
                             },
                             {
+                                title: null,
                                 extend: 'excel',
                                 filename: $fileName
                             },
                             {
+                                title: null,
                                 extend: 'print',
                                 filename: $fileName
                             }
