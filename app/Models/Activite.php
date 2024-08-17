@@ -52,11 +52,11 @@ class Activite extends Model
     {
         return $this->belongsToMany(Apostolat::class, ApostolatConcerne::class)->withTimestamps();
     }
-/*
-    public function apostolats(){
-        return $this->hasMany(Apostolat::class, ApostolatConcerne::class, NULL, "id");
-    }
-*/
+    /*
+        public function apostolats(){
+            return $this->hasMany(Apostolat::class, ApostolatConcerne::class, NULL, "id");
+        }
+    */
     public function id_apostolats(){
         if( $this->id_apostolats_concernes == NULL){
             $this->id_apostolats_concernes = array();

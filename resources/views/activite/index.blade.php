@@ -40,12 +40,14 @@
                                                 <td class="">{{$activite->nom}}</td>
                                                 <!--td class="">{{--$activite->categorieActivite->nom--}}</td-->
                                                 <td class="">
-                                                    @if ($activite->zone_id)
-                                                    {{$activite->zone->nom}}
-                                                    @elseif ($activite->sous_zone_id)
-                                                    {{$activite->sousZone->nom}}
+                                                    @if ($activite?->type_activite == App\Constantes::ACTIVITE_REGIONALE)
+                                                        Région
+                                                    @elseif ($activite?->type_activite == App\Constantes::ACTIVITE_ZONALE)
+                                                        {{$activite?->zone?->nom}}
+                                                    @elseif ($activite?->type_activite == App\Constantes::ACTIVITE_SOUS_ZONALE)
+                                                        {{$activite?->sousZone?->nom}}
                                                     @else
-                                                    Groupe de {{$activite->groupe->nom_groupe}}
+                                                        Groupe de {{$activite?->groupe?->nom_groupe}}
                                                     @endif
                                                 </td>
                                                 <td class="">{{$activite->date_debut}}</td>

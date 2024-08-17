@@ -36,20 +36,22 @@
                                             <tbody>
                                             @foreach($activites as $activite)
                                             <tr>
-                                                <td class="">{{$activite->categorieActivite->nom}}</td>
-                                                <td class="">{{$activite->nom}}</td>
+                                                <td class="">{{$activite?->categorieActivite?->nom}}</td>
+                                                <td class="">{{$activite?->nom}}</td>
                                                 <td class="">
-                                                    @if ($activite->zone_id)
-                                                    Zone de {{$activite->zone->nom}}
-                                                    @elseif ($activite->sous_zone_id)
-                                                    Sous Zone de {{$activite->sousZone->nom}}
+                                                    @if ($activite?->type_activite == App\Constantes::ACTIVITE_REGIONALE)
+                                                        Région
+                                                    @elseif ($activite?->type_activite == App\Constantes::ACTIVITE_ZONALE)
+                                                        {{$activite?->zone?->nom}}
+                                                    @elseif ($activite?->type_activite == App\Constantes::ACTIVITE_SOUS_ZONALE)
+                                                        {{$activite?->sousZone?->nom}}
                                                     @else
-                                                    Groupe de {{$activite->groupe->nom_groupe}}
+                                                        Groupe de {{$activite?->groupe?->nom_groupe}}
                                                     @endif
                                                 </td>
-                                                <td class="">{{$activite->date_debut}}</td>
-                                                <td class="">{{$activite->date_fin}}</td>
-                                                <td class="">{{$activite->heure_debut}}</td>
+                                                <td class="">{{$activite?->date_debut}}</td>
+                                                <td class="">{{$activite?->date_fin}}</td>
+                                                <td class="">{{$activite?->heure_debut}}</td>
                                                 <td class="td-actions text-right">
                                                     <form action="{{ route('presences.create',$activite->id) }}" method="Post">
                                                         @csrf

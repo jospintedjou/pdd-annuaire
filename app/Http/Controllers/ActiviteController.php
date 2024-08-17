@@ -69,7 +69,7 @@ class ActiviteController extends Controller
                                 Constantes::ACTIVITE_SOUS_ZONALE.','.Constantes::ACTIVITE_GROUPE,
             'date_debut' => 'required|date',
             'date_fin' => 'nullable|date',
-            'heure_debut' => 'required|date_format:H:i:s',
+            'heure_debut' => 'required|date_format:H:i',
             'lieu' => 'required|string',
             'apostolat' => 'required|array|min:1',
             'apostolat.*' => 'exists:apostolats,id'
@@ -126,7 +126,6 @@ class ActiviteController extends Controller
      */
     public function show(Activite $activite)
     {
-        //
         return view('activite.show', compact('activite'));
     }
 
@@ -227,8 +226,32 @@ class ActiviteController extends Controller
      */
     public function presence(Request $request)
     {
-        $activites = Activite::get();
+        $zone = auth()->user()->zone();
+        $sousZone = auth()->user()->sousZone();
+        $groupe = auth()->user()->groupeActif();
 
+        //Only the admin can see all the activities. Normal user sees the zone activities.
+        if(auth()->user()->isAdmin()){
+            $activites = Activite::get();
+        }else{
+            $allActivites = Activite::query()->get();
+            //Get only zone related activities
+            //if activity of zone see only for user zone
+            //If activity of sous-zone then see only sous-zone related
+            //if activity of group then see only grpup related
+            $activites = [];
+            foreach($allActivites as $activite){
+
+                if ($activite?->zone_id && $activite->zone_id == $zone->id){
+                    $activites[] = $activite;
+                }elseif ($activite?->sous_zone_id  && $activite->sous_zone_id == $sousZone->id){
+                     $activites[] = $activite;
+                }elseif ($activite?->groupe_id  && $activite->groupe_id == $groupe->id){
+                    $activites[] = $activite;
+                }
+            }
+
+        }
         return view('presences.index', compact('activites'));
     }
 

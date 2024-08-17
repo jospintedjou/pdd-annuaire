@@ -54,19 +54,19 @@ class User extends AuthUser
     /* Get user actual actif group */
     public function groupeActif()
     {
-        return $this->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first();
+        return $this->groupes()?->where('actif', \App\Constantes::ETAT_ACTIF)->first();
     }
 
     /* Actual user's zone */
     public function zone()
     {
-        return $this->groupes()->where('actif', Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first();
+        return $this->groupes()?->where('actif', Constantes::ETAT_ACTIF)->first()?->sousZone()->first()?->zone()->first();
     }
 
-    /* Actual user's zone */
+    /* Actual user's sous-zone */
     public function sousZone()
     {
-        return $this->groupes()->where('actif', Constantes::ETAT_ACTIF)->first()->sousZone()->first();
+        return $this->groupes()?->where('actif', Constantes::ETAT_ACTIF)->first()?->sousZone()->first();
     }
 
     public function activites()

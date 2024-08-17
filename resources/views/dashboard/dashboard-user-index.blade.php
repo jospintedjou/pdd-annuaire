@@ -106,12 +106,13 @@
                                                         <i class="material-icons">bar_chart</i>
                                                         <div class="ripple-container"></div>
                                                     </a>
+                                                    @if(auth()->user()->isAdmin())
                                                     <a href="{{route('users.edit', ['user' =>$user->id])}}" type="button" rel="tooltip"
                                                        class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                         <i class="material-icons">edit</i>
                                                         <div class="ripple-container"></div>
                                                     </a>
-
+                                                    @endif
                                                 </form>
                                             </td>
                                         </tr>

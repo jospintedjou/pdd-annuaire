@@ -156,7 +156,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group @error('date_debut') has-danger @enderror">
                                         <label for="date_debut" class="bmd-label-floating @error('date_debut') text-danger @enderror">Date de debut</label>
-                                        <input type="date" name="date_debut" id="date_debut" value="{{ old('date_debut') }}" class="form-control @error('date_debut') is-invalid @enderror">
+                                        <input type="date" name="date_debut" id="date_debut" value="{{ old('date_debut') }}" class="form-control datepicker0 @error('date_debut') is-invalid @enderror">
                                         @error('date_debut')
                                         <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -167,7 +167,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group @error('date_fin') has-danger @enderror">
                                         <label for="date_fin" class="bmd-label-floating @error('date_fin') text-danger @enderror">Date de fin</label>
-                                        <input type="date" name="date_fin" id="date_fin" value="{{ old('date_fin') }}" class="form-control @error('date_fin') is-invalid @enderror">
+                                        <input type="date" name="date_fin" id="date_fin" value="{{ old('date_fin') }}" class="form-control datepicker0 @error('date_fin') is-invalid @enderror">
                                         @error('date_fin')
                                         <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -180,7 +180,7 @@
                                  <div class="col-md-4">
                                      <div class="@error('heure_debut') has-danger @enderror">
                                          <label for="heure_debut" class="bmd-label-floating @error('heure_debut') text-danger @enderror">Heure de Debut</label>
-                                         <input type="time" name="heure_debut" id="heure_debut" value="{{ old('heure_debut') }}" class="form-control @error('heure_debut') is-invalid @enderror">
+                                         <input type="time" name="heure_debut" id="heure_debut" value="{{ old('heure_debut') }}" class="form-control timepicker @error('heure_debut') is-invalid @enderror">
                                          @error('heure_debut')
                                          <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
