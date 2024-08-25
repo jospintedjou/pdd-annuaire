@@ -15,8 +15,28 @@ class SousZoneController extends Controller
      */
     public function index()
     {
-        //
-        $sous_zones = SousZone::get();
+        $authUser = auth()->user();
+        $authZone = $authUser->zone();
+        $authSousZone = $authUser->sousZone();
+        $authGroupe = $authUser->groupeActif();
+        $sous_zones = [];
+
+        //Only the admin can see all the activities. Normal user sees the zone activities.
+        if($authUser->isAdmin()){
+            $sous_zones = SousZone::query()->orderby('nom')->get();
+        }else{
+            $allSousZones = SousZone::query()->orderby('nom')->get();
+            //Get only user related groups
+            foreach($allSousZones as $sousZone){
+
+                if ($authUser->isResponsableSousZone() && $sousZone->id == $authSousZone->id){
+                    $sous_zones[] = $sousZone;
+                }elseif ($authUser->isResponsableZone() && $sousZone->zone->id == $authZone->id){
+                    $sous_zones[] = $sousZone;
+                }
+            }
+
+        }
 
         return view('sous_zones.index', compact('sous_zones'));
     }
@@ -120,5 +140,20 @@ class SousZoneController extends Controller
             return response()->json(['status'=>'error'], 500, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
                 JSON_UNESCAPED_UNICODE);
         }
+    }
+
+    /**
+     * List all members of the zone
+     **/
+    public function listMembers(Request $request)
+    {
+        $sousZone = SousZone::query()->find($request->input('id'));
+        if($sousZone){
+            $users =  $sousZone->getMembres();
+        }else{
+            abort(404);
+        }
+
+        return view('sous_zones.list-members',compact('users', 'sousZone'));
     }
 }

@@ -11,10 +11,10 @@ return [
     'continents' => [
         'Afrique',
         'Europe',
-        'Amerique du Nord',
-        'Amerique du Sud',
+        'Amérique',
         'Asie',
-        'Australie'
+        'Océanie',
+        'Antarctique'
     ],
 
     /**

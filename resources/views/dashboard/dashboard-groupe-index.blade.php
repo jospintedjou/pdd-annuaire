@@ -73,6 +73,7 @@
                                    style="width: 100%;" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
+                                    <th width="5%">N°</th>
                                     <th width="20%">Groupes</th>
                                     <th width="20%">Zone</th>
                                     <th width="10%">Membres</th>
@@ -82,6 +83,7 @@
                                 <tbody>
                                 @foreach($groupes as $groupe)
                                     <tr>
+                                        <td>{{$loop->index + 1}}</td>
                                         <td class="">
                                             <span class="font-weight-normal">{{$groupe->nom_groupe}}</span>
                                         </td>
@@ -94,6 +96,11 @@
                                             </span>
                                         </td>
                                         <td class="td-actions text-right">
+                                            <a href="{{route('groupe_members', ['id'=>$groupe->id])}}" type="button" rel="tooltip"
+                                               class="btn btn-success btn-round" data-original-title="" title="liste des membres">
+                                                <i class="material-icons">person</i>
+                                                <div class="ripple-container"></div>
+                                            </a>
                                             <a href="{{route('statistiques_groupe', ['groupe' =>$groupe->id])}}" type="button" rel="tooltip"
                                                class="btn btn-primary btn-round" data-original-title="" title="statistiques">
                                                 <i class="material-icons">bar_chart</i>

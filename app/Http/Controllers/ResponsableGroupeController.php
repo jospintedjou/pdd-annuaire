@@ -19,7 +19,23 @@ class ResponsableGroupeController extends Controller
      */
     public function index()
     {
-        $groupes = Groupe::get();
+        $authUser = auth()->user();
+        $authZone = $authUser->zone();
+        $authSousZone = $authUser->sousZone();
+        $authGroupe = $authUser->groupeActif();
+
+        //Only the admin can see all the activities. Normal user sees the zone activities.
+        if($authUser->isAdmin()){
+            $groupes = Groupe::query()->get();
+        }else{
+            $allGroupes = Groupe::query()->get();
+            $groupes = [];
+            foreach($allGroupes as $groupe){
+                if ( $groupe->sousZone->zone_id == $authZone->id){
+                    $groupes[] = $groupe;
+                }
+            }
+        }
         return view('responsable_groupes.index',compact('groupes'));
     }
 

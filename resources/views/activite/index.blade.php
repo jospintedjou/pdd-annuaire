@@ -24,11 +24,11 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
+                                                <th>N°</th>
                                                 <th>Activité</th>
                                                 <!--th>Categorie</th-->
                                                 <th>Concern&eacute;s</th>
                                                 <th>Date Debut</th>
-                                                <th>Date Fin</th>
                                                 <th>Lieu</th>
                                                 <th>Heure debut</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
@@ -37,6 +37,7 @@
                                             <tbody>
                                             @foreach($activites as $activite)
                                             <tr>
+                                                <td>{{$loop->index + 1}}</td>
                                                 <td class="">{{$activite->nom}}</td>
                                                 <!--td class="">{{--$activite->categorieActivite->nom--}}</td-->
                                                 <td class="">
@@ -51,7 +52,6 @@
                                                     @endif
                                                 </td>
                                                 <td class="">{{$activite->date_debut}}</td>
-                                                <td class="">{{$activite->date_fin}}</td>
                                                 <td class="">{{$activite->lieu}}</td>
                                                 <td class="">{{$activite->heure_debut}}</td>
                                                 <td class="td-actions text-right">
@@ -114,17 +114,35 @@
     <script type="text/javascript">
         $(document).ready(function () {
             //console.log($('.dataTable').html());
+            // Setup - add a text input to each footer cell
+            $('.dataTable thead th:not(:last)').each(function () {
+                var title = $(this).text();
+                $(this).append('<br/><input style="width:100%" type="text" placeholder="Rechercher par ' + title + '" />');
+            });
+
             $('.dataTable').DataTable({
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
                 ],
-                "order": [[ 0, "desc" ]],
+                "order": [[ 0, "asc" ]],
                 responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records",
+                language: datatable_fr,
+                initComplete: function () {
+                    // Apply the search
+                    this.api()
+                            .columns()
+                            .every(function () {
+                                var that = this;
+
+                                $('input', this.header()).on('keyup change clear', function () {
+                                    if (that.search() !== this.value) {
+                                        that.search(this.value.replace("/;/g", "&quot;|&quot;"), true, false).draw();
+                                        //that.search(this.value).draw();
+                                    }
+                                });
+                            });
                 }
             });
         });

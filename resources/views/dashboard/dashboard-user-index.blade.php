@@ -73,6 +73,7 @@
                                    style="width: 100%;" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
+                                    <th width="5%">N°</th>
                                     <th width="10%">Nom</th>
                                     <th width="10%">Zone</th>
                                     <th width="10%">Sous-zone</th>
@@ -88,6 +89,7 @@
                                 @foreach($users as $user)
                                     @if($user)
                                         <tr>
+                                            <td>{{$loop->index + 1}}</td>
                                             <td class="">{{$user->prenom}} {{$user->nom}}</td>
                                             <td class="">
                                                 <?php //dd($user->groupes) ?>

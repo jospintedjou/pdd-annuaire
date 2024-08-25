@@ -37,6 +37,7 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
+                                                <th>N°</th>
                                                 <th>Nom</th>
                                                 <!--th>Zone</th-->
                                                 <!--th>Sous-zone</th-->
@@ -48,10 +49,10 @@
                                             </tr>
                                             </thead>
 
-
                                             <tbody>
                                             @foreach($users as $user)
                                                 <tr class="@if($user->rubriques()->where('rubrique_id', $rubrique->id)->exists()) presence-active @endif" data-user_id="{{$user->id}}">
+                                                    <td>{{$loop->index + 1 }}</td>
                                                     <td class="">
                                                         {{$user->prenom}} {{$user->nom}}</td>
                                                     <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
@@ -361,15 +362,12 @@
             var table = $('.dataTable').DataTable({
                 "pagingType": "full_numbers",
                 "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
+                    [50, 100, 150, -1],
+                    [50, 100, 150, "All"]
                 ],
-                "order": [[4, "desc"]],
+                "order": [[0, "asc"]],
                 responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records",
-                },
+                language: datatable_fr,
                 initComplete: function () {
                     // Apply the search
                     this.api()

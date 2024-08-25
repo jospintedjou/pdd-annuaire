@@ -26,6 +26,19 @@ class User extends AuthUser
     public function isAdmin(){
         return $this->role == Constantes::ROLE_ADMIN;
     }
+
+    public function isResponsableGroupe(){
+        return $this->responsableGroupes()->wherePivot('actif', 1)
+            ->withPivot('actif')->first();
+    }
+    public function isResponsableSousZone(){
+        return $this->responsableSousZones()->wherePivot('actif', 1)
+            ->withPivot('actif')->first();
+    }
+    public function isResponsableZone(){
+        return $this->responsableZones()->wherePivot('actif', 1)
+            ->withPivot('actif')->first();
+    }
     /**================== End Custom functions ==============================**/
 
     /**================= Start Model Relation functions ===================**/

@@ -53,7 +53,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('annee_spirituelles', AnneeSpirituelleController::class);
     Route::resource('categorie_activites', CategorieActiviteController::class);
     Route::resource('activites', ActiviteController::class);
-    Route::resource('groupes', GroupeController::class);
     Route::resource('logs', LogController::class);
     Route::resource('participations', ParticipationController::class);
     Route::resource('rubriques', RubriqueController::class);
@@ -100,7 +99,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     //Stats
     Route::get('/statistiques_membre.index', [DashboardMembreController::class, 'index'])
-        ->name('statistiques_membre.index');
+         ->name('statistiques_membre.index');
     Route::get('/statistiques_membre', [DashboardMembreController::class, 'dashboard'])
          ->name('statistiques_membre');
 
@@ -114,15 +113,27 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/statistiques_zone', [DashboardZoneController::class, 'dashboard'])
          ->name('statistiques_zone');
 
+    //Groupe
+    Route::resource('groupes', GroupeController::class);
+    Route::get('groupe/membres', [GroupeController::class, 'listMembers'])
+        ->name('groupe_members');
+
+    //Sous-zone
+    Route::resource('sous_zones', SousZoneController::class);
+    Route::get('sous_zone/membres', [SousZoneController::class, 'listMembers'])
+        ->name('sous_zone_members');
+
+    //Zone
+    Route::resource('zones', ZoneController::class);
+    Route::post('/get-sous-zone', [ZoneController::class, 'getSousZone'])
+        ->name('get_sous_zone');
+    Route::get('zone/membres', [ZoneController::class, 'listMembers'])
+        ->name('zone_members');
+
     //Route::resource('responsable_groupes', ResponsableGroupeController::class);
    // Route::resource('responsable_sous_zones', ResponsableSousZoneController::class);
    // Route::resource('responsable_zones', ResponsableZoneController::class);
 
-    Route::post('/get-sous-zone', [ZoneController::class, 'getSousZone'])
-        ->name('get_sous_zone');
-
-    Route::resource('sous_zones', SousZoneController::class);
-    Route::resource('zones', ZoneController::class);
     Route::resource('users', UserController::class);
 
     Route::post('/import',[UserController::class,'import'])->name('import');

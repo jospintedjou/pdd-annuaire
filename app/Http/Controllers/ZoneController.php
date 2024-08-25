@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SousZone;
+use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,23 @@ class ZoneController extends Controller
      */
     public function index()
     {
-        $zones = Zone::get();
+        $authUser = auth()->user();
+        $authZone = $authUser->zone();
+        $zones = [];
+
+        //Only the admin can see all the activities. Normal user sees the zone activities.
+        if($authUser->isAdmin()){
+            $zones = Zone::query()->orderby('nom')->get();
+        }else{
+            $allZones = Zone::query()->orderby('nom')->get();
+            //Get only user related groups
+            foreach($allZones as $zone){
+
+                if ($authUser->isResponsableZone() && $zone->id == $authZone->id){
+                    $sous_zones[] = $zone;
+                }
+            }
+        }
 
         return view('zones.index', compact('zones'));
     }
@@ -142,5 +159,20 @@ class ZoneController extends Controller
 
         return response()->json(['status'=>'success', 'data'=>$str], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
             JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * List all members of the zone
+     **/
+    public function listMembers(Request $request)
+    {
+        $zone = Zone::query()->find($request->input('id'));
+        if($zone){
+            $users =  $zone->getMembres();
+        }else{
+            abort(404);
+        }
+
+        return view('zones.list-members',compact('users', 'zone'));
     }
 }

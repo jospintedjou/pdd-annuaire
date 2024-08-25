@@ -26,7 +26,35 @@ class ActiviteController extends Controller
      */
     public function index()
     {
-        $activites = Activite::get();
+        $activites = [];
+        $zone = auth()->user()->zone();
+        $sousZone = auth()->user()->sousZone();
+        $groupe = auth()->user()->groupeActif();
+
+        //Only the admin can see all the activities. Normal user sees the zone activities.
+        if(auth()->user()->isAdmin()){
+            $activites = Activite::query()->orderby('nom', 'asc')->get();
+        }else{
+            $allActivites = Activite::query()->orderby('nom', 'asc')->get();
+            //Get only zone related activities
+            //if activity of zone see only for user zone
+            //If activity of sous-zone then see only sous-zone related
+            //if activity of group then see only grpup related
+            $activites = [];
+            foreach($allActivites as $activite){
+
+                if ($activite->type_activite == Constantes::ACTIVITE_GROUPE && $activite->groupe_id == $groupe->id){
+                    $activites[] = $activite;
+                }elseif ($activite->type_activite == Constantes::ACTIVITE_SOUS_ZONALE && $activite->sous_zone_id == $sousZone->id){
+                    $activites[] = $activite;
+                }elseif ($activite->type_activite == Constantes::ACTIVITE_ZONALE && $activite->zone_id == $zone->id){
+                    $activites[] = $activite;
+                }elseif($activite->type_activite == Constantes::ACTIVITE_REGIONALE ){
+                    //Regional activity
+                    $activites[] = $activite;
+                }
+            }
+        }
 
         return view('activite.index', compact('activites'));
     }
@@ -242,11 +270,14 @@ class ActiviteController extends Controller
             $activites = [];
             foreach($allActivites as $activite){
 
-                if ($activite?->zone_id && $activite->zone_id == $zone->id){
+                if ($activite->type_activite == Constantes::ACTIVITE_GROUPE && $activite->groupe_id == $groupe->id){
                     $activites[] = $activite;
-                }elseif ($activite?->sous_zone_id  && $activite->sous_zone_id == $sousZone->id){
-                     $activites[] = $activite;
-                }elseif ($activite?->groupe_id  && $activite->groupe_id == $groupe->id){
+                }elseif ($activite->type_activite == Constantes::ACTIVITE_SOUS_ZONALE && $activite->sous_zone_id == $sousZone->id){
+                    $activites[] = $activite;
+                }elseif ($activite->type_activite == Constantes::ACTIVITE_ZONALE && $activite->zone_id == $zone->id){
+                    $activites[] = $activite;
+                }elseif($activite->type_activite == Constantes::ACTIVITE_REGIONALE ){
+                    //Regional activity
                     $activites[] = $activite;
                 }
             }
@@ -265,7 +296,26 @@ class ActiviteController extends Controller
             abort(404);
         }
 
-        $users = User::where('role', '!=', Constantes::ROLE_ADMIN)->get();
+        //Get only zone related activities
+        //if activity of zone see only for user zone
+        //If activity of sous-zone then see only sous-zone related
+        //if activity of group then see only grpup related
+        $users = [];
+        $allUsers = User::query()->where('id', '!=', 1)->orderby('nom', 'asc')->get();
+        //dd($activite);
+        foreach($allUsers as $user){
+
+            if ($activite->type_activite == Constantes::ACTIVITE_GROUPE  && $activite?->groupe_id == $user?->groupeActif()?->id){
+                $users[] = $user;
+            }elseif ($activite->type_activite == Constantes::ACTIVITE_SOUS_ZONALE  && $activite?->sous_zone_id == $user?->sousZone()?->id){
+                $users[] = $user;
+            }elseif ($activite->type_activite == Constantes::ACTIVITE_ZONALE && $activite?->zone_id == $user?->zone()?->id){
+                $users[] = $user;
+            }elseif($activite->type_activite == Constantes::ACTIVITE_REGIONALE){
+                //Regional activity
+                $users[] = $user;
+            }
+        }
 
         $niveau_engagements = NiveauEngagement::get();
         $apostolats = Apostolat::orderBy('nom')->get();

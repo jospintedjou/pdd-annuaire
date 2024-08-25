@@ -167,15 +167,15 @@
                             </ul>
                         </div>
                     </li>
-
-                    <li class="nav-item @if(request()->routeIs('zones*')) active @endif">
+                    @if(auth()->user()->isAdmin() || auth()->user()->isResponsableZone())
+                    <li class="nav-item @if(request()->routeIs('zone*')) active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#zones" aria-expanded="true">
                             <i class="material-icons">person</i>
                             <p>zones <b class="caret"></b> </p>
                         </a>
-                        <div class="collapse @if(request()->routeIs('zones*')) show @endif" id="zones" style="">
+                        <div class="collapse @if(request()->routeIs('zone*')) show @endif" id="zones" style="">
                         <ul class="nav">
-                            <li class="nav-item @if(request()->routeIs('zones.index')) active @endif" >
+                            <li class="nav-item @if(request()->routeIs('zones.index') || request()->routeIs('zone_members')) active @endif" >
                                 <a class="nav-link" href="{!! route('zones.index') !!}">
                                     <span class="sidebar-mini"> L </span>
                                     <span class="sidebar-normal"> Lister </span>
@@ -192,14 +192,17 @@
                         </ul>
                     </div>
                     </li>
-                    <li class="nav-item @if(request()->routeIs('sous_zones*')) active @endif">
+                    @endif
+
+                    @if(auth()->user()->isAdmin() || auth()->user()->isResponsableSousZone())
+                    <li class="nav-item @if(request()->routeIs('sous_zone*')) active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#sous-zones" aria-expanded="true">
                             <i class="material-icons">person</i>
                             <p>Sous-zones <b class="caret"></b> </p>
                         </a>
-                        <div class="collapse @if(request()->routeIs('sous_zones*')) show @endif" id="sous-zones" style="">
+                        <div class="collapse @if(request()->routeIs('sous_zone*')) show @endif" id="sous-zones" style="">
                         <ul class="nav">
-                            <li class="nav-item @if(request()->routeIs('sous_zones.index')) active @endif" >
+                            <li class="nav-item @if(request()->routeIs('sous_zones.index') || request()->routeIs('sous_zone_members')) active @endif" >
                                 <a class="nav-link" href="{!! route('sous_zones.index') !!}">
                                     <span class="sidebar-mini"> L </span>
                                     <span class="sidebar-normal"> Lister </span>
@@ -216,14 +219,17 @@
                         </ul>
                     </div>
                     </li>
-                    <li class="nav-item @if(request()->routeIs('groupes*')) active @endif">
-                        <a class="nav-link @if(request()->routeIs('groupes*')) show @endif" data-toggle="collapse" href="#groupes" aria-expanded="true">
+                    @endif
+
+                    @if(auth()->user()->isAdmin() || auth()->user()->isResponsableGroupe())
+                    <li class="nav-item @if(request()->routeIs('groupe*')) active @endif">
+                        <a class="nav-link" data-toggle="collapse" href="#groupes" aria-expanded="true">
                             <i class="material-icons">person</i>
                             <p>Groupes <b class="caret"></b> </p>
                         </a>
-                        <div class="collapse" id="groupes" style="">
+                        <div class="collapse @if(request()->routeIs('groupe*')) show @endif" id="groupes" style="">
                         <ul class="nav">
-                            <li class="nav-item @if(request()->routeIs('groupes.index')) active @endif" >
+                            <li class="nav-item @if(request()->routeIs('groupes.index') || request()->routeIs('groupe_members')) active @endif" >
                                 <a class="nav-link" href="{!! route('groupes.index') !!}">
                                     <span class="sidebar-mini"> L </span>
                                     <span class="sidebar-normal"> Lister </span>
@@ -240,30 +246,7 @@
                         </ul>
                     </div>
                     </li>
-                    <li class="nav-item @if(request()->routeIs('responsabilite*')) active @endif">
-                        <a class="nav-link" data-toggle="collapse" href="#responsabilite" aria-expanded="true">
-                            <i class="material-icons">person</i>
-                            <p>Responsabilité<b class="caret"></b> </p>
-                        </a>
-                        <div class="collapse @if(request()->routeIs('responsabilite*')) show @endif" id="responsabilite" style="">
-                        <ul class="nav">
-                            <li class="nav-item @if(request()->routeIs('responsabilite.index')) active @endif" >
-                                <a class="nav-link" href="{!! route('responsabilite.index') !!}">
-                                    <span class="sidebar-mini"> L </span>
-                                    <span class="sidebar-normal"> Lister </span>
-                                </a>
-                            </li>
-                            @if(auth()->user()->isAdmin())
-                            <li class="nav-item @if(request()->routeIs('responsabilite.create')) active @endif">
-                                <a class="nav-link" href="{!! route('responsabilite.create') !!}">
-                                    <span class="sidebar-mini"> A </span>
-                                    <span class="sidebar-normal"> Ajouter </span>
-                                </a>
-                            </li>
-                            @endif
-                        </ul>
-                    </div>
-                    </li>
+                    @endif
 
                     <li class="nav-item @if(request()->routeIs('responsable_zones*')) active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#responsable-zones" aria-expanded="true">
@@ -304,19 +287,45 @@
                             <p>Responsable de groupes <b class="caret"></b> </p>
                         </a>
                         <div class="collapse @if(request()->routeIs('responsable_groupes*')) show @endif" id="responsable-groupes" style="">
-                        <ul class="nav">
-                            <li class="nav-item @if(request()->routeIs('responsable_groupes.index')) active @endif" >
-                                <a class="nav-link" href="{!! route('responsable_groupes.index') !!}">
-                                    <span class="sidebar-mini"> L </span>
-                                    <span class="sidebar-normal"> Lister </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                            <ul class="nav">
+                                <li class="nav-item @if(request()->routeIs('responsable_groupes.index')) active @endif" >
+                                    <a class="nav-link" href="{!! route('responsable_groupes.index') !!}">
+                                        <span class="sidebar-mini"> L </span>
+                                        <span class="sidebar-normal"> Lister </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
 
                     @if(auth()->user()->isAdmin())
+                            <li><span class="text-white">----------------Configuration-----------------</span></li>
                     <!----------------------------- Start Admin only modules ----------------------------->
+                    <li class="nav-item @if(request()->routeIs('responsabilite*')) active @endif">
+                        <a class="nav-link" data-toggle="collapse" href="#responsabilite" aria-expanded="true">
+                            <i class="material-icons">person</i>
+                            <p>Responsabilité<b class="caret"></b> </p>
+                        </a>
+                        <div class="collapse @if(request()->routeIs('responsabilite*')) show @endif" id="responsabilite" style="">
+                            <ul class="nav">
+                                <li class="nav-item @if(request()->routeIs('responsabilite.index')) active @endif" >
+                                    <a class="nav-link" href="{!! route('responsabilite.index') !!}">
+                                        <span class="sidebar-mini"> L </span>
+                                        <span class="sidebar-normal"> Lister </span>
+                                    </a>
+                                </li>
+                                @if(auth()->user()->isAdmin())
+                                    <li class="nav-item @if(request()->routeIs('responsabilite.create')) active @endif">
+                                        <a class="nav-link" href="{!! route('responsabilite.create') !!}">
+                                            <span class="sidebar-mini"> A </span>
+                                            <span class="sidebar-normal"> Ajouter </span>
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    </li>
+
                     <li class="nav-item @if(request()->routeIs('rubriques*')) active @endif">
                     <a class="nav-link" data-toggle="collapse" href="#rubriques" aria-expanded="true">
                         <i class="material-icons">person</i>

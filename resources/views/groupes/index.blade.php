@@ -44,12 +44,18 @@
                                                     <form action="{{ route('groupes.destroy',$groupe->id) }}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
+                                                        <a href="{{route('groupe_members', ['id'=>$groupe->id])}}" type="button" rel="tooltip"
+                                                           class="btn btn-success btn-round" data-original-title="" title="liste des membres">
+                                                            <i class="material-icons">person</i>
+                                                            <div class="ripple-container"></div>
+                                                        </a>
                                                         <a href="{{route('groupes.edit', ['groupe' =>$groupe->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
+                                                        @if(auth()->user()->isAdmin())
                                                         <button type="button" class="btn btn-danger btn-round text-white"
                                                                 data-id="{{ $groupe->id }}"
                                                                 data-href="{{ route('groupes.destroy',$groupe->id) }}"
@@ -57,6 +63,7 @@
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>
                                                         </button>
+                                                        @endif
 
                                                     </form>
                                                 </td>

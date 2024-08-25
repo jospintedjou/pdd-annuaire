@@ -30,6 +30,18 @@ class Groupe extends Model
             ->withPivot(['responsabilite_id', 'actif']);
     }
 
+    public function getMembres()
+    {
+        return User::select(['users.*','groupe_user.actif'])
+            ->join('groupe_user', 'users.id', '=', 'groupe_user.user_id')
+            ->join('groupes', 'groupe_user.groupe_id', '=', 'groupes.id')
+            ->where('groupe_user.actif', \App\Constantes::ETAT_ACTIF)
+            ->where('groupes.id', $this->id)
+            ->orderby('groupes.nom_groupe', 'asc')
+            ->orderby('users.nom', 'asc')
+            ->get();
+    }
+
     public function activites()
     {
         return $this->hasMany(Activite::class);

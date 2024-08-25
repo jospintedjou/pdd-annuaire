@@ -8,6 +8,7 @@ use App\Models\Evaluation;
 use App\Http\Requests\UpdateEvaluationRequest;
 use App\Models\Groupe;
 use App\Models\NiveauEngagement;
+use App\Models\ResponsableGroupe;
 use App\Models\Rubrique;
 use App\Models\SousZone;
 use App\Models\Zone;
@@ -40,7 +41,33 @@ class EvaluationController extends Controller
             abort(404);
         }
 
-        $users = User::where('role', '!=', Constantes::ROLE_ADMIN)->get();
+        //Get only zone related activities
+        //if activity of zone see only for user zone
+        //If activity of sous-zone then see only sous-zone related
+        //if activity of group then see only grpup related
+        $users = [];
+        $allUsers = User::query()->where('id', '!=', 1)->orderby('nom', 'asc')->get();
+        //dd($activite);
+        $authUser = auth()->user();
+        if(auth()->user()->isAdmin()){
+            $users = $allUsers;
+        }else{
+
+            foreach($allUsers as $user){
+                if ( $authUser->isAdmin()){
+                    $users[] = $user;
+                }elseif ( $authUser->isResponsableZone() && $authUser->zone()->id == $user->zone()->id){
+                    $users[] = $user;
+                }elseif ( $authUser->isResponsableSousZone() &&  $authUser->sousZone()->id == $user->sousZone()->id){
+                    $users[] = $user;
+                }elseif( $authUser->isResponsableGroupe() &&  $authUser->groupeActif()->id == $user->groupeActif()->id){
+                    //Regional activity
+                    $users[] = $user;
+                }
+            }
+        }
+
+
 
         $niveau_engagements = NiveauEngagement::get();
         $apostolats = Apostolat::orderBy('nom')->get();

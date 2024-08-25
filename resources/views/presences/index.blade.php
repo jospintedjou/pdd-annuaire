@@ -24,6 +24,7 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
+                                                <th>N°</th>
                                                 <th>Categorie</th>
                                                 <th>Activité</th>
                                                 <th>Concernés</th>
@@ -36,6 +37,7 @@
                                             <tbody>
                                             @foreach($activites as $activite)
                                             <tr>
+                                                <td>{{$loop->index + 1}}</td>
                                                 <td class="">{{$activite?->categorieActivite?->nom}}</td>
                                                 <td class="">{{$activite?->nom}}</td>
                                                 <td class="">
@@ -103,18 +105,37 @@
     <script type="text/javascript">
         $(document).ready(function () {
             //console.log($('.dataTable').html());
+            $fileName = 'LISTE DES ACTIVITES';
             $('.dataTable').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                title: null,
+                                extend: 'csv',
+                                filename: $fileName,
+                            },
+                            {
+                                title: null,
+                                extend: 'excel',
+                                filename: $fileName
+                            },
+                            {
+                                title: null,
+                                extend: 'print',
+                                filename: $fileName
+                            }
+                        ]
+                    }
+                },
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
                 ],
-                "order": [[ 0, "desc" ]],
+                "order": [],
                 responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records",
-                }
+                language: datatable_fr
             });
         });
     </script>

@@ -32,7 +32,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('role', '!=', Constantes::ROLE_ADMIN)->get();
+        $users = User::query()->where('id', '!=', 1)->orderby('nom', 'asc')->get();
 
         return view('users.index',compact('users'));
     }
@@ -75,8 +75,6 @@ class UserController extends Controller
             throw ValidationException::withMessages(['file' => 'This value is incorrect']);
         }
 
-        //dd($fileErrors);
-
         //$datas = Excel::import(new ProductsImport($request->suppliers_id),request()->file('file'));
 
         //dd($request->file('file')->store('files'));
@@ -107,9 +105,31 @@ class UserController extends Controller
     {
         $niveau_engagements = NiveauEngagement::get();
         $apostolats = Apostolat::get();
-        $groupes = Groupe::get();
         $zones = Zone::get();
         $sous_zones = SousZone::get();
+
+        $authUser = auth()->user();
+        $authZone = $authUser->zone();
+        $authSousZone = $authUser->sousZone();
+        $authGroupe = $authUser->groupeActif();
+
+        //Only the admin can see all the activities. Normal user sees the zone activities.
+        if($authUser->isAdmin()){
+            $groupes = Groupe::query()->orderby('nom_groupe')->get();
+        }else{
+            $allGroupes = Groupe::query()->orderby('nom_groupe')->get();
+            $groupes = [];
+            foreach($allGroupes as $groupe){
+                if ( $authUser->isResponsableZone() && $groupe->sousZone->zone->id == $authZone->id){
+                    $groupes[] = $groupe;
+                }elseif( $authUser->isResponsableSousZone() && $groupe->sousZone->id == $authSousZone->id){
+                    $groupes[] = $groupe;
+                }elseif( $authUser->isResponsableGroupe() && $groupe->id == $authGroupe->id){
+                    $groupes[] = $groupe;
+                }
+            }
+        }
+
         return view('users.create', compact('niveau_engagements', 'apostolats', 'groupes', 'sous_zones', 'zones'));
     }
 
@@ -229,9 +249,31 @@ class UserController extends Controller
     {
         $niveau_engagements = NiveauEngagement::get();
         $apostolats = Apostolat::get();
-        $groupes = Groupe::get();
+        $groupes = [];
         $zones = Zone::get();
         $sous_zones = SousZone::get();
+
+        $authUser = auth()->user();
+        $authZone = $authUser->zone();
+        $authSousZone = $authUser->sousZone();
+        $authGroupe = $authUser->groupeActif();
+
+        //Only the admin can see all the activities. Normal user sees the zone activities.
+        if($authUser->isAdmin()){
+            $groupes = Groupe::query()->orderby('nom_groupe')->get();
+        }else{
+            $allGroupes = Groupe::query()->orderby('nom_groupe')->get();
+            $groupes = [];
+            foreach($allGroupes as $groupe){
+                if ( $authUser->isResponsableZone() && $groupe->sousZone->zone->id == $authZone->id){
+                    $groupes[] = $groupe;
+                }elseif( $authUser->isResponsableSousZone() && $groupe->sousZone->id == $authSousZone->id){
+                    $groupes[] = $groupe;
+                }elseif( $authUser->isResponsableGroupe() && $groupe->id == $authGroupe->id){
+                    $groupes[] = $groupe;
+                }
+            }
+        }
 
         return view('users.edit', compact('user', 'niveau_engagements',  'apostolats', 'groupes', 'sous_zones', 'zones'));
 

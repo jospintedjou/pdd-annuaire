@@ -25,6 +25,7 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
+                                                <th>N°</th>
                                                 <th>Nom</th>
                                                 <th>Continent</th>
                                                 <th>Pays</th>
@@ -35,6 +36,7 @@
                                             <tbody>
                                             @foreach($zones as $zone)
                                             <tr>
+                                                <td class="">{{$loop->index + 1}}</td>
                                                 <td class="">{{$zone->nom}}</td>
                                                 <td class="">{{$zone->continent}}</td>
                                                 <td class="">{{$zone->pays}}</td>
@@ -43,6 +45,11 @@
                                                     <form action="{{ route('zones.destroy',$zone->id) }}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
+                                                        <a href="{{route('zone_members', ['id'=>$zone->id])}}" type="button" rel="tooltip"
+                                                           class="btn btn-success btn-round" data-original-title="" title="liste des membres">
+                                                            <i class="material-icons">person</i>
+                                                            <div class="ripple-container"></div>
+                                                        </a>
                                                         <a href="{{route('zones.edit', ['zone' =>$zone->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>

@@ -54,19 +54,22 @@
                                                     <form action="{{-- route('responsable_groupes.destroy',$groupe->id) --}}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
+                                                        @if(auth()->user()->isAdmin() || (auth()->user()?->isResponsableZone() && auth()->user()?->isResponsableZone()?->id == $groupe->sousZone->zone->id)
+                                                        || (auth()->user()?->isResponsableSousZone() && auth()->user()?->isResponsableSousZone()?->id == $groupe->sousZone->id))
                                                         <a href="{{route('responsable_groupes.edit', ['groupe' =>$groupe->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>
                                                         </a>
+                                                        @endif
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-danger btn-round text-white"
+                                                        <!--button type="button" class="btn btn-danger btn-round text-white"
                                                                 data-id="{{ $groupe->id }}"
                                                                 data-href="{{-- route('responsable_groupes.destroy',$groupe->id) --}}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>
-                                                        </button>
+                                                        </button-->
 
                                                     </form>
                                                 </td>
@@ -143,8 +146,8 @@
                 },
                 "pagingType": "full_numbers",
                 "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
+                    [50, 100, 150, -1],
+                    [50, 100, 150, "All"]
                 ],
                 "order": [[ 0, "asc" ]],
                 responsive: true,

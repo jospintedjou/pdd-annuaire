@@ -24,6 +24,7 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
+                                                <th>N°</th>
                                                 <th>Nom</th>
                                                 <th>Zone</th>
                                                 <th>Ville</th>
@@ -34,6 +35,7 @@
                                             <tbody>
                                             @foreach($sous_zones as $sous_zone)
                                             <tr>
+                                                <td class="">{{$loop->index + 1}}</td>
                                                 <td class="">{{$sous_zone->nom}}</td>
                                                 <td class="">{{$sous_zone->zone->nom}}</td>
                                                 <td class="">{{$sous_zone->zone->ville}}</td>
@@ -42,12 +44,18 @@
                                                     <form action="{{ route('sous_zones.destroy',$sous_zone->id) }}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
+                                                        <a href="{{route('sous_zone_members', ['id'=>$sous_zone->id])}}" type="button" rel="tooltip"
+                                                           class="btn btn-success btn-round" data-original-title="" title="liste des membres">
+                                                            <i class="material-icons">person</i>
+                                                            <div class="ripple-container"></div>
+                                                        </a>
                                                         <a href="{{route('sous_zones.edit', ['sous_zone' =>$sous_zone->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>
                                                         </a>
                                                         <!-- Button trigger modal -->
+                                                        @if(auth()->user()->isAdmin())
                                                         <button type="button" class="btn btn-danger btn-round text-white"
                                                                 data-id="{{ $sous_zone->id }}"
                                                                 data-href="{{ route('sous_zones.destroy',$sous_zone->id) }}"
@@ -55,7 +63,7 @@
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>
                                                         </button>
-
+                                                        @endif
                                                     </form>
                                                 </td>
                                             </tr>
@@ -97,19 +105,37 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-            //console.log($('.dataTable').html());
+            $fileName = 'LISTE DES SOUS-ZONES';
             $('.dataTable').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                title: null,
+                                extend: 'csv',
+                                filename: $fileName,
+                            },
+                            {
+                                title: null,
+                                extend: 'excel',
+                                filename: $fileName
+                            },
+                            {
+                                title: null,
+                                extend: 'print',
+                                filename: $fileName
+                            }
+                        ]
+                    }
+                },
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
                 ],
-                "order": [[ 0, "desc" ]],
+                "order": [],
                 responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records",
-                }
+                language: datatable_fr
             });
         });
     </script>

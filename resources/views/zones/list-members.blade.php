@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Utilisateur @endsection
+@section('page_title') Membres de la {{$zone->nom}} @endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des utilisateurs</h4>
+                        <h4 class="card-title">Liste des membres de la {{$zone->nom}}</h4>
                     </div>
                     <div class="card-body">
                         @if ($message = Session::get('success'))
@@ -36,9 +36,6 @@
                                                 <!--th>Date d'inscr.</th-->
                                                 <th width="10%">Catégorie Soc.</th>
                                                 <th width="10%">Niveau d'enga.</th>
-                                                <th width="10%" class="disabled-sorting text-right sorting">
-                                                    Actions
-                                                </th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -46,7 +43,7 @@
                                                 @if($user)
                                                 <tr>
                                                 <td class="">{{$loop->index + 1}}</td>
-                                                <td class="">{{$user->prenom}} {{$user->nom}}</td>
+                                                <td class="">{{$user->nom}} {{$user->prenom}}</td>
                                                 <td class="">
                                                     <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
                                                     {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first()->nom }}
@@ -56,32 +53,6 @@
                                                 <!--td class="">{{$user->created_at}}</td-->
                                                 <td class="">{{  $user->categorie_sociale }}</td>
                                                 <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
-                                                <td class="td-actions text-right">
-                                                    <form action="{{ route('users.destroy',$user->id) }}" method="Post">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <a href="{{route('statistiques_membre', ['user' =>$user->id])}}" type="button" rel="tooltip"
-                                                           class="btn btn-primary btn-round" data-original-title="" title="statistiques">
-                                                            <i class="material-icons">bar_chart</i>
-                                                            <div class="ripple-container"></div>
-                                                        </a>
-                                                        <a href="{{route('users.edit', ['user' =>$user->id])}}" type="button" rel="tooltip"
-                                                           class="btn btn-success btn-round" data-original-title="" title="modifier">
-                                                            <i class="material-icons">edit</i>
-                                                            <div class="ripple-container"></div>
-                                                        </a>
-                                                        <!-- Button trigger modal -->
-                                                        @if(auth()->user()->isAdmin())
-                                                        <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('users.destroy',$user->id) }}"
-                                                                data-id="{{ $user->id }}"
-                                                                data-toggle="modal" data-target="#confirm-delete">
-                                                            <i class="material-icons">close</i>
-                                                            <div class="ripple-container"></div>
-                                                        </button>
-                                                        @endif
-
-                                                    </form>
-                                                </td>
                                             </tr>
                                                 @endif
                                             @endforeach
@@ -122,10 +93,10 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-            $fileName = 'TABLEAU DES STATISTIQUES GLOBALES DES MEMBRES';
+            $fileName = "LISTE DES MEMBRES DE LA {{$zone->nom}}";
 
             // Setup - add a text input to each footer cell
-            $('.dataTable thead th:not(:last)').each(function () {
+            $('.dataTable thead th').each(function () {
                 var title = $(this).text();
                 $(this).append('<br/><input style="width:100%" type="text" placeholder="Rechercher par ' + title + '" />');
             });
@@ -167,7 +138,7 @@
                     [50, 100, 150, -1],
                     [50, 100, 150, "All"]
                 ],
-                "order": [[ 4, "desc" ]],
+                "order": [[ 3, "asc" ]],
                 responsive: true,
                 language: datatable_fr,
                 initComplete: function () {

@@ -17,7 +17,25 @@ class ResponsableSousZoneController extends Controller
      */
     public function index()
     {
-        $sous_zones = SousZone::get();
+        $authUser = auth()->user();
+        $authZone = $authUser->zone();
+        $authSousZone = $authUser->sousZone();
+        $authGroupe = $authUser->groupeActif();
+
+        //Only the admin can see all the activities. Normal user sees the zone activities.
+        if($authUser->isAdmin()){
+            $sous_zones = SousZone::query()->get();
+        }else{
+            $allSousZones = SousZone::query()->get();
+            $sous_zones = [];
+            foreach($allSousZones as $sousZone){
+
+                if ( $sousZone->zone_id == $authSousZone->zone_id){
+                    $sous_zones[] = $sousZone;
+                }
+            }
+        }
+
         return view('responsable_sous_zones.index',compact('sous_zones'));
     }
 

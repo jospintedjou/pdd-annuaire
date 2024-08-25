@@ -22,6 +22,8 @@ class Zone extends Model
             ->join('zones', 'sous_zones.zone_id', '=', 'zones.id')
             ->where('groupe_user.actif', \App\Constantes::ETAT_ACTIF)
             ->where('zones.id', $this->id)
+            ->orderby('groupes.nom_groupe', 'asc')
+            ->orderby('users.nom', 'asc')
             ->get();
     }
 
