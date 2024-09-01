@@ -51,15 +51,13 @@ class UserController extends Controller
         $path = $updateFile->getRealPath();
         //$path = $updateFile->getClientOriginalName();
 
-        $originalHeadings = (new HeadingRowImport(2))->toArray($path);
+        $originalHeadings = (new HeadingRowImport(1))->toArray($path);
         $originalHeadings = array_change_key_case($originalHeadings, CASE_LOWER)[0][0];
 
-        //dd($originalHeadings);
-
-        $headings_arr =  ["pays", "zone", "sous_zone", "groupe", "noms", "prenoms", "sexe",
-            "statut_matrimonial", "categorie", "niveau_dengagement_2021", "niveau_dengagement_2022",
-            "niveau_dengagement_2023", "profession_classe", "specialite_filiere", "ville",
-            "telephone_whatsapp", "email"
+        $headings_arr =  ["groupe", "noms", "prenoms", "sexe",
+                    "apostolat", "categorie","niveau_dengagement", "profession_classe",
+                    "specialite_filiere", "ville", "quartier",
+                    "telephone_whatsapp","email"
         ];
 
         //Check if the excel file has all needed headings
@@ -77,11 +75,8 @@ class UserController extends Controller
 
         //$datas = Excel::import(new ProductsImport($request->suppliers_id),request()->file('file'));
 
-        //dd($request->file('file')->store('files'));
-
         try {
             $excelData = Excel::import(new ImportUser, $request->file('file')->store('files'));
-            //dd($excelData);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
 
@@ -93,7 +88,8 @@ class UserController extends Controller
             }
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success','Liste ajoutée avec succès.');
+
     }
 
     /**
@@ -156,8 +152,7 @@ class UserController extends Controller
                 'categorie_sociale' => 'required',
                 'apostolat_id' => 'required',
                 'groupe_id' => 'required',
-                'etat' => 'required',
-                'date_entree' => 'string'
+                'etat' => 'required'
             ]);
 
         $data['role'] = Constantes::ROLE_MEMBRE;
@@ -303,8 +298,7 @@ class UserController extends Controller
             'categorie_sociale' => 'required',
             'apostolat_id' => 'required',
             'groupe_id' => 'required',
-            'etat' => 'required',
-            'date_entree' => 'string'
+            'etat' => 'required'
         ]);
 
         $data['role'] = "MEMBRE"; //Must be "membre" or "responsable groupe" or "responsable sous-zone" or "responsable zone"

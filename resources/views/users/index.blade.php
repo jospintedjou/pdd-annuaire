@@ -44,45 +44,56 @@
                                             <tbody>
                                             @foreach($users as $user)
                                                 @if($user)
-                                                <tr>
-                                                <td class="">{{$loop->index + 1}}</td>
-                                                <td class="">{{$user->prenom}} {{$user->nom}}</td>
-                                                <td class="">
-                                                    <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
-                                                    {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first()->nom }}
-                                                </td>
-                                                <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
-                                                <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
-                                                <!--td class="">{{$user->created_at}}</td-->
-                                                <td class="">{{  $user->categorie_sociale }}</td>
-                                                <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
-                                                <td class="td-actions text-right">
-                                                    <form action="{{ route('users.destroy',$user->id) }}" method="Post">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <a href="{{route('statistiques_membre', ['user' =>$user->id])}}" type="button" rel="tooltip"
-                                                           class="btn btn-primary btn-round" data-original-title="" title="statistiques">
-                                                            <i class="material-icons">bar_chart</i>
-                                                            <div class="ripple-container"></div>
-                                                        </a>
-                                                        <a href="{{route('users.edit', ['user' =>$user->id])}}" type="button" rel="tooltip"
-                                                           class="btn btn-success btn-round" data-original-title="" title="modifier">
-                                                            <i class="material-icons">edit</i>
-                                                            <div class="ripple-container"></div>
-                                                        </a>
-                                                        <!-- Button trigger modal -->
-                                                        @if(auth()->user()->isAdmin())
-                                                        <button type="button" class="btn btn-danger btn-round text-white" data-href="{{ route('users.destroy',$user->id) }}"
-                                                                data-id="{{ $user->id }}"
-                                                                data-toggle="modal" data-target="#confirm-delete">
-                                                            <i class="material-icons">close</i>
-                                                            <div class="ripple-container"></div>
-                                                        </button>
-                                                        @endif
+                                                    <tr>
+                                                        <td class="">{{$loop->index + 1}}</td>
+                                                        <td class="">{{$user->nom}} {{$user->prenom}}</td>
+                                                        <td class="">
+                                                            <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
+                                                            {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first()->nom }}
+                                                        </td>
+                                                        <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
+                                                        <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
+                                                        <!--td class="">{{$user->created_at}}</td-->
+                                                        <td class="">{{  $user->categorie_sociale }}</td>
+                                                        <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
+                                                        <td class="td-actions text-right">
+                                                            <form action="{{ route('users.destroy',$user->id) }}"
+                                                                  method="Post">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <a href="{{route('statistiques_membre', ['user' =>$user->id])}}"
+                                                                   type="button" rel="tooltip"
+                                                                   class="btn btn-primary btn-round"
+                                                                   data-original-title="" title="statistiques">
+                                                                    <i class="material-icons">bar_chart</i>
 
-                                                    </form>
-                                                </td>
-                                            </tr>
+                                                                    <div class="ripple-container"></div>
+                                                                </a>
+                                                                <a href="{{route('users.edit', ['user' =>$user->id])}}"
+                                                                   type="button" rel="tooltip"
+                                                                   class="btn btn-success btn-round"
+                                                                   data-original-title="" title="modifier">
+                                                                    <i class="material-icons">edit</i>
+
+                                                                    <div class="ripple-container"></div>
+                                                                </a>
+                                                                <!-- Button trigger modal -->
+                                                                @if(auth()->user()->isAdmin())
+                                                                    <button type="button"
+                                                                            class="btn btn-danger btn-round text-white"
+                                                                            data-href="{{ route('users.destroy',$user->id) }}"
+                                                                            data-id="{{ $user->id }}"
+                                                                            data-toggle="modal"
+                                                                            data-target="#confirm-delete">
+                                                                        <i class="material-icons">close</i>
+
+                                                                        <div class="ripple-container"></div>
+                                                                    </button>
+                                                                @endif
+
+                                                            </form>
+                                                        </td>
+                                                    </tr>
                                                 @endif
                                             @endforeach
                                             </tbody>
@@ -98,7 +109,8 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -167,7 +179,7 @@
                     [50, 100, 150, -1],
                     [50, 100, 150, "All"]
                 ],
-                "order": [[ 4, "desc" ]],
+                "order": [[1, "asc"]],
                 responsive: true,
                 language: datatable_fr,
                 initComplete: function () {
@@ -186,65 +198,6 @@
                             });
                 }
             });
-
-            // Apply the search
-            /*
-            * mytable.columns().eq(0).each(function (colIdx) {
-                 $('input', mytable.column(colIdx).footer()).on('keyup change', function () {
-                     mytable.column (colIdx)
-                              .search (this.value.replace(/;/g, &quot;|&quot;), true, false)
-                              .draw ();
-                 } );
-             } );
-            * */
-            /*table.columns().eq( 0 ).each( function ( colIdx ) {
-                $( 'input', table.column( colIdx ).header() ).on( 'keyup change', function () {
-                    table
-                            .column( colIdx )
-                            .search( this.value )
-                            .draw();
-                } );
-            } );*/
         });
-
-        /*$(document).ready(function () {
-            //console.log($('#datatables').html());
-            $('.dataTable').DataTable({
-                "pagingType": "full_numbers",
-                "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
-                ],
-                "order": [[ 4, "desc" ]],
-                responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records",
-                }
-            });
-
-            //var table = $('#datatable').DataTable();
-
-            // Edit record
-            table.on('click', '.edit', function () {
-                $tr = $(this).closest('tr');
-                var data = table.row($tr).data();
-                alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-            });
-
-            // Delete a record
-            table.on('click', '.remove', function (e) {
-                $tr = $(this).closest('tr');
-                table.row($tr).remove().draw();
-                e.preventDefault();
-            });
-
-            //Like record
-            table.on('click', '.like', function () {
-                alert('You clicked on Like button');
-            });
-        });
-        */
-
     </script>
 @endsection

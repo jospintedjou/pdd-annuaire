@@ -37,6 +37,7 @@ class Constantes
     const APOSTOLAT_ENFANTS = "APOSTOLAT DES ENFANTS";
     const APOSTOLAT_JEUNES = "APOSTOLAT DES JEUNES";
     const APOSTOLAT_MARIES = "APOSTOLAT DES MARIES";
+    const APOSTOLAT_SINGLES = "APOSTOLAT DES SINGLES";
 
     //Actif-Inactif
     const ETAT_ACTIF = 1;
@@ -56,12 +57,14 @@ class Constantes
     const VILLE_YAOUNDE = 'YAOUNDE';
 
     //Categories Sociales
-    const ELEVE = 'ELEVE';
+    /*const ELEVE = 'ELEVE';
     const ETUDIANT_MINEUR = 'ETUDIANT MINEUR';
     const ETUDIANT_MAJEUR = 'ETUDIANT MAJEUR';
-    const JEUNE_TRAVAILLEUR = 'JEUNE TRAVAILLEUR';
-    const CATEGORIE_SOCIALES = array('ELEVE', 'ETUDIANT MINEUR', 'ETUDIANT MAJEUR', 'JEUNE TRAVAILLEUR',
-        'ETUDIANT MAJEUR','JEUNE MARIE','ADULTE MARIE');
+    const JEUNE_TRAVAILLEUR = 'JEUNE TRAVAILLEUR';*/
+    const CATEGORIE_SOCIALES = array('Adulte Marié', 'Adulte Single', 'Prêtre',
+        'Jeune Marié', 'Jeune Travailleur Senior', 'Jeune travailleur majeur',
+        'Jeune travailleur', 'Universitaire majeur', 'Universitaire débutant',
+        'Secondaire intermediare', 'Secondaire junior', 'Gd Seminariste', 'Réligieuse');
 
     //Responsable
     const SUPERVISEUR = 'SUPERVISEUR';
@@ -76,12 +79,12 @@ class Constantes
     const RESPONSABILITES_GROUPE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable', '4e Adjoint au Responsable', 'EPAULEUR');
 
     //Niveau d'engagement
-    const SIMPLE                      = 'SIMPLE';
+    /*const SIMPLE                      = 'SIMPLE';
     const REGULIER                    = 'REGULIER';
-    const ACTIF_1                     = 'ACTIF_1';
+    const ACTIF_1                     = 'A1N';
     const ACTIF_1_ANCIEN              = 'A1A';
     const ACTIF_1_ANCIEN_ENCOURAGE    = 'A1AE';
-    const ACTIF_2                     = 'ACTIF_2';
+    const ACTIF_2                     = 'A2N';
     const ACTIF_2_ANCIEN              = 'A2A';
     const ACTIF_2_ANCIEN_ENCOURAGE    = 'A2AE';
     const ACTIF_3                     = 'ACTIF_3';
@@ -93,7 +96,7 @@ class Constantes
     const ACCOMPAGNATEUR_EN_FORMATION = 'AEF';
     const ACCOMPAGNATEUR              = 'ACCOMPAGNATEUR';
     const INCARNATEUR                 = 'INCARNATEUR';
-    const RESPONSABLE_GENERAL         = 'RESPONSABLE_GENERAL';
+    const RESPONSABLE_GENERAL         = 'RESPONSABLE_GENERAL';*/
 
     //Types d'activité
     const ACTIVITE_REGIONALE          = 'Régionale';
