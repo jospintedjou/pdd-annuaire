@@ -55,43 +55,101 @@ class ImportUser implements ToModel, WithHeadingRow
     public function model(array $row)
     {
 
-        if(empty($row['noms']) || empty($row['groupe']) || empty($row['profession_classe'])) {
+        if(empty($row['groupe'])) {
             return null;
         }
 
-        //Validate file header
+        //If not specified the engagement level is 'regulier'
+        if(empty($row['niveau_dengagement'])){
+            $row['niveau_dengagement'] = Constantes::REGULIER;
+        }
 
+        //Validate file header
+        $nom = empty($row['nom']) ? 'ras' : $row['nom'];
+        $prenoms = $row['prenoms'];
         $niveau_engagement = NiveauEngagement::where('nom', $row['niveau_dengagement'])->first();
         $niveau_engagement_id = $niveau_engagement ? $niveau_engagement->id : NULL;
         $groupe = Groupe::where('nom_groupe', $row['groupe'])->first();
         $groupe_id = $groupe ? $groupe->id : NULL;
 
-        $sexe = $row['sexe'] == "Masculin" ? Constantes::SEXE_MASCULIN : Constantes::SEXE_FEMININ;
+        $sexe = $row['sexe'] == "Masculin" || $row['sexe'] == "M" ? Constantes::SEXE_MASCULIN : Constantes::SEXE_FEMININ;
+
+        //Default apostolat is 'jeune'
+        if(empty($row['apostolat'])){
+            $row['apostolat'] = Constantes::APOSTOLAT_JEUNES;
+        }elseif($row['apostolat'] == "Célibataire"){
+            $row['apostolat'] = Constantes::APOSTOLAT_JEUNES;
+        }elseif($row['apostolat'] == "Fiancé"){
+            $row['apostolat'] = Constantes::APOSTOLAT_JEUNES;
+        }elseif($row['apostolat'] == "Mariée" || $row['apostolat'] == "Marié"){
+            $row['apostolat'] = Constantes::APOSTOLAT_MARIES;
+        }elseif($row['apostolat'] == "Single"){
+            $row['apostolat'] = Constantes::APOSTOLAT_SINGLES;
+        }
+
         $apostolat = Apostolat::where('nom', $row['apostolat'])->first();
         $apostolat_id = $apostolat ? $apostolat->id : NULL;
 
-        $categorie = $row['categorie'];
+        //email
+        if(empty($row['email']) || $row['email'] == 'ras'){
+            $email = 'ras'.now().'@gmail.com';
+        }else {
+            $email = $row['email'];
+        }
 
-        $userExists = User::where(['nom' => $row['noms'], 'prenom' => $row['prenoms'],
-                                'categorie_sociale' => $row['categorie']])
+        //quartier
+        if(!isset($row['quartier']) || empty($row['quartier'])){
+            $quartier = 'ras';
+        }
+
+        //Categories
+        if(empty($row['categorie'])){
+            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
+        }elseif($row['categorie'] == "Eleve"){
+            $categorie = Constantes::CATEGORIE_SECONDAIRE_INTERMEDIAIRE;
+        }elseif($row['categorie'] == "Etudiants"){
+            $categorie = Constantes::CATEGORIE_UNIVERSITAIRE_DEBUTANT;
+        }elseif($row['categorie'] == "Universitaire"){
+            $categorie = Constantes::CATEGORIE_UNIVERSITAIRE_DEBUTANT;
+        }elseif($row['categorie'] == "Femme Au Foyer") {
+            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
+        }elseif($row['categorie'] == "Ing Qhse"){
+            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
+        }elseif($row['categorie'] == "Stagiaire"){
+            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
+        }elseif($row['categorie'] == "Travailleur"){
+            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
+        }elseif($row['categorie'] == "Travailleurs"){
+            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
+        }elseif($row['categorie'] == "Retraité"){
+            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR_SENIOR;
+        }else{
+            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
+        }
+
+        $userExists = User::where(['nom' => $nom, 'prenom' => $prenoms,
+                                'categorie_sociale' => $categorie])
                         ->orWhere(['telephone1' => $row['telephone_whatsapp']])
                         ->orWhere(['telephone2' => $row['telephone_whatsapp']])
-                        ->orWhere('email', $row['email'])->exists();
+                        ->orWhere('email', $email)->exists();
 
-        if($userExists || empty($niveau_engagement_id) || empty($groupe_id) || empty($apostolat_id)){
+        if($userExists || empty($niveau_engagement_id) || empty($groupe_id)
+            || empty($apostolat_id)
+          ){
             return null;
         }
 
         $user = User::create([
-            'nom' => $row['noms'],
-            'prenom' => $row['prenoms'],
+            'nom' => $nom,
+            'prenom' => $prenoms,
             'adresse' => $row['ville'], //Put 'adresse' later
             'telephone1' => $row['telephone_whatsapp'],
             'telephone2' => "",
             'sexe' => $sexe,
-            'email' => $row['email'],
+            'email' => $email,
             'profession' => $row['profession_classe'],
-            'quartier' => $row['quartier'],
+            'specialite' => $row['specialite_filiere'],
+            'quartier' => $quartier,
             'password' => \Illuminate\Support\Facades\Hash::make(time()),
             'niveau_engagement_id' => $niveau_engagement_id,
             'categorie_sociale' => $categorie,

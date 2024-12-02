@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Groupe;
 use App\Models\Zone;
 use App\Models\SousZone;
 use Illuminate\Http\Request;
@@ -35,7 +36,6 @@ class SousZoneController extends Controller
                     $sous_zones[] = $sousZone;
                 }
             }
-
         }
 
         return view('sous_zones.index', compact('sous_zones'));
@@ -133,6 +133,7 @@ class SousZoneController extends Controller
         $id = $request->input('id');
 
         if(!empty($id)){
+            Groupe::where('sous_zone_id', $id)->delete();
             SousZone::find($id)->delete();
             return response()->json(['status'=>'success'], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
                 JSON_UNESCAPED_UNICODE);

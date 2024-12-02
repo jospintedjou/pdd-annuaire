@@ -16,7 +16,7 @@ class User extends AuthUser
 
     protected $fillable = ['nom', 'prenom', 'adresse', 'telephone1', 'telephone2', 'sexe', 'date_naissance',
         'etat', 'email', 'profession', 'pays', 'ville', 'quartier', 'niveau_engagement_id', 'role', 'categorie_sociale',
-        'email_verified_at', 'password', 'date_entree'];
+        'email_verified_at', 'password', 'date_entree', 'specialite'];
 
     /**================== Start Custom functions ===========================**/
     public function isActive(){
@@ -67,7 +67,7 @@ class User extends AuthUser
     /* Get user actual actif group */
     public function groupeActif()
     {
-        return $this->groupes()?->where('actif', \App\Constantes::ETAT_ACTIF)->first();
+        return $this->groupes()?->where('actif', \App\Constantes::ETAT_ACTIF)?->first();
     }
 
     /* Actual user's zone */
@@ -79,7 +79,7 @@ class User extends AuthUser
     /* Actual user's sous-zone */
     public function sousZone()
     {
-        return $this->groupes()?->where('actif', Constantes::ETAT_ACTIF)->first()?->sousZone()->first();
+        return $this->groupes()?->where('actif', Constantes::ETAT_ACTIF)->first()?->sousZone()?->first();
     }
 
     public function activites()

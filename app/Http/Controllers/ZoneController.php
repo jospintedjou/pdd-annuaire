@@ -56,18 +56,21 @@ class ZoneController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+
         $data = $request->validate([
             'nom' => 'required|string',
-            'continent' => 'required|string',
-            'pays' => 'required|string',
+           'continent' => 'required|string',
+           'pays' => 'required|string',
             'ville' => 'required|string'
         ]);
 
+        //dd($request);
         Zone::create($data);
 
         return redirect()->route('zones.index')
-                ->with('success', 'Zone créé avec succès');
+                ->with('success', 'Zone ajoutée avec succès');
     }
 
     /**

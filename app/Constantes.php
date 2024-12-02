@@ -34,10 +34,10 @@ class Constantes
     const ROLE_UTILISATEUR = 'UTILISATEUR';
 
     //Apostolat
-    const APOSTOLAT_ENFANTS = "APOSTOLAT DES ENFANTS";
-    const APOSTOLAT_JEUNES = "APOSTOLAT DES JEUNES";
-    const APOSTOLAT_MARIES = "APOSTOLAT DES MARIES";
-    const APOSTOLAT_SINGLES = "APOSTOLAT DES SINGLES";
+    const APOSTOLAT_ENFANTS = "ENFANT";
+    const APOSTOLAT_JEUNES = "JEUNE";
+    const APOSTOLAT_MARIES = "MARIE(E)";
+    const APOSTOLAT_SINGLES = "SINGLE";
 
     //Actif-Inactif
     const ETAT_ACTIF = 1;
@@ -57,14 +57,26 @@ class Constantes
     const VILLE_YAOUNDE = 'YAOUNDE';
 
     //Categories Sociales
-    /*const ELEVE = 'ELEVE';
-    const ETUDIANT_MINEUR = 'ETUDIANT MINEUR';
-    const ETUDIANT_MAJEUR = 'ETUDIANT MAJEUR';
-    const JEUNE_TRAVAILLEUR = 'JEUNE TRAVAILLEUR';*/
-    const CATEGORIE_SOCIALES = array('Adulte Marié', 'Adulte Single', 'Prêtre',
-        'Jeune Marié', 'Jeune Travailleur Senior', 'Jeune travailleur majeur',
-        'Jeune travailleur', 'Universitaire majeur', 'Universitaire débutant',
-        'Secondaire intermediare', 'Secondaire junior', 'Gd Seminariste', 'Réligieuse');
+    const CATEGORIE_ADULTE_MARIE = 'ADULTE MARIE';
+    const CATEGORIE_ADULTE_SINGLE = 'ADULTE SINGLE';
+    const CATEGORIE_PRETRE = 'PRETRE';
+    const CATEGORIE_JEUNE_MARIE = 'JEUNE MARIE';
+    const CATEGORIE_JEUNE_TRAVAILLEUR_SENIOR = 'JEUNE TRAVAILLEUR SENIOR';
+    const CATEGORIE_JEUNE_TRAVAILLEUR_MAJEUR = 'JEUNE TRAVAILLEUR MAJEUR';
+    const CATEGORIE_JEUNE_TRAVAILLEUR = 'JEUNE TRAVAILLEUR';
+    const CATEGORIE_UNIVERSITAIRE_MAJEUR = 'UNIVERSITAIRE MAJEUR';
+    const CATEGORIE_UNIVERSITAIRE_DEBUTANT = 'UNIVERSITAIRE DEBUTANT';
+    const CATEGORIE_SECONDAIRE_INTERMEDIAIRE = 'SECONDAIRE INTERMEDIAIRE';
+    const CATEGORIE_SECONDAIRE_JUNIOR = 'SECONDAIRE JUNIOR';
+    const CATEGORIE_GRAND_SEMINARISTE = 'Gd Seminariste';
+    const CATEGORIE_RELIGIEUSE = 'RELIGIEUSE';
+    const CATEGORIE_SOCIALES = array(SELF::CATEGORIE_ADULTE_MARIE, SELF::CATEGORIE_ADULTE_SINGLE, SELF::CATEGORIE_PRETRE,
+            SELF::CATEGORIE_JEUNE_MARIE, SELF::CATEGORIE_JEUNE_TRAVAILLEUR_SENIOR,
+            SELF::CATEGORIE_JEUNE_TRAVAILLEUR_MAJEUR, SELF::CATEGORIE_JEUNE_TRAVAILLEUR,
+            SELF::CATEGORIE_UNIVERSITAIRE_MAJEUR, SELF::CATEGORIE_UNIVERSITAIRE_DEBUTANT,
+            SELF::CATEGORIE_SECONDAIRE_INTERMEDIAIRE, SELF::CATEGORIE_SECONDAIRE_JUNIOR,
+            SELF::CATEGORIE_GRAND_SEMINARISTE, SELF::CATEGORIE_RELIGIEUSE
+        );
 
     //Responsable
     const SUPERVISEUR = 'SUPERVISEUR';
@@ -79,24 +91,24 @@ class Constantes
     const RESPONSABILITES_GROUPE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable', '4e Adjoint au Responsable', 'EPAULEUR');
 
     //Niveau d'engagement
-    /*const SIMPLE                      = 'SIMPLE';
+    const SIMPLE                      = 'SIMPLE';
     const REGULIER                    = 'REGULIER';
-    const ACTIF_1                     = 'A1N';
-    const ACTIF_1_ANCIEN              = 'A1A';
-    const ACTIF_1_ANCIEN_ENCOURAGE    = 'A1AE';
-    const ACTIF_2                     = 'A2N';
-    const ACTIF_2_ANCIEN              = 'A2A';
-    const ACTIF_2_ANCIEN_ENCOURAGE    = 'A2AE';
-    const ACTIF_3                     = 'ACTIF_3';
-    const ACTIF_3_ANCIEN              = 'A3A';
-    const ACTIF_3_ANCIEN_ENCOURAGE    = 'A3AE';
-    const ACTIF_3_TERMINAL            = 'A3T';
+    const ACTIF_1                     = 'Actif 1 N';
+    const ACTIF_1_ANCIEN              = 'Actif 1 A';
+    const ACTIF_1_ANCIEN_ENCOURAGE    = 'Actif 1 AE';
+    const ACTIF_2                     = 'Actif 2 N';
+    const ACTIF_2_ANCIEN              = 'Actif 2 A';
+    const ACTIF_2_ANCIEN_ENCOURAGE    = 'Actif 2 AE';
+    const ACTIF_3                     = 'Actif 3 N';
+    const ACTIF_3_ANCIEN              = 'Actif 3 A';
+    const ACTIF_3_ANCIEN_ENCOURAGE    = 'Actif 3 AE';
+    const ACTIF_3_TERMINAL            = 'Actif 3 T';
     const CANDIDAT_MEMBRE_PLEIN       = 'CMP';
     const MEMBRE_PLEIN                = 'MP';
     const ACCOMPAGNATEUR_EN_FORMATION = 'AEF';
-    const ACCOMPAGNATEUR              = 'ACCOMPAGNATEUR';
-    const INCARNATEUR                 = 'INCARNATEUR';
-    const RESPONSABLE_GENERAL         = 'RESPONSABLE_GENERAL';*/
+    const ACCOMPAGNATEUR              = 'Accompagnateur';
+    const INCARNATEUR                 = 'Incarnateur';
+    const RESPONSABLE_GENERAL         = 'RESPONSABLE_GENERAL';
 
     //Types d'activité
     const ACTIVITE_REGIONALE          = 'Régionale';

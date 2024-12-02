@@ -44,7 +44,11 @@ return [
         'Ebolowa',
         'Bafoussam',
         'Limbe',
-        'Bertoua'
+        'Bertoua',
+        'Bamenda',
+        'Maroua',
+        'Garoua',
+        'Paris'
     ],
 
     /**

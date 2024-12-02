@@ -30,7 +30,7 @@
                                                     data-style2="btn btn-primary btn-round" data-header="Choisir la zone">
                                                 @foreach ($zones as $zone)
                                                     @if(isset($zone))
-                                                        <option value="{{ $zone->id }}"  {{$zone == $groupe->zone ? 'selected'  : '' }}>{{ $zone->nom }}</option>
+                                                        <option value="{{ $zone->id }}"  {{$zone == $groupe->sousZone->zone ? 'selected'  : '' }}>{{ $zone->nom }}</option>
                                                     @else
                                                         <option  selected disabled>Aucune zone trouvée</option>
                                                     @endif
@@ -44,14 +44,15 @@
                                         </div>
 
                                         <div class="form-group @error('sous_zone_id') has-danger @enderror">
-                                            <label for="sous_zone_id" class="bmd-label-floating0 @error('sous_zone_id') text-danger @enderror">Sous-zone</label>
+                                            <label for="sous_zone_id" class="bmd-label-floating0 @error('sous_zone_id') text-danger @enderror">Sous-zone
+                                                </label>
 
-                                            <select name="sous_zone_id" id="sous_zone" class="selectpicker col-md-10 sous-zone" data-size="auto" data-style="select-with-transition"
-                                                    data-actions-box="true" data-live-search="true"
-                                                    data-style2="btn btn-primary btn-round" data-header="Choisir la sous zone">
-                                                @foreach ($sous_zones as $sous_zone)
-                                                    @if(isset($sous_zone))
-                                                        <option value="{{ $sous_zone->id }}"  {{$sous_zone == $groupe->sous_zone ? 'selected'  : '' }}>{{ $sous_zone->nom }}</option>
+                                                <select name="sous_zone_id" id="sous_zone" class="selectpicker col-md-10 sous-zone" data-size="auto" data-style="select-with-transition"
+                                                        data-actions-box="true" data-live-search="true"
+                                                        data-style2="btn btn-primary btn-round" data-header="Choisir la sous zone">
+                                                    @foreach ($sous_zones as $sous_zone)
+                                                        @if(isset($sous_zone))
+                                                            <option value="{{ $sous_zone->id }}" {{$sous_zone->id == $groupe?->sousZone?->id ? 'selected'  : '' }}>{{ $sous_zone->nom }}</option>
                                                     @else
                                                         <option  selected disabled>Aucune sous zone trouvée</option>
                                                     @endif

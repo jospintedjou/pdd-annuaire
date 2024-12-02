@@ -54,7 +54,7 @@ class UserController extends Controller
         $originalHeadings = (new HeadingRowImport(1))->toArray($path);
         $originalHeadings = array_change_key_case($originalHeadings, CASE_LOWER)[0][0];
 
-        $headings_arr =  ["groupe", "noms", "prenoms", "sexe",
+        $headings_arr =  ["groupe", "nom", "prenoms", "sexe",
                     "apostolat", "categorie","niveau_dengagement", "profession_classe",
                     "specialite_filiere", "ville", "quartier",
                     "telephone_whatsapp","email"
