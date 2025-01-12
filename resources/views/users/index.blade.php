@@ -16,7 +16,31 @@
                             <div class="alert alert-success">
                                 <p>{{ $message }}</p>
                             </div>
+                        @elseif($message = Session::get('error'))
+                            <div class="alert alert-danger">
+                                <p>{{ $message }}</p>
+                            </div>
+
+                            @if($failures = Session::get('failures'))
+
+                                @if($failures->isNotEmpty())
+                                    <div class="alert alert-danger">
+                                        <h4>Import Errors</h4>
+                                        <ul>
+                                            @foreach($failures as $failure)
+                                                <li>
+                                                    Ligne {{ $failure->row() }}: {{ implode(', ', $failure->errors()) }}
+                                                    <br>
+                                                    <strong>Valeurs:</strong> {{ json_encode($failure->values()) }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
+                            @endif
                         @endif
+
                         <div class="toolbar">
                             <!--  Here you can write extra buttons/actions for the toolbar              -->
                         </div>

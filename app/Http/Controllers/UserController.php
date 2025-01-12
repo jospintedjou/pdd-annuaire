@@ -76,19 +76,37 @@ class UserController extends Controller
         //$datas = Excel::import(new ProductsImport($request->suppliers_id),request()->file('file'));
 
         try {
-            $excelData = Excel::import(new ImportUser, $request->file('file')->store('files'));
+            $importUser = new ImportUser;
+
+            $excelData = Excel::import($importUser,
+                $request->file('file')->store('files'));
+
+            $totalImportedRows = $importUser->getImportedCount();
+            $failures = $importUser->failures();
+
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
 
-            foreach ($failures as $failure) {
+            /*foreach ($failures as $failure) {
                 $failure->row(); // row that went wrong
                 $failure->attribute(); // either heading key (if using heading row concern) or column index
                 $failure->errors(); // Actual error messages from Laravel validator
                 $failure->values(); // The values of the row that has failed.
-            }
+            }*/
         }
 
-        return redirect()->back()->with('success','Liste ajoutée avec succès.');
+        $res = redirect()->back()
+                ->with('totalImportedRows', $totalImportedRows);
+        $totalFailures = isset($failures) ? count($failures) : 0;
+
+        $res = !empty($failures)
+                ? $res->with('success',
+                    $totalImportedRows.' membres ajouté(s) avec succès.')
+                : $res->with('error',
+                    $totalImportedRows.' membres ajouté(s), '.$totalFailures.' lignes ignorré(e)s')
+                    ->with('failures',$failures);
+
+        return $res;
 
     }
 

@@ -13,10 +13,19 @@ use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Validators\Failure;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Support\Facades\Log;
 
-class ImportUser implements ToModel, WithHeadingRow
+class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure
 {
 
+    use Importable, SkipsFailures;
+
+    private $importedCount = 0;
     /**
      * @param  int $headingRow
      */
@@ -27,11 +36,11 @@ class ImportUser implements ToModel, WithHeadingRow
     public function rules(): array
     {
        return [
-            '*.groupe' => ['required', 'exists:groupes,nom'],
-            '*.noms' => ['required', 'exists:users,nom'],
-            '*.sexe' => ['required', 'in:'.Constantes::SEXE_MASCULIN.','.Constantes::SEXE_FEMININ.',SOCIAL'],
+            '*.groupe' => ['required', 'exists:groupes,nom_groupe'],
+            /*'*.nom' => ['required'],*/
+            /*'*.sexe' => ['required', 'in:'.Constantes::SEXE_MASCULIN.','.Constantes::SEXE_FEMININ],*/
             '*.niveau_dengagement' => ['required', 'exists:niveau_engagements,nom'],
-            '*.profession_classe' => ['required', 'min:2'],
+            /*'*.profession_classe' => ['required', 'min:2'],*/
         ];
 
         /*
@@ -47,6 +56,20 @@ class ImportUser implements ToModel, WithHeadingRow
         */
     }
 
+    public function onFailure(Failure ...$failures)
+    {
+        // Handle each failure
+        foreach ($failures as $failure) {
+            // Access failure details
+            $row = $failure->row(); // Row number
+            $attribute = $failure->attribute(); // Column name or index
+            $errors = $failure->errors(); // Validation error messages
+            $values = $failure->values(); // The row's data
+
+            // Log or store the failure details as needed
+        }
+    }
+
     /**
     * @param array $row
     *
@@ -56,6 +79,7 @@ class ImportUser implements ToModel, WithHeadingRow
     {
 
         if(empty($row['groupe'])) {
+            Log::info('Row skipped in Excel file because the group name ' . $row['groupe'] . ' for user ' . $row['nom'] . ' ' . $row['prenoms'] . ' is unknown.');
             return null;
         }
 
@@ -75,9 +99,7 @@ class ImportUser implements ToModel, WithHeadingRow
         $sexe = $row['sexe'] == "Masculin" || $row['sexe'] == "M" ? Constantes::SEXE_MASCULIN : Constantes::SEXE_FEMININ;
 
         //Default apostolat is 'jeune'
-        if(empty($row['apostolat'])){
-            $row['apostolat'] = Constantes::APOSTOLAT_JEUNES;
-        }elseif($row['apostolat'] == "Célibataire"){
+        if($row['apostolat'] == "Celibataire" || $row['apostolat'] == "Célibataire"){
             $row['apostolat'] = Constantes::APOSTOLAT_JEUNES;
         }elseif($row['apostolat'] == "Fiancé"){
             $row['apostolat'] = Constantes::APOSTOLAT_JEUNES;
@@ -85,6 +107,8 @@ class ImportUser implements ToModel, WithHeadingRow
             $row['apostolat'] = Constantes::APOSTOLAT_MARIES;
         }elseif($row['apostolat'] == "Single"){
             $row['apostolat'] = Constantes::APOSTOLAT_SINGLES;
+        }else{
+            $row['apostolat'] = Constantes::APOSTOLAT_JEUNES;
         }
 
         $apostolat = Apostolat::where('nom', $row['apostolat'])->first();
@@ -105,9 +129,9 @@ class ImportUser implements ToModel, WithHeadingRow
         //Categories
         if(empty($row['categorie'])){
             $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
-        }elseif($row['categorie'] == "Eleve"){
+        }elseif($row['categorie'] == "Elève" || $row['categorie'] == "Eleve" ){
             $categorie = Constantes::CATEGORIE_SECONDAIRE_INTERMEDIAIRE;
-        }elseif($row['categorie'] == "Etudiants"){
+        }elseif($row['categorie'] == "Etudiants" || $row['categorie'] == "Etudiant"){
             $categorie = Constantes::CATEGORIE_UNIVERSITAIRE_DEBUTANT;
         }elseif($row['categorie'] == "Universitaire"){
             $categorie = Constantes::CATEGORIE_UNIVERSITAIRE_DEBUTANT;
@@ -128,16 +152,37 @@ class ImportUser implements ToModel, WithHeadingRow
         }
 
         $userExists = User::where(['nom' => $nom, 'prenom' => $prenoms,
-                                'categorie_sociale' => $categorie])
-                        ->orWhere(['telephone1' => $row['telephone_whatsapp']])
-                        ->orWhere(['telephone2' => $row['telephone_whatsapp']])
+                                'categorie_sociale' => $categorie,
+                                'telephone1' => $row['telephone_whatsapp'] ])
                         ->orWhere('email', $email)->exists();
 
-        if($userExists || empty($niveau_engagement_id) || empty($groupe_id)
-            || empty($apostolat_id)
-          ){
+        if($userExists){
+            Log::info('Row skipped in Excel file because user '.$nom.' '.$prenoms.' already exists in database.');;
+            return null;
+        }else if(empty($niveau_engagement_id)){
+            Log::info('Row skipped in Excel file because the niveau d engagement '.$row['niveau_dengagement'].' for user '.$nom.' '.$prenoms.' is unknown.');
+            return null;
+        }else if(empty($groupe_id)) {
+            Log::info('Row skipped in Excel file because the group name ' . $row['groupe'] . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
+            return null;
+        }else if(empty($apostolat_id)){
+            Log::info('Row skipped in Excel file because the apostolat name '.$row['apostolat'].' for user '.$nom.' '.$prenoms.' is unknown.');
             return null;
         }
+
+        //To test
+        /*if($row['nom'] =='Nzovep' ) {
+            var_dump('Exists $userExists', $userExists);
+            var_dump('Exists $niveau_engagement_id', $niveau_engagement_id);
+            var_dump('$groupe_id', $groupe_id);
+            var_dump('$groupe_id', $groupe_id);
+            var_dump('$apostolat_id', $apostolat_id);
+            var_dump('$row[\'niveau_dengagement\']', $row['niveau_dengagement']);
+
+            //var_dump('$groupe',$groupe);
+            var_dump('$email', $email);
+            dd($email);
+        }*/
 
         $user = User::create([
             'nom' => $nom,
@@ -171,11 +216,18 @@ class ImportUser implements ToModel, WithHeadingRow
             ]);
         //}
 
+        $this->importedCount++;
+
         return $user;
     }
 
     public function headingRow(): int
     {
         return 1;
+    }
+
+    public function getImportedCount(): int
+    {
+        return $this->importedCount;
     }
 }
