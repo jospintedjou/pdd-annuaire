@@ -70,7 +70,7 @@ class UserController extends Controller
         }
 
         if($fileHasError){
-            throw ValidationException::withMessages(['file' => 'This value is incorrect']);
+            throw ValidationException::withMessages(['file' => $fileErrors]);
         }
 
         //$datas = Excel::import(new ProductsImport($request->suppliers_id),request()->file('file'));
@@ -79,7 +79,7 @@ class UserController extends Controller
             $importUser = new ImportUser;
 
             $excelData = Excel::import($importUser,
-                $request->file('file')->store('files'));
+                            $request->file('file')->store('files'));
 
             $totalImportedRows = $importUser->getImportedCount();
             $failures = $importUser->failures();
@@ -95,9 +95,16 @@ class UserController extends Controller
             }*/
         }
 
+        $duplicatedRows = $importUser->getDuplicatedRows();
+        $duplicatedRowsStr = implode(', ', $duplicatedRows);
+        $countRows = count($duplicatedRows);
+
         $res = redirect()->back()
                 ->with('totalImportedRows', $totalImportedRows);
         $totalFailures = isset($failures) ? count($failures) : 0;
+
+        $res->with('duplicatedRowsStr',
+            $countRows.' noms en double : '.$duplicatedRowsStr);
 
         $res = !empty($failures)
                 ? $res->with('success',

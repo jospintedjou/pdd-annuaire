@@ -73,13 +73,13 @@
                                                         <td class="">{{$user->nom}} {{$user->prenom}}</td>
                                                         <td class="">
                                                             <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
-                                                            {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first()->nom }}
+                                                            {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()?->sousZone()?->first()?->zone()?->first()?->nom }}
                                                         </td>
                                                         <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
-                                                        <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
+                                                        <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)?->first()?->nom_groupe }}</td>
                                                         <!--td class="">{{$user->created_at}}</td-->
                                                         <td class="">{{  $user->categorie_sociale }}</td>
-                                                        <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
+                                                        <td class="">{{  $user->niveauEngagement()?->first()?->nom }}</td>
                                                         <td class="td-actions text-right">
                                                             <form action="{{ route('users.destroy',$user->id) }}"
                                                                   method="Post">

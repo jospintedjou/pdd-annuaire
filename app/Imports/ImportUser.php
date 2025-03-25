@@ -19,6 +19,7 @@ use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure
 {
@@ -26,6 +27,9 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
     use Importable, SkipsFailures;
 
     private $importedCount = 0;
+
+    private $duplicatedRows = [];
+
     /**
      * @param  int $headingRow
      */
@@ -36,10 +40,15 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
     public function rules(): array
     {
        return [
-            '*.groupe' => ['required', 'exists:groupes,nom_groupe'],
-            /*'*.nom' => ['required'],*/
-            /*'*.sexe' => ['required', 'in:'.Constantes::SEXE_MASCULIN.','.Constantes::SEXE_FEMININ],*/
+            /*
+             '*.groupe' => ['required', 'exists:groupes,nom_groupe'],
+
             '*.niveau_dengagement' => ['required', 'exists:niveau_engagements,nom'],
+            */
+
+
+           /*'*.nom' => ['required'],*/
+           /*'*.sexe' => ['required', 'in:'.Constantes::SEXE_MASCULIN.','.Constantes::SEXE_FEMININ],*/
             /*'*.profession_classe' => ['required', 'min:2'],*/
         ];
 
@@ -116,7 +125,8 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
 
         //email
         if(empty($row['email']) || $row['email'] == 'ras'){
-            $email = 'ras'.now().'@gmail.com';
+            $email = 'ras'. Str::uuid().'@gmail.com';
+            //$email = 'ras'.now().'@gmail.com';
         }else {
             $email = $row['email'];
         }
@@ -154,10 +164,11 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
         $userExists = User::where(['nom' => $nom, 'prenom' => $prenoms,
                                 'categorie_sociale' => $categorie,
                                 'telephone1' => $row['telephone_whatsapp'] ])
-                        ->orWhere('email', $email)->exists();
+                            ->orWhere('email', $email)->exists();
 
         if($userExists){
-            Log::info('Row skipped in Excel file because user '.$nom.' '.$prenoms.' already exists in database.');;
+            Log::info('Row skipped in Excel file because user '.$nom.' '.$prenoms.' already exists in database.');
+            $this->duplicatedRows[] = $nom.' '.$prenoms;
             return null;
         }else if(empty($niveau_engagement_id)){
             Log::info('Row skipped in Excel file because the niveau d engagement '.$row['niveau_dengagement'].' for user '.$nom.' '.$prenoms.' is unknown.');
@@ -229,5 +240,10 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
     public function getImportedCount(): int
     {
         return $this->importedCount;
+    }
+
+    public function getDuplicatedRows()
+    {
+        return $this->duplicatedRows;
     }
 }

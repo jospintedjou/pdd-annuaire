@@ -15,16 +15,37 @@ class Zone extends Model
 
     public function getMembres()
     {
-        return User::select(['users.*','groupe_user.actif'])
-            ->join('groupe_user', 'users.id', '=', 'groupe_user.user_id')
-            ->join('groupes', 'groupe_user.groupe_id', '=', 'groupes.id')
-            ->join('sous_zones', 'groupes.sous_zone_id', '=', 'sous_zones.id')
-            ->join('zones', 'sous_zones.zone_id', '=', 'zones.id')
-            ->where('groupe_user.actif', \App\Constantes::ETAT_ACTIF)
-            ->where('zones.id', $this->id)
-            ->orderby('groupes.nom_groupe', 'asc')
-            ->orderby('users.nom', 'asc')
-            ->get();
+         /*$members = User::select(['users.*','groupe_user.actif'])
+                ->join('groupe_user', 'users.id', '=', 'groupe_user.user_id')
+                ->join('groupes', 'groupe_user.groupe_id', '=', 'groupes.id')
+                ->join('sous_zones', 'groupes.sous_zone_id', '=', 'sous_zones.id')
+                ->join('zones', 'sous_zones.zone_id', '=', 'zones.id')
+                ->where('groupe_user.actif', \App\Constantes::ETAT_ACTIF)
+                ->where('zones.id', $this->id)
+                ->orderby('groupes.nom_groupe', 'asc')
+                ->orderby('users.nom', 'asc')
+                ->get();*/
+//dd($members);
+
+       $members = User::select(['users.*'])
+                ->with([
+                    'groupes' => function ($query) {
+                        $query->where('actif', \App\Constantes::ETAT_ACTIF);
+                    },
+                    'groupes',
+                    'groupes.sousZone',
+                    'groupes.sousZone.zone',
+                    'activites'
+
+                ])
+                ->whereHas('groupes.sousZone.zone', function ($query) {
+                    $query->where('id', $this->id);
+                })
+                //->orderBy('groupes.nom_groupe', 'asc')
+                ->orderBy('nom', 'asc')
+                ->get(); 
+
+        return $members;
     }
 
     public function sousZones()

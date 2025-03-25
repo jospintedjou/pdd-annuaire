@@ -23,7 +23,74 @@ class DashboardZoneController extends DashboardController
         return view('dashboard.dashboard-zone-index', compact('zones', 'nombreMembres'));
     }
 
-    /* Dashboard of one zone*/
+    public function dashboard(Request $request)
+{
+    if (!$request->zone) {
+        abort(404);
+    }
+
+    $zone = Zone::find($request->zone);
+
+    if(!$zone){
+        abort(404);
+    }
+
+    if (!$zone) {
+        abort(404);
+    }
+
+    $users = $zone->getMembres(); // Already eager-loaded
+    $nombreMembres = $users->count();
+
+    $categorieActivitesArr = CategorieActivite::with('activites')->get();
+    $categorieActivites = [];
+    
+    foreach ($categorieActivitesArr as $categorieActivite) {
+        $totalActivites = $categorieActivite->activites->count();
+        $nombreParticipation = 0;
+
+        foreach ($users as $user) {
+            
+            $groupe = $user->groupes;
+            $sousZone = $user?->sousZone();
+            //$zone = $user?->zone;
+            //dd($user);
+            if (!$groupe) continue;
+
+            $filteredActivites = $user->activites->where('categorie_activite_id', $categorieActivite->id);
+
+            switch ($categorieActivite->type_activite) {
+                case \App\Constantes::ACTIVITE_REGIONALE:
+                    $nombreParticipation += $filteredActivites->count();
+                    break;
+                case \App\Constantes::ACTIVITE_ZONALE:
+                    $nombreParticipation += $filteredActivites->where('type_activite', \App\Constantes::ACTIVITE_ZONALE)->count();
+                    break;
+                case \App\Constantes::ACTIVITE_SOUS_ZONALE:
+                    $nombreParticipation += $filteredActivites->where('type_activite', \App\Constantes::ACTIVITE_SOUS_ZONALE)->count();
+                    break;
+                case \App\Constantes::ACTIVITE_GROUPE:
+                    $nombreParticipation += $filteredActivites->where('type_activite', \App\Constantes::ACTIVITE_GROUPE)->count();
+                    break;
+            }
+        }
+
+        $categorieActivites[$categorieActivite->nom] = [
+            "nombreActivite" => $totalActivites,
+            "nombreParticipation" => $nombreParticipation,
+            "stats" => ($nombreMembres * $totalActivites) > 0 
+                ? round($nombreParticipation * 100 / ($nombreMembres * $totalActivites), 2) 
+                : 0
+        ];
+    }
+
+    $categorieActivitesDetails = $this->activityStats($users);
+
+    return view('dashboard.dashboard-zone', compact('categorieActivitesDetails', 'categorieActivites', 'zone', 'nombreMembres'));
+}
+
+
+    /* Dashboard of one zone
     public function dashboard(Request $request)
     {
         if(!$request->zone){
@@ -32,6 +99,10 @@ class DashboardZoneController extends DashboardController
         //$request->zone = 1;
         $zone = Zone::find($request->zone);
 
+        if(!$zone){
+            abort(404);
+        }
+
         $users = $zone->getMembres();
 
         $nombreMembres = $users->count();
@@ -39,6 +110,8 @@ class DashboardZoneController extends DashboardController
         $categorieActivitesArr = CategorieActivite::get();
         $categorieActivites = [];
         $nombreActivite = 0;
+
+        dd($categorieActivitesArr);
 
         $activites = Activite::get();
 
@@ -99,8 +172,8 @@ class DashboardZoneController extends DashboardController
                             break;
                     }
 
-                    /* If the activity is annual, we consider 01 attemp per year even if the were more than one attemps.
-                        E.g: we can have 03 optionnal Retreat but every member should attemp for one */
+                    // If the activity is annual, we consider 01 attemp per year even if the were more than one attemps.
+                        //E.g: we can have 03 optionnal Retreat but every member should attemp for one 
                     if($categorieActivite->periodicite == Constantes::PERIODE_ANNUELLE){
                         $nombreActivite = $nombreActivite > 0 ? 1 : 0;
                     }
@@ -117,7 +190,7 @@ class DashboardZoneController extends DashboardController
         $categorieActivitesDetails = $this->activityStats($users);
 
         return view('dashboard.dashboard-zone', compact('categorieActivitesDetails', 'categorieActivites', 'zone', 'nombreMembres'));
-    }
+    } */
 
 
     /* Return stats */

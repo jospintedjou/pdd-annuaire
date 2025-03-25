@@ -3,6 +3,12 @@
 @section('content')
     <div class="content user-level">
         <div class="container-fluid">
+            @if ($message = Session::get('duplicatedRowsStr'))
+                <div class="alert alert-warning">
+                    <p>{{ $message }}</p>
+                </div>
+            @endif
+
             @if ($message = Session::get('success'))
                 <div class="alert alert-success">
                     <p>{{ $message }}</p>

@@ -163,8 +163,8 @@
                 },
                 "pagingType": "full_numbers",
                 "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
+                    [30, 50, 100, -1],
+                    [30, 50, 100, "All"]
                 ],
                 "order": [],
                 responsive: true,
