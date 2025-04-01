@@ -46,7 +46,7 @@
           Tip 2: you can also add an image using data-image tag
       -->
         <div class="logo">
-            <a href="http://www.creative-tim.com" class="simple-text logo-normal" 
+            <a href="/" class="simple-text logo-normal" 
             style="display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none;">
                 <img src="{{ asset('images/icone.png') }}" style="width: 60px;" alt="PDD logo">
                 <span style="font-size: 20px; color: inherit;">PDD ANNUAIRE</span>

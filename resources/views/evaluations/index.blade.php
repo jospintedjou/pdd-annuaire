@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header card-header-primary card-header-icon">
                         <div class="card-icon">
-                            <i class="material-icons">activity</i>
+                            <i class="material-icons">quiz</i>
                         </div>
                         <h4 class="card-title">Evaluations par rubriques</h4>
                     </div>

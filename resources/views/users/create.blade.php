@@ -44,10 +44,14 @@
                     <ul class="nav flex-column0 nav-pills text-center"
                         id="h-pills-tab" role="tablist" aria-orientation="horizontal">
                         <li class="nav-item0">
-                            <a class="nav-link active" href="#add-user" data-toggle="tab">Ajouter un membre</a>
+                            <a class="nav-link active" href="#add-user" data-toggle="tab">
+                                <i class="material-icons" style="margin-right: 10px;">person_add</i> Ajouter un membre
+                            </a>
                         </li>
                         <li class="nav-item0">
-                            <a class="nav-link" href="#add-list" data-toggle="tab">Importer une liste</a>
+                            <a class="nav-link" href="#add-list" data-toggle="tab">
+                                <i class="material-icons" style="margin-right: 10px;">file_upload</i> Importer une liste
+                            </a>
                         </li>
                     </ul>
 
