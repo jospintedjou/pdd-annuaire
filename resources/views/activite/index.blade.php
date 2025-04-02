@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header card-header-primary card-header-icon">
                         <div class="card-icon">
-                            <i class="material-icons">activity</i>
+                            <i class="material-icons">rowing</i>
                         </div>
                         <h4 class="card-title">Liste des activit&eacute;s</h4>
                     </div>

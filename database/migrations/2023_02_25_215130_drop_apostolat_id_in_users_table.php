@@ -15,7 +15,7 @@ class DropApostolatIdInUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign('users_apostolat_id_foreign');
-            $table->dropColumn('apostolat_id');
+            //$table->dropColumn('apostolat_id');
         });
     }
 

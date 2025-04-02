@@ -44,10 +44,14 @@
                     <ul class="nav flex-column0 nav-pills text-center"
                         id="h-pills-tab" role="tablist" aria-orientation="horizontal">
                         <li class="nav-item0">
-                            <a class="nav-link active" href="#add-user" data-toggle="tab">Ajouter un membre</a>
+                            <a class="nav-link active" href="#add-user" data-toggle="tab">
+                                <i class="material-icons" style="margin-right: 10px;">person_add</i> Ajouter un membre
+                            </a>
                         </li>
                         <li class="nav-item0">
-                            <a class="nav-link" href="#add-list" data-toggle="tab">Importer une liste</a>
+                            <a class="nav-link" href="#add-list" data-toggle="tab">
+                                <i class="material-icons" style="margin-right: 10px;">file_upload</i> Importer une liste
+                            </a>
                         </li>
                     </ul>
 
@@ -66,9 +70,8 @@
                                             <div class="card-body">
                                                 <div-- class="container">
                                                     <div class="row">
-                                                        <div class="form-group col-md-5 @error('nom') has-danger @enderror">
-                                                            <label for="nom"
-                                                                   class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
+                                                        <div class="form-group col-md-4 @error('nom') has-danger @enderror">
+                                                            <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
                                                             <input type="text" name="nom" id="nom"
                                                                    value="{{ old('nom') }}"
                                                                    class="form-control @error('nom') is-invalid @enderror">
@@ -79,8 +82,7 @@
                                                             @enderror
                                                         </div>
                                                         <div class="form-group col-md-4 @error('prenom') has-danger @enderror">
-                                                            <label for="prenom"
-                                                                   class="bmd-label-floating @error('prenom') text-danger @enderror">Prenom</label>
+                                                            <label for="prenom" class="bmd-label-floating @error('prenom') text-danger @enderror">Prenom</label>
                                                             <input type="text" name="prenom" id="prenom"
                                                                    value="{{ old('prenom') }}"
                                                                    class="form-control @error('prenom') is-invalid @enderror">
@@ -90,10 +92,9 @@
                                                             </span>
                                                             @enderror
                                                         </div>
-                                                        <div class="form-group col-md-3 @error('sexe') has-danger @enderror">
-                                                            <label for="sexe"
-                                                                   class="bmd-label-floating0 @error('sexe') text-danger @enderror">Sexe</label>
-                                                            <select name="sexe" id="sexe" class="selectpicker col-md-8"
+                                                        <div class="form-group col-md-4 @error('sexe') has-danger @enderror">
+                                                            <label for="sexe" class="bmd-label-floating0 @error('sexe') text-danger @enderror">Sexe</label>
+                                                            <select name="sexe" id="sexe" class="selectpicker col-md-12 form-control"
                                                                     data-size="auto" data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"
@@ -111,12 +112,10 @@
                                                             </span>
                                                             @enderror
                                                         </div>
-                                                    </div><!-- row -->
-
-                                                    <div class="row">
-                                                        <div class="form-group col-md-5 @error('adresse') has-danger @enderror">
-                                                            <label for="adresse"
-                                                                   class="bmd-label-floating @error('adresse') text-danger @enderror">Adresse</label>
+                                                        <!-- </div>
+                                                        <div class="row"> -->
+                                                        <div class="form-group col-md-4 @error('adresse') has-danger @enderror">
+                                                            <label for="adresse" class="bmd-label-floating @error('adresse') text-danger @enderror">Adresse</label>
                                                             <input type="text" name="adresse" id="adresse"
                                                                    value="{{ old('adresse') }}"
                                                                    class="form-control @error('adresse') is-invalid @enderror">
@@ -127,8 +126,7 @@
                                                             @enderror
                                                         </div>
                                                         <div class="form-group col-md-4 @error('telephone1') has-danger @enderror">
-                                                            <label for="telephone1"
-                                                                   class="bmd-label-floating @error('telephone1') text-danger @enderror">Telephone
+                                                            <label for="telephone1" class="bmd-label-floating @error('telephone1') text-danger @enderror">Telephone
                                                                 1</label>
                                                             <input type="text" name="telephone1" id="telephone1"
                                                                    value="{{ old('telephone1') }}"
@@ -139,9 +137,8 @@
                                                             </span>
                                                             @enderror
                                                         </div>
-                                                        <div class="form-group col-md-3 @error('telephone2') has-danger @enderror">
-                                                            <label for="telephone2"
-                                                                   class="bmd-label-floating @error('telephone2') text-danger @enderror">Telephone
+                                                        <div class="form-group col-md-4 @error('telephone2') has-danger @enderror">
+                                                            <label for="telephone2" class="bmd-label-floating @error('telephone2') text-danger @enderror">Telephone
                                                                 2</label>
                                                             <input type="text" name="telephone2" id="telephone2"
                                                                    value="{{ old('telephone2') }}"
@@ -152,12 +149,10 @@
                                                             </span>
                                                             @enderror
                                                         </div>
-                                                    </div><!-- row -->
-
-                                                    <div class="row">
-                                                        <div class="form-group col-md-5 @error('email') has-danger @enderror">
-                                                            <label for="email"
-                                                                   class="bmd-label-floating @error('email') text-danger @enderror">Email</label>
+                                                        <!-- </div>
+                                                        <div class="row"> -->
+                                                        <div class="form-group col-md-4 @error('email') has-danger @enderror">
+                                                            <label for="email" class="bmd-label-floating @error('email') text-danger @enderror">Email</label>
                                                             <input type="text" name="email" id="email"
                                                                    value="{{ old('email') }}"
                                                                    class="form-control @error('email') is-invalid @enderror">
@@ -168,8 +163,7 @@
                                                             @enderror
                                                         </div>
                                                         <div class="form-group col-md-4 @error('quartier') has-danger @enderror">
-                                                            <label for="quartier"
-                                                                   class="bmd-label-floating @error('quartier') text-danger @enderror">Quartier</label>
+                                                            <label for="quartier" class="bmd-label-floating @error('quartier') text-danger @enderror">Quartier</label>
                                                             <input type="text" name="quartier" id="quartier"
                                                                    value="{{ old('quartier') }}"
                                                                    class="form-control @error('quartier') is-invalid @enderror">
@@ -179,9 +173,8 @@
                                                             </span>
                                                             @enderror
                                                         </div>
-                                                        <div class="form-group col-md-3 @error('profession') has-danger @enderror">
-                                                            <label for="profession"
-                                                                   class="bmd-label-floating @error('profession') text-danger @enderror">Profession</label>
+                                                        <div class="form-group col-md-4 @error('profession') has-danger @enderror">
+                                                            <label for="profession" class="bmd-label-floating @error('profession') text-danger @enderror">Profession</label>
                                                             <input type="text" name="profession" id="profession"
                                                                    value="{{ old('profession') }}"
                                                                    class="form-control @error('profession') is-invalid @enderror">
@@ -192,19 +185,16 @@
                                                             @enderror
                                                         </div>
 
-                                                    </div><!-- row -->
-
-                                                    <div class="row">
+                                                        <!-- </div>
+                                                        <div class="row"> -->
                                                         <div class="form-group col-md-4 @error('categorie_sociale') has-danger @enderror">
-                                                            <label for="categorie_sociale"
-                                                                   class="bmd-label-floating0 col-12 @error('categorie_sociale') text-danger @enderror">Categorie
-                                                                sociale</label>
+                                                            <label for="categorie_sociale" class="bmd-label-floating0 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
                                                             <select name="categorie_sociale" id="categorie_sociale"
-                                                                    class="selectpicker col-12" data-size="auto"
+                                                                    class="selectpicker col-md-12 form-control" data-size="auto"
                                                                     data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"
-                                                                    data-header="Choisir">
+                                                                    data-header="Choisir une catégorie sociale">
                                                                 @foreach (\App\Constantes::CATEGORIE_SOCIALES as $categorie_sociale)
                                                                     @if(isset($categorie_sociale))
                                                                         <option value="{{ $categorie_sociale }}">{{$categorie_sociale}}</option>
@@ -223,14 +213,13 @@
                                                         </div>
 
                                                         <div class="form-group col-md-4 @error('apostolat_id') has-danger @enderror">
-                                                            <label for="apostolat_id"
-                                                                   class="bmd-label-floating0 col-12 @error('apostolat_id') text-danger @enderror">Apostolat</label>
+                                                            <label for="apostolat_id" class="bmd-label-floating0 @error('apostolat_id') text-danger @enderror">Apostolat</label>
                                                             <select name="apostolat_id[]" id="apostolat_id"
-                                                                    class="selectpicker col-12" data-size="auto"
+                                                                    class="selectpicker col-md-12 form-control" data-size="auto"
                                                                     data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"
-                                                                    data-header="Choisir l'apostolat" multiple>
+                                                                    data-header="Choisir un apostolat" multiple>
                                                                 @foreach ($apostolats as $apostolat)
                                                                     @if(isset($apostolat))
                                                                         <option value="{{ $apostolat->id }}">{{$apostolat->nom}}</option>
@@ -249,16 +238,14 @@
                                                         </div>
 
                                                         <div class="form-group col-md-4 @error('niveau_engagement_id') has-danger @enderror">
-                                                            <label for="niveau_engagement_id"
-                                                                   class="bmd-label-floating0 col-12 @error('niveau_engagement_id') text-danger @enderror">Niveau
-                                                                d'engagement</label>
+                                                            <label for="niveau_engagement_id" class="bmd-label-floating0 @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
                                                             <select name="niveau_engagement_id"
                                                                     id="niveau_engagement_id"
-                                                                    class="selectpicker col-12" data-size="auto"
+                                                                    class="selectpicker col-md-12 form-control" data-size="auto"
                                                                     data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"
-                                                                    data-header="Choisir">
+                                                                    data-header="Choisir un niveau d'engagement">
                                                                 @foreach ($niveau_engagements as $niveau_engagement)
                                                                     @if(isset($niveau_engagement))
                                                                         <option value="{{ $niveau_engagement->id }}">{{$niveau_engagement->nom}}</option>
@@ -275,20 +262,17 @@
                                                             </span>
                                                             @enderror
                                                         </div>
-                                                    </div><!-- row -->
-
-                                                    <div class="row">
+                                                        <!-- </div>
+                                                        <div class="row"> -->
 
                                                         <div class="form-group col-md-4 @error('groupe_id') has-danger @enderror">
-                                                            <label for="groupe_id"
-                                                                   class="bmd-label-floating0 @error('groupe_id') text-danger @enderror">Groupe</label>
-
+                                                            <label for="groupe_id" class="bmd-label-floating0 @error('groupe_id') text-danger @enderror">Groupe</label>
                                                             <select name="groupe_id" id="groupe_id"
-                                                                    class="selectpicker col-md-8" data-size="auto"
+                                                                    class="selectpicker col-md-12 form-control" data-size="auto"
                                                                     data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"
-                                                                    data-header="Choisir le groupe">
+                                                                    data-header="Choisir un groupe">
                                                                 @foreach ($groupes as $groupe)
                                                                     @if(isset($groupe))
                                                                         <option value="{{ $groupe->id }}">{{$groupe->nom_groupe}}</option>
@@ -306,9 +290,7 @@
                                                         </div>
 
                                                         <div class="form-group col-md-4 @error('password') has-danger @enderror">
-                                                            <label for="password"
-                                                                   class="bmd-label-floating @error('password') text-danger @enderror">Mot
-                                                                de passe</label>
+                                                            <label for="password" class="bmd-label-floating @error('password') text-danger @enderror">Mot de passe</label>
                                                             <input type="password" name="password" id="password"
                                                                    value="{{ old('password') }}"
                                                                    class="form-control @error('password') is-invalid @enderror">
@@ -320,13 +302,13 @@
                                                         </div>
 
                                                         <div class="form-group col-md-4 @error('etat') has-danger @enderror">
-                                                            <label for="etat"
-                                                                   class="bmd-label-floating @error('etat') text-danger @enderror">Etat</label>
-
-                                                            <select name="etat" id="etat" class="selectpicker col-md-8"
-                                                                    data-size="auto" data-style="select-with-transition"
+                                                            <label for="etat" class="bmd-label-floating0 @error('etat') text-danger @enderror">Etat</label>
+                                                            <select name="etat" id="etat" 
+                                                                    class="selectpicker col-md-12 form-control" data-size="auto"
+                                                                    data-style="select-with-transition"
+                                                                    data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"
-                                                                    data-header="Choisir le groupe">
+                                                                    data-header="Choisir un état">
                                                                 <option value="{{ \App\Constantes::ETAT_ACTIF }}">
                                                                     Activé
                                                                 </option>
@@ -341,13 +323,10 @@
                                                             @enderror
                                                         </div>
 
-                                                    </div><!-- row -->
-
-                                                    <div class="row">
+                                                        <!-- </div>
+                                                        <div class="row"> -->
                                                         <div class="form-group col-md-4 @error('date_entree') has-danger @enderror">
-                                                            <label for="date_entree"
-                                                                   class="bmd-label-floating @error('date_entree') text-danger @enderror">Date
-                                                                d'entrée</label>
+                                                            <label for="date_entree" class="bmd-label-floating0 @error('date_entree') text-danger @enderror">Date d'entrée</label>
                                                             <input type="date" name="date_entree" id="date_entree"
                                                                    value="{{ old('date_entree') }}"
                                                                    class="form-control @error('date_entree') is-invalid @enderror">
@@ -494,12 +473,14 @@
 
                                                     </div--><!-- container -->
 
-                                                    <div class="clearfix"></div>
-                                                    <div class="row text-center">
+                                                <div class="clearfix"></div>
+                                                <div class="row">
+                                                    <div class="col-12">
                                                         <button id="btn-send" type="submit"
-                                                                class="btn btn-primary wd-100 col-md-3">Envoyer
+                                                                class="btn btn-primary"><i class="material-icons">send</i> Envoyer
                                                         </button>
-                                                    </div><!-- row -->
+                                                    </div>
+                                                </div><!-- row -->
 
                                             </div>
                                         </div>
@@ -509,29 +490,29 @@
                             </form>
                         </div>
                         <div class="tab-pane" id="add-list">
+                            <i class="sub-title text-muted">En-tête: Nom, Prenom, Sexe, Adresse, Telephone1, Telephone2, Email, Quartier, Profession, Categorie sociale, Apostolat, Niveau engagement, Groupe, Mot de passe, Etat, Date entrée.</i>
+                            <hr>
                             <p>
-
-                            <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <div class="row">
-                                    <div class="form-group col-md-4 mb-4 @error('file') has-danger @enderror">
-
-                                        <div class="custom-file text-left">
-                                            <label class="custom-file-label" for="customFile" @error('file') text-danger @enderror>Choisir une fichier Excel <i class="fa fa-file-excel-o"></i>
-                                                <input type="file" name="file" class="custom-file-input" id="customFile"
-                                                       required>
-                                            </label>
-                                            @error('file')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="form-group col-md-4 mb-4 @error('file') has-danger @enderror">
+                                            <div class="custom-file text-left">
+                                                <label class="custom-file-label" for="customFile" @error('file') text-danger @enderror>Choisir une fichier Excel <i class="fa fa-file-excel-o"></i>
+                                                    <input type="file" name="file" class="custom-file-input" id="customFile"
+                                                        required>
+                                                </label>
+                                                @error('file')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <button class="btn btn-primary">Importer</button>
-                                <!--a class="btn btn-success" href="{{ route('export-users') }}">Export Users</a-->
-                            </form>
+                                    <button class="btn btn-primary"><i class="material-icons">file_upload</i> Importer</button>
+                                    <!--a class="btn btn-success" href="{{ route('export-users') }}">Export Users</a-->
+                                </form>
                             </p>
                         </div>
 

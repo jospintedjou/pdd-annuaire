@@ -19,15 +19,16 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="row">
-                                    <div class="col-md-6">
-
+                                    <div class="col-md-4">
                                         <div class="form-group @error('zone_id') has-danger @enderror">
-                                            <label for="zone_id" class="bmd-label-floating @error('zone_id') text-danger @enderror">Zone</label>
+                                            <label for="zone_id" class="bmd-label-floating0 @error('zone_id') text-danger @enderror">Zone</label>
 
-                                            <select name="zone_id" id="zone_id" class="selectpicker col-md-10"
-                                                    data-actions-box="true" data-live-search="true"
-                                                    data-size="auto" data-style="select-with-transition"
-                                                    data-style2="btn btn-primary btn-round" data-header="Choisir la zone">
+                                            <select name="zone_id" id="zone_id" 
+                                                class="selectpicker col-md-12 form-control" value="{{ old('zone_id') }}"
+                                                data-actions-box="true" data-live-search="true"
+                                                data-size="auto" data-style="select-with-transition"
+                                                data-style2="btn btn-primary btn-round" 
+                                                data-header="Choisir la zone">
                                                 @foreach ($zones as $zone)
                                                     @if(isset($zone))
                                                         <option value="{{ $zone->id }}"  {{$zone->id == $sous_zone->zone_id ? 'selected'  : '' }}>{{ $zone->nom }}</option>
@@ -42,7 +43,8 @@
                                             </span>
                                             @enderror
                                         </div>
-
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="form-group @error('quartier') has-danger @enderror">
                                             <label for="quartier" class="bmd-label-floating @error('quartier') text-danger @enderror">Quartier</label>
                                             <input type="text" name="quartier" id="quartier" value="{{ old('quartier') ?? $sous_zone->quartier }}" class="form-control @error('quartier') is-invalid @enderror">
@@ -52,6 +54,8 @@
                                             </span>
                                             @enderror
                                         </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="form-group @error('nom') has-danger @enderror">
                                             <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
                                             <input type="text" value="{{old('nom') ?? $sous_zone->nom}}" name="nom" id="nom" class="form-control @error('nom') is-invalid @enderror">
@@ -63,9 +67,16 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <button type="submit" class="btn btn-primary pull-right">Modifier</button>
                                 <div class="clearfix"></div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button id="btn-send" type="submit"
+                                                class="btn btn-primary"><i class="material-icons">send</i> Modifier
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>

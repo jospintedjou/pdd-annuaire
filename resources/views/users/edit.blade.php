@@ -20,7 +20,7 @@
                         <div class="card-body">
                             <div class="container">
                                 <div class="row">
-                                    <div class="form-group col-md-5 @error('nom') has-danger @enderror">
+                                    <div class="form-group col-md-4 @error('nom') has-danger @enderror">
                                         <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
                                         <input type="text" name="nom" id="nom" value="{{ $user->nom }}" class="form-control @error('nom') is-invalid @enderror">
                                         @error('nom')
@@ -38,10 +38,10 @@
                                             </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-3 @error('sexe') has-danger @enderror">
+                                    <div class="form-group col-md-4 @error('sexe') has-danger @enderror">
                                         <label for="sexe" class="bmd-label-floating @error('sexe') text-danger @enderror">Sexe</label>
-                                        <select name="sexe" id="sexe" class="selectpicker col-md-8" data-size="auto" data-style="select-with-transition"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir le sexe">
+                                        <select name="sexe" id="sexe" class="selectpicker col-md-12 form-control" data-size="auto" data-style="select-with-transition"
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir un sexe">
                                             <option value="{{\App\Constantes::SEXE_MASCULIN}}" {{$user->sexe == \App\Constantes::SEXE_MASCULIN ? "selected" : "" }}>Homme</option>
                                             <option value="{{\App\Constantes::SEXE_FEMININ}}" {{$user->sexe == \App\Constantes::SEXE_FEMININ ? "selected" : "" }}>Femme</option>
                                         </select>
@@ -54,7 +54,7 @@
                                 </div><!-- row -->
 
                                 <div class="row">
-                                    <div class="form-group col-md-5 @error('adresse') has-danger @enderror">
+                                    <div class="form-group col-md-4 @error('adresse') has-danger @enderror">
                                         <label for="adresse" class="bmd-label-floating @error('adresse') text-danger @enderror">Adresse</label>
                                         <input type="text" name="adresse" id="adresse" value="{{ $user->adresse }}" class="form-control @error('adresse') is-invalid @enderror">
                                         @error('adresse')
@@ -72,7 +72,7 @@
                                         </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-3 @error('telephone2') has-danger @enderror">
+                                    <div class="form-group col-md-4 @error('telephone2') has-danger @enderror">
                                         <label for="telephone2" class="bmd-label-floating @error('telephone2') text-danger @enderror">Telephone 2</label>
                                         <input type="text" name="telephone2" id="telephone2" value="{{ $user->telephone2 }}" class="form-control @error('telephone2') is-invalid @enderror">
                                         @error('telephone2')
@@ -84,7 +84,7 @@
                                 </div><!-- row -->
 
                                 <div class="row">
-                                    <div class="form-group col-md-5 @error('email') has-danger @enderror">
+                                    <div class="form-group col-md-4 @error('email') has-danger @enderror">
                                         <label for="email" class="bmd-label-floating @error('email') text-danger @enderror">Email</label>
                                         <input type="text" name="email" id="email" value="{{ $user->email }}" class="form-control @error('email') is-invalid @enderror">
                                         @error('email')
@@ -102,7 +102,7 @@
                                         </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-3 @error('profession') has-danger @enderror">
+                                    <div class="form-group col-md-4 @error('profession') has-danger @enderror">
                                         <label for="profession" class="bmd-label-floating @error('profession') text-danger @enderror">Profession</label>
                                         <input type="text" name="profession" id="profession" value="{{ $user->profession }}" class="form-control @error('profession') is-invalid @enderror">
                                         @error('profession')
@@ -116,10 +116,10 @@
 
                                 <div class="row">
                                     <div class="form-group col-md-4 @error('categorie_sociale') has-danger @enderror">
-                                        <label for="categorie_sociale" class="bmd-label-floating0 col-12 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
-                                        <select name="categorie_sociale" id="categorie_sociale" class="selectpicker  col-12" data-size="auto" data-style="select-with-transition"
+                                        <label for="categorie_sociale" class="bmd-label-floating0 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
+                                        <select name="categorie_sociale" id="categorie_sociale" class="selectpicker col-md-12 form-control" data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir">
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir une categorie sociale">
                                             @foreach (\App\Constantes::CATEGORIE_SOCIALES as $categorie_sociale)
                                                 @if(isset($categorie_sociale))
                                                     <option value="{{ $categorie_sociale }}" {{ $user->categorie_sociale == $categorie_sociale ? "selected" : ""}}>{{$categorie_sociale}}</option>
@@ -136,10 +136,10 @@
                                     </div>
                                     <?php //dd($user->apostolats()->pluck('apostolat_id')->toArray()); ?>
                                     <div class="form-group col-md-4 @error('apostolat_id') has-danger @enderror">
-                                        <label for="apostolat_id" class="bmd-label-floating0 col-12 @error('apostolat_id') text-danger @enderror">Apostolat</label>
-                                        <select name="apostolat_id[]" id="apostolat_id" class="selectpicker  col-12" data-size="auto" data-style="select-with-transition"
+                                        <label for="apostolat_id" class="bmd-label-floating0 @error('apostolat_id') text-danger @enderror">Apostolat</label>
+                                        <select name="apostolat_id[]" id="apostolat_id" class="selectpicker col-md-12 form-control" data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir l'apostolat" multiple>
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir un apostolat" multiple>
                                             @foreach ($apostolats as $apostolat)
                                                 @if(isset($apostolat))
                                                     <option value="{{ $apostolat->id }}" {{  in_array($apostolat->id, $user->apostolats()->pluck('apostolat_id')->toArray()) ? "selected" : ""}}>{{$apostolat->nom}}</option>
@@ -156,10 +156,10 @@
                                     </div>
 
                                     <div class="form-group col-md-4 @error('niveau_engagement_id') has-danger @enderror">
-                                        <label for="niveau_engagement_id" class="bmd-label-floating0 col-12 @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
-                                        <select name="niveau_engagement_id" id="niveau_engagement_id" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
+                                        <label for="niveau_engagement_id" class="bmd-label-floating0 @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
+                                        <select name="niveau_engagement_id" id="niveau_engagement_id" class="selectpicker col-md-12 form-control" data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir">
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir un niveau d'engagement">
                                             @foreach ($niveau_engagements as $niveau_engagement)
                                                 @if(isset($niveau_engagement))
                                                     <option value="{{ $niveau_engagement->id }}" {{ $user->niveauEngagement()->first()->id == $niveau_engagement->id ? "selected" : ""}}>{{$niveau_engagement->nom}}</option>
@@ -180,10 +180,9 @@
 
                                     <div class="form-group col-md-4 @error('groupe_id') has-danger @enderror">
                                         <label for="groupe_id" class="bmd-label-floating0 @error('groupe_id') text-danger @enderror">Groupe</label>
-
-                                        <select name="groupe_id" id="groupe_id" class="selectpicker col-12" data-size="auto" data-style="select-with-transition"
+                                        <select name="groupe_id" id="groupe_id" class="selectpicker col-md-12 form-control" data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
-                                                data-style2="btn btn-primary btn-round" data-header="Choisir le groupe">
+                                                data-style2="btn btn-primary btn-round" data-header="Choisir un groupe">
                                             @foreach ($groupes as $groupe)
                                                 @if(isset($groupe))
                                                     <option value="{{ $groupe->id }}" {{ $user->groupes()->first()->id == $groupe->id ? "selected" : ""}}>{{$groupe->nom_groupe}}</option>
@@ -212,7 +211,7 @@
                                     <div class="form-group col-md-4 @error('etat') has-danger @enderror">
                                         <label for="etat" class="bmd-label-floating @error('etat') text-danger @enderror">Etat</label>
 
-                                        <select name="etat" id="etat" class="selectpicker col-md-8" data-size="auto" data-style="select-with-transition"
+                                        <select name="etat" id="etat" class="selectpicker col-md-12" data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" data-header="Choisir le groupe">
                                             <option value="{{ \App\Constantes::ETAT_ACTIF }}" {{ $user->etat == \App\Constantes::ETAT_ACTIF ? "selected" : ""}}>Activé</option>
                                             <option value="{{ \App\Constantes::ETAT_INACTIF }}" {{ $user->etat == \App\Constantes::ETAT_INACTIF ? "selected" : ""}}>Désactivé</option>
@@ -395,8 +394,12 @@
                             </div><!-- container -->
 
                             <div class="clearfix"></div>
-                            <div class="row text-center">
-                                <button id="btn-send" type="submit" class="btn btn-primary wd-100 col-md-3">Envoyer</button>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button id="btn-send" type="submit" 
+                                        class="btn btn-primary wd-100 col-md-3"><i class="material-icons">send</i> Modifier
+                                    </button>
+                                </div>
                             </div><!-- row -->
 
                         </div>

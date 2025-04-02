@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header card-header-primary card-header-icon">
                         <div class="card-icon">
-                            <i class="material-icons">person</i>
+                            <i class="material-icons">supervisor_account</i>
                         </div>
                         <h4 class="card-title">Liste des responsables des Sous-zones</h4>
                     </div>
