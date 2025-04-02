@@ -54,11 +54,11 @@
                                             <thead>
                                             <tr>
                                                 <th width="5%">N°</th>
-                                                <th width="10%">Nom</th>
-                                                <th width="10%">Zone</th>
-                                                <th width="10%">Groupe</th>
+                                                <th width="20%">Nom</th>
+                                                <th width="20%">Zone</th>
+                                                <th width="15%">Groupe</th>
                                                 <!--th>Date d'inscr.</th-->
-                                                <th width="10%">Catégorie Soc.</th>
+                                                <th width="20%">Catégorie Soc.</th>
                                                 <th width="10%">Niveau d'enga.</th>
                                                 <th width="10%" class="disabled-sorting text-right sorting">
                                                     Actions

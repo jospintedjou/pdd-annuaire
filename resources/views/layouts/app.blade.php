@@ -21,7 +21,7 @@
     <!-- CSS Files -->
     <link href="{{asset('theme-admin/css/material-dashboard.min.css').'?v=2.1.2'}}" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link href="{{asset('theme-admin/demo/demo.css')}}" rel="stylesheet" />
+    <!-- <link href="{{asset('theme-admin/demo/demo.css')}}" rel="stylesheet" /> -->
 
     <link href="{{asset('theme-admin/css/style-sup.css')}}" rel="stylesheet" />
 
@@ -91,7 +91,7 @@
                     <li class="nav-item @if(request()->routeIs('users*')) active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#users" aria-expanded="true">
                             <i class="material-icons">people</i>
-                            <p>Membre <b class="caret"></b> </p>
+                            <p>Membres <b class="caret"></b> </p>
                         </a>
                         <div class="collapse @if(request()->routeIs('users*')) show @endif" id="users" style="">
                             <ul class="nav">
@@ -470,8 +470,8 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end">
                 <ul class="navbar-nav">
-                    <li> {{ucfirst(auth()->user()->prenom)}} {{ucfirst(auth()->user()->nom)}} ({{auth()->user()->niveau}})</li>
-                    <li class="nav-item dropdown">
+                    <li>Bienvenue <span style="font-weight: bold">{{ucfirst(auth()->user()->prenom)}} {{ucfirst(auth()->user()->nom)}} ({{auth()->user()->niveau}})</span></li>
+                    <!-- <li class="nav-item dropdown">
                         <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">notifications</i>
                             <span class="notification">5</span>
@@ -486,12 +486,12 @@
                             <a class="dropdown-item" href="#">Another Notification</a>
                             <a class="dropdown-item" href="#">Another One</a>
                         </div>
-                    </li>
+                    </li> -->
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">person</i>
                             <p class="d-lg-none d-md-block">
-                                Account
+                                Compte
                             </p>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
