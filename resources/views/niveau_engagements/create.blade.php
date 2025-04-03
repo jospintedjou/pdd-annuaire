@@ -19,7 +19,7 @@
                         <div class="card-body">
 
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <div class="form-group @error('nom') has-danger @enderror">
                                         <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
                                         <input type="text" name="nom" id="nom" value="{{ old('nom') }}" class="form-control @error('nom') is-invalid @enderror">
@@ -30,7 +30,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group @error('nom') has-danger @enderror">
-                                        <button id="btn-send" type="submit" class="btn btn-primary">Envoyer</button>
+                                        <button id="btn-send" type="submit" class="btn btn-primary"><i class="material-icons">send</i> Envoyer</button>
                                     </div>
                                 </div>
                             </div>

@@ -23,7 +23,7 @@
                                         <label for="zone" class="bmd-label-floating0 @error('zone') text-danger @enderror">Zone</label>
 
                                         <select name="zone_id" id="zone" 
-                                            class="selectpicker col-md-12 form-control zone"
+                                            class="selectpicker w-100 zone"
                                             data-url="{{route('get_sous_zone')}}" data-size="auto" 
                                             data-style="select-with-transition"
                                             data-actions-box="true" data-live-search="true"
@@ -49,7 +49,7 @@
                                         <label for="sous_zone" class="bmd-label-floating0 @error('sous_zone') text-danger @enderror">Sous-zone</label>
 
                                         <select name="sous_zone_id" id="sous_zone" 
-                                            class="selectpicker col-md-12 form-control sous-zone"
+                                            class="selectpicker w-100 sous-zone"
                                             data-actions-box="true" data-live-search="true"
                                             data-size="auto" data-style="select-with-transition"
                                             data-style2="btn btn-primary btn-round" 
@@ -99,7 +99,7 @@
                                     <div class="form-group @error('jour_reunion') has-danger @enderror">
                                         <label for="jour_reunion" class="bmd-label-floating0 @error('jour_reunion') text-danger @enderror">Jour de Reunion</label>
                                         <select name="jour_reunion" id="jour_reunion"  value="{{ old('jour_reunion') }}"  
-                                            class="selectpicker col-md-12 form-control" 
+                                            class="selectpicker w-100" 
                                             data-size="auto" data-style="select-with-transition"
                                             data-live-search="true" data-actions-box="true"
                                             data-style2="btn btn-primary btn-round" 

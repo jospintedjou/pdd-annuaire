@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary pull-right">Modifier</button>
+                                <button type="submit" class="btn btn-primary"><i class="material-icons">send</i> Modifier</button>
                                 <div class="clearfix"></div>
                             </form>
                         </div>
