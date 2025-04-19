@@ -54,7 +54,7 @@ class UserController extends Controller
         $originalHeadings = (new HeadingRowImport(1))->toArray($path);
         $originalHeadings = array_change_key_case($originalHeadings, CASE_LOWER)[0][0];
 
-        $headings_arr =  ["groupe", "nom", "prenoms", "sexe",
+        $headings_arr =  ["zone", "sous_zone", "groupe", "noms", "prenoms", "sexe",
                     "apostolat", "categorie","niveau_dengagement", "profession_classe",
                     "specialite_filiere", "ville", "quartier",
                     "telephone_whatsapp","email"
@@ -101,11 +101,14 @@ class UserController extends Controller
 
         $res = redirect()->back()
                 ->with('totalImportedRows', $totalImportedRows);
+
         $totalFailures = isset($failures) ? count($failures) : 0;
 
-        $res->with('duplicatedRowsStr',
+        if($duplicatedRowsStr != ""){
+            $res->with('duplicatedRowsStr',
             $countRows.' noms en double : '.$duplicatedRowsStr);
-
+        }
+        
         $res = !empty($failures)
                 ? $res->with('success',
                     $totalImportedRows.' membres ajouté(s) avec succès.')

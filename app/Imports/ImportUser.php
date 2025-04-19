@@ -6,7 +6,9 @@ use App\Constantes;
 use App\Models\Apostolat;
 use App\Models\Groupe;
 use App\Models\NiveauEngagement;
+use App\Models\SousZone;
 use App\Models\User;
+use App\Models\Zone;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -18,15 +20,18 @@ use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure
+class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure, SkipsEmptyRows
 {
 
     use Importable, SkipsFailures;
 
     private $importedCount = 0;
+
+    private $currentRow = 1;
 
     private $duplicatedRows = [];
 
@@ -86,9 +91,29 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
     */
     public function model(array $row)
     {
+        //Validate file header
+
+        //Skip empty rows in the provided Excel File
+        if(empty($row['zone']) || empty($row['sous_zone'])  || empty($row['groupe']) ) {
+            Log::info('Row N° '. $this->currentRow.' skipped in Excel file because the zone, sous-zone or group name is empty');
+            $this->currentRow++;
+            return null;
+         } 
+
+        $nom = empty($row['noms']) ? 'ras' : $row['noms'];
+        $prenoms = empty($row['prenoms']) ? 'ras' : $row['prenoms'];
+        $niveau_engagement = NiveauEngagement::where('nom', $row['niveau_dengagement'])->first();
+        $niveau_engagement_id = $niveau_engagement ? $niveau_engagement->id : NULL;
+        $zone = Zone::where('nom', $row['zone'])->first();
+        $sousZone = SousZone::where('nom', $row['sous_zone'])->first();
+        $groupe = Groupe::where('nom_groupe', $row['groupe'])->first();
+        $groupe_id = $groupe ? $groupe->id : NULL;
+        $sexe = $row['sexe'] == "Masculin" || $row['sexe'] == "M" ? Constantes::SEXE_MASCULIN : Constantes::SEXE_FEMININ;
+        $quartier = empty($row['quartier']) ? 'ras' : $row['quartier'];
 
         if(empty($row['groupe'])) {
-            Log::info('Row skipped in Excel file because the group name ' . $row['groupe'] . ' for user ' . $row['nom'] . ' ' . $row['prenoms'] . ' is unknown.');
+            Log::info('Row skipped in Excel file because the group name ' . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
+            $this->currentRow++;
             return null;
         }
 
@@ -97,15 +122,45 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
             $row['niveau_dengagement'] = Constantes::REGULIER;
         }
 
-        //Validate file header
-        $nom = empty($row['nom']) ? 'ras' : $row['nom'];
-        $prenoms = $row['prenoms'];
-        $niveau_engagement = NiveauEngagement::where('nom', $row['niveau_dengagement'])->first();
-        $niveau_engagement_id = $niveau_engagement ? $niveau_engagement->id : NULL;
-        $groupe = Groupe::where('nom_groupe', $row['groupe'])->first();
-        $groupe_id = $groupe ? $groupe->id : NULL;
+        if(empty($row['zone'])){
+            Log::info('Row skipped in Excel file because the zone name ' . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
+            $this->currentRow++;
+            return null;
+        }
 
-        $sexe = $row['sexe'] == "Masculin" || $row['sexe'] == "M" ? Constantes::SEXE_MASCULIN : Constantes::SEXE_FEMININ;
+        if(empty($row['sous_zone'])){
+            Log::info('Row skipped in Excel file because the souszone name ' . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
+            $this->currentRow++;
+            return null;
+        }
+
+        //If zone is not specified or does not exist, return null
+        if($zone == null){
+            Log::info('Row skipped in Excel file because the zone name ' . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
+            $this->currentRow++;
+            return null;
+        }   
+
+        //Create Sous zone if not exists
+        if($sousZone == null){
+            $sousZone = new SousZone();
+            $sousZone->nom = $row['sous_zone'];
+            $sousZone->quartier = $row['quartier'];
+            $sousZone->zone_id = $zone->id;
+            $sousZone->save();
+            $sousZone->refresh();   
+        }
+
+        //Create Groupe if not exists
+        if($groupe == null){
+            $groupe = new Groupe();
+            $groupe->nom_groupe = $row['groupe'];
+            $groupe->sous_zone_id = $sousZone->id;
+            $groupe->jour_reunion = "RAS";
+            $groupe->heure_reunion = '16:00';
+            $groupe->save();
+            $groupe->refresh();   
+        }
 
         //Default apostolat is 'jeune'
         if($row['apostolat'] == "Celibataire" || $row['apostolat'] == "Célibataire"){
@@ -126,14 +181,8 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
         //email
         if(empty($row['email']) || $row['email'] == 'ras'){
             $email = 'ras'. Str::uuid().'@gmail.com';
-            //$email = 'ras'.now().'@gmail.com';
         }else {
             $email = $row['email'];
-        }
-
-        //quartier
-        if(!isset($row['quartier']) || empty($row['quartier'])){
-            $quartier = 'ras';
         }
 
         //Categories
@@ -169,31 +218,21 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
         if($userExists){
             Log::info('Row skipped in Excel file because user '.$nom.' '.$prenoms.' already exists in database.');
             $this->duplicatedRows[] = $nom.' '.$prenoms;
+            $this->currentRow++;
             return null;
         }else if(empty($niveau_engagement_id)){
             Log::info('Row skipped in Excel file because the niveau d engagement '.$row['niveau_dengagement'].' for user '.$nom.' '.$prenoms.' is unknown.');
+            $this->currentRow++;
             return null;
         }else if(empty($groupe_id)) {
             Log::info('Row skipped in Excel file because the group name ' . $row['groupe'] . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
+            $this->currentRow++;
             return null;
         }else if(empty($apostolat_id)){
             Log::info('Row skipped in Excel file because the apostolat name '.$row['apostolat'].' for user '.$nom.' '.$prenoms.' is unknown.');
+            $this->currentRow++;
             return null;
         }
-
-        //To test
-        /*if($row['nom'] =='Nzovep' ) {
-            var_dump('Exists $userExists', $userExists);
-            var_dump('Exists $niveau_engagement_id', $niveau_engagement_id);
-            var_dump('$groupe_id', $groupe_id);
-            var_dump('$groupe_id', $groupe_id);
-            var_dump('$apostolat_id', $apostolat_id);
-            var_dump('$row[\'niveau_dengagement\']', $row['niveau_dengagement']);
-
-            //var_dump('$groupe',$groupe);
-            var_dump('$email', $email);
-            dd($email);
-        }*/
 
         $user = User::create([
             'nom' => $nom,
@@ -228,6 +267,7 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
         //}
 
         $this->importedCount++;
+        $this->currentRow++;
 
         return $user;
     }
