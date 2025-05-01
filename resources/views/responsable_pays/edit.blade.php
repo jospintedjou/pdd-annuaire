@@ -46,7 +46,7 @@
                                     </div>
 
                                     <div class="row">
-                                        @dd($responsabilites)
+                                    
                                     @foreach($responsabilites as $responsabilite)
                                         <div class="col-md-6">
                                             <div class="form-group @error('responsabilite_pays') has-danger @enderror">
