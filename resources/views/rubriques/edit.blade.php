@@ -31,9 +31,10 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <button type="submit" class="btn btn-primary pull-right">Modifier</button>
                                 <div class="clearfix"></div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary"><i class="material-icons">send</i> Modifier</button>
+                                </div>
                             </form>
                         </div>
                     </div>

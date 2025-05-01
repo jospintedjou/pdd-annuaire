@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Responsabilite @endsection
+@section('page_title') Responsabilit&eacute; @endsection
 @section('content')
     <div class="content">
         <div class="container-fluid">
@@ -11,7 +11,7 @@
                     <div class="card pb-30">
                         <div class="card-header card-header-primary card-header-text">
                             <div class="card-text">
-                                <h4 class="card-title">Modifier la Responsabilite</h4>
+                                <h4 class="card-title">Modifier la Responsabilité</h4>
                             </div>
                         </div>
                         <div class="card-body">
@@ -22,7 +22,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group @error('nom') has-danger @enderror">
                                             <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
-                                            <input type="text" value="{{old('nom') ?? $responsabilite->nom}}" name="nom" id="nom" class="form-control @error('nom') is-invalid @enderror">
+                                            <input type="text" value="{{old('nom') ?? $responsabilite->nom}}" name="nom" id="nom" 
+                                                class="form-control @error('nom') is-invalid @enderror">
                                             @error('nom')
                                             <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -31,9 +32,10 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <button type="submit" class="btn btn-primary pull-right">Modifier</button>
                                 <div class="clearfix"></div>
+                                <div class="form-group">
+                                    <button id="btn-send" type="submit" class="btn btn-primary"><i class="material-icons">send</i> Modifier</button>
+                                </div>
                             </form>
                         </div>
                     </div>
