@@ -25,10 +25,11 @@
                                             <thead>
                                             <tr>
                                                 <th>N°</th>
-                                                <th>Nom</th>
+                                                <th>Sous-zone</th>
                                                 <th>Zone</th>
                                                 <th>Ville</th>
                                                 <th>Quartier</th>
+                                                <th>A des pays?</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
                                             </tr>
                                             </thead>
@@ -40,6 +41,7 @@
                                                 <td class="">{{$sous_zone->zone->nom}}</td>
                                                 <td class="">{{$sous_zone->zone->ville}}</td>
                                                 <td class="">{{$sous_zone->quartier}}</td>
+                                                <td class="">{{$sous_zone->has_country ? 'Oui' : 'Non' }}</td>
                                                 <td class="td-actions text-right">
                                                     <form action="{{ route('sous_zones.destroy',$sous_zone->id) }}" method="Post">
                                                         @csrf

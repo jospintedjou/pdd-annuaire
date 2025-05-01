@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Zone;
 use App\Models\Groupe;
+use App\Models\Pays;
 use App\Models\SousZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -54,8 +55,9 @@ class GroupeController extends Controller
     {
         $zones = Zone::all();
         $sous_zones = SousZone::all();
+        $paysArr = Pays::all();
 
-        return view('groupes.create', compact('zones'), compact('sous_zones'));
+        return view('groupes.create', compact('zones', 'sous_zones', 'paysArr'));
     }
 
     /**
@@ -71,9 +73,10 @@ class GroupeController extends Controller
             'paroisse' => 'nullable|string',
             'jour_reunion' => 'required|string',
             'heure_reunion' => 'required',
-            'sous_zone_id' => 'required|exists:sous_zones,id'
+            'sous_zone_id' => 'required|exists:sous_zones,id',
+            'pays_id' => 'nullable|exists:pays,id',
         ]);
-
+        
         Groupe::create($data);
 
         return redirect()->route('groupes.index')
@@ -101,8 +104,9 @@ class GroupeController extends Controller
     {
         $zones = Zone::all();
         $sous_zones = SousZone::all();
+        $paysArr = Pays::all();
 
-        return view('groupes.edit', compact('groupe'), compact('zones'))->with('sous_zones', $sous_zones);
+        return view('groupes.edit', compact('groupe', 'paysArr', 'zones'))->with('sous_zones', $sous_zones);
     }
 
     /**
@@ -119,11 +123,14 @@ class GroupeController extends Controller
             'paroisse' => 'nullable|string',
             'jour_reunion' => 'required|string',
             'heure_reunion' => 'required',
-            'sous_zone_id' => 'required|exists:sous_zones,id'
+            'sous_zone_id' => 'required|exists:sous_zones,id',
+            'pays_id' => 'nullable|exists:pays,id',
         ]);
 
+        if(!$groupe->sousZone?->has_country){
+            $data['pays_id'] = null;
+        }
         $groupe->update($data);
-
         return redirect()->route('groupes.index')
             ->with('success', 'Groupe updated successfully');
     }

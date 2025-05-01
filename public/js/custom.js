@@ -1,4 +1,13 @@
 $(document).ready(function(){
+
+    if(jQuery('meta[name="csrf-token"]').length > 0){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    }
+   
     /** Start show/hide password **/
     var clicked = 0;
     $(".toggle-password").click(function (e) {
@@ -80,12 +89,6 @@ $(document).ready(function(){
                 presence: presence
             };
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $.ajax({
             type: "POST",
             url: url,
@@ -155,9 +158,9 @@ $(document).ready(function(){
      *--------------------------------------------**/
 
     /**-------------------------------------------------
-    *  Start dependant dropdown for sous-zone & group  *
+    *  Start dependant dropdown for zone & sous-zone  *
     *-------------------------------------------------**/
-    $('.zone').on('change', function () {
+    $('#select-zone').on('change', function () {
 
         var zone_id = $(this).val(),
             url = $(this).closest('select').data('url');
@@ -166,19 +169,13 @@ $(document).ready(function(){
             zone_id: zone_id
         };
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $.ajax({
             type: "POST",
             url: url,
             data: formData,
             dataType: 'json',
             success: function (data) {
-                var sousZone = $('#sous_zone');
+                var sousZone = $('#select-sous-zone');
                 sousZone.html(data.data);
                 sousZone.selectpicker('refresh');
             },
@@ -188,7 +185,50 @@ $(document).ready(function(){
         });
     });
     /**-------------------------------------------------
-     *  End dependant dropdown for sous-zone & group  *
+     *  End dependant dropdown for zone & sous-zone  *
+     *-------------------------------------------------**/
+
+    /**-------------------------------------------------
+    *  Start dependant dropdown for sous-zone & pays  *
+    *-------------------------------------------------**/
+    $('#select-sous-zone').on('change', function () {
+
+        var sous_zone_id = $(this).val(),
+            has_country = $(this).find('option:selected').data('has_country'),
+            pays = $('#select-pays'),
+            pays_container = $('.select-pays-container'),
+            url = $(this).closest('select').data('url');
+        console.log('this',  $(this));
+        console.log('pays_container', pays_container);
+        console.log('has_country', has_country);
+        console.log('url', url);
+        formData = {
+            sous_zone_id: sous_zone_id
+        };
+
+        if(has_country == 1){
+            pays_container.show('fade');
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                dataType: 'json',
+                success: function (data) {
+                    pays.html(data.data);
+                    pays.selectpicker('refresh');
+                },
+                error: function (data) {
+                    
+                }
+            });
+        }else{
+            pays.val('');
+            pays.selectpicker('refresh');
+            pays_container.hide('fade');
+        }
+    });
+    /**-------------------------------------------------
+     *  End dependant dropdown for sous-zone & pays  *
      *-------------------------------------------------**/
 
 });

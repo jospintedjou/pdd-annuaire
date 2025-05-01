@@ -35,6 +35,10 @@ class User extends AuthUser
         return $this->responsableSousZones()->wherePivot('actif', 1)
             ->withPivot('actif')->first();
     }
+    public function isResponsablePays(){
+        return $this->responsablePays()->wherePivot('actif', 1)
+            ->withPivot('actif')->first();
+    }
     public function isResponsableZone(){
         return $this->responsableZones()->wherePivot('actif', 1)
             ->withPivot('actif')->first();
@@ -82,6 +86,12 @@ class User extends AuthUser
         return $this->groupes()?->where('actif', Constantes::ETAT_ACTIF)->first()?->sousZone()?->first();
     }
 
+    /* Actual user's sous-zone */
+    public function pays()
+    {
+        return $this->groupes()?->where('actif', Constantes::ETAT_ACTIF)->first()?->pays()?->first();
+    }
+
     public function activites()
     {
         return $this->belongsToMany(Activite::class, Participation::class)->withTimestamps()
@@ -96,6 +106,12 @@ class User extends AuthUser
     public function responsableGroupes()
     {
         return $this->belongsToMany(Groupe::class, 'responsable_groupe')->withTimestamps()
+            ->withPivot(['responsabilite_id', 'actif']);
+    }
+
+    public function responsablePays()
+    {
+        return $this->belongsToMany(Pays::class, 'responsable_pays')->withTimestamps()
             ->withPivot(['responsabilite_id', 'actif']);
     }
 

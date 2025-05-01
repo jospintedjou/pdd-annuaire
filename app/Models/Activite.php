@@ -12,7 +12,7 @@ class Activite extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['type', 'zone_id','sous_zone_id', 'nom', 'groupe_id','date_debut', 'date_fin',
+    protected $fillable = ['type', 'zone_id','sous_zone_id', 'pays_id', 'nom', 'groupe_id','date_debut', 'date_fin',
         'heure_debut','lieu', 'categorie_activite_id', 'type_activite', 'created_at'];
 
     private $id_apostolats_concernes = NULL;
@@ -30,6 +30,11 @@ class Activite extends Model
     public function groupe()
     {
         return $this->belongsTo(Groupe::class);
+    }
+
+    public function pays()
+    {
+        return $this->belongsTo(Pays::class);
     }
 
     public function sousZone()

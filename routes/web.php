@@ -23,6 +23,8 @@ use App\Http\Controllers\DashboardMembreController;
 use App\Http\Controllers\ResponsabiliteController;
 use App\Http\Controllers\RubriqueController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\PaysController;
+use App\Http\Controllers\ResponsablePaysController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +79,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::put('/responsable_groupes/{groupe}', [ResponsableGroupeController::class, 'update'])
         ->name('responsable_groupes.update');
 
+    //responsable pay
+    Route::get('/responsable_pays', [ResponsablePaysController::class, 'index'])
+    ->name('responsable_pays.index');
+    Route::get('/responsable_pays/create', [ResponsablePaysController::class, 'create'])
+        ->name('responsable_groupes.create');
+    Route::get('/responsable_pays/{pays}', [ResponsablePaysController::class, 'edit'])
+        ->name('responsable_pays.edit');
+    Route::put('/responsable_pays/{pays}', [ResponsablePaysController::class, 'update'])
+        ->name('responsable_pays.update');
+
     //responsable sous-zone
     Route::get('/responsable_sous_zones', [ResponsableSousZoneController::class, 'index'])
         ->name('responsable_sous_zones.index');
@@ -120,8 +132,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     //Sous-zone
     Route::resource('sous_zones', SousZoneController::class);
+    Route::post('/get-pays', [SousZoneController::class, 'getPays'])
+    ->name('get_pays');
     Route::get('sous_zone/membres', [SousZoneController::class, 'listMembers'])
         ->name('sous_zone_members');
+
+    //Pays
+    Route::resource('pays', PaysController::class);
+    Route::get('pays/membres', [PaysController::class, 'listMembers'])
+        ->name('pays_members');
 
     //Zone
     Route::resource('zones', ZoneController::class);

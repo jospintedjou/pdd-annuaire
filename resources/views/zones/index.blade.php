@@ -26,7 +26,7 @@
                                             <thead>
                                             <tr>
                                                 <th>N°</th>
-                                                <th>Nom</th>
+                                                <th>Zone</th>
                                                 <th>Continent</th>
                                                 <th>Pays</th>
                                                 <th>Ville</th>

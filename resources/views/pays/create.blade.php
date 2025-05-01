@@ -1,85 +1,80 @@
 @extends('layouts.app')
-@section('page_title') Sous Zone @endsection
+@section('page_title') Pays @endsection
 @section('content')
     <div class="content user-level">
         <div class="container-fluid">
             @component('helpers.alert')
                 .
             @endcomponent
-            <form method="post" action="{!! route('sous_zones.store') !!}">
+            <form method="post" action="{!! route('pays.store') !!}">
                 @csrf
                 <div class="row">
                 <div class="col-md-12">
                     <div class="card pb-30">
                         <div class="card-header card-header-primary card-header-text">
                             <div class="card-text">
-                                <h4 class="card-title">Ajouter une sous zone</h4>
+                                <h4 class="card-title">Ajouter un pays</h4>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group @error('zone_id') has-danger @enderror">
-                                        <label for="zone_id" class="bmd-label-floating0 @error('zone_id') text-danger @enderror">Zone</label>
+                                <div class="col-md-4">
+                                    <div class="form-group @error('sous_zone_id') has-danger @enderror">
+                                        <label for="sous_zone_id" class="bmd-label-floating0 @error('sous_zone_id') text-danger @enderror">Sous-Zone</label>
 
-                                        <select name="zone_id" id="zone_id" value="{{ old('zone_id') }}"
+                                        <select name="sous_zone_id" id="sous_zone_id" value="{{ old('sous_zone_id') }}"
                                             class="selectpicker col-md-12 form-control"
                                             data-size="auto" data-style="select-with-transition"
                                             data-style2="btn btn-primary btn-round" 
                                             data-actions-box="true" data-live-search="true"
-                                            data-header="Choisir la zone">
-                                            <!-- <option value="" disabled selected>-- <i>Faire un choix</i> --</option> -->
-                                            @foreach ($zones as $zone)
-                                                @if(isset($zone))
-                                                    <option value="{{ $zone->id }}">{{ $zone->nom }}</option>
+                                            data-header="Choisir la sous zone">
+                                            <option value="" disabled selected>-- <i>Faire un choix</i> --</option>
+                                            @foreach ($sousZones as $sousZone)
+                                                @if(isset($sousZone))
+                                                    <option value="{{ $sousZone->id }}">{{ $sousZone->nom }}</option>
                                                 @else
-                                                    <option  selected disabled>Aucune zone trouvée</option>
+                                                    <option  selected disabled>Aucune sous zone trouvée</option>
                                                 @endif
                                             @endforeach
                                         </select>
-                                        @error('zone_id')
+                                        @error('sous_zone_id')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                         </span>
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group @error('quartier') has-danger @enderror">
-                                        <label for="quartier" class="bmd-label-floating @error('quartier') text-danger @enderror">Quartier</label>
-                                        <input type="text" name="quartier" id="quartier" value="{{ old('quartier') }}" class="form-control @error('quartier') is-invalid @enderror">
-                                        @error('quartier')
+                                <div class="col-md-4">
+                                    <div class="form-group @error('continent') has-danger @enderror">
+                                        <label for="continent" class="bmd-label-floating0 @error('continent') text-danger @enderror">Continent</label>
+
+                                        <select name="continent" id="continent" value="{{ old('continent') }}"
+                                            class="selectpicker col-md-12 form-control"
+                                            data-size="auto" data-style="select-with-transition"
+                                            data-style2="btn btn-primary btn-round"
+                                            data-actions-box="true" data-live-search="true"
+                                            data-header="Choisir le continent">
+                                            <!-- <option value="" disabled selected>-- <i>Faire un choix</i> --</option> -->
+                                            @foreach (\App\Constantes::CONTINENTS as $continent)
+                                                @if(isset($continent))
+                                                    <option value="{{ $continent }}">{{ $continent }}</option>
+                                                @else
+                                                    <option  selected disabled>Aucun continent trouvé</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('continent')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                         </span>
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group @error('nom') has-danger @enderror">
                                         <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
                                         <input type="text" name="nom" id="nom" value="{{ old('nom') }}" class="form-control @error('nom') is-invalid @enderror">
                                         @error('nom')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group @error('has_country') has-danger @enderror">
-                                        <label for="has_country" class="bmd-label-floating0 @error('has_country') text-danger @enderror">A des pays ?</label>
-
-                                        <select name="has_country" id="has_country" value="{{ old('has_country') }}"
-                                            class="selectpicker col-md-12 form-control"
-                                            data-size="auto" data-style="select-with-transition"
-                                            data-style2="btn btn-primary btn-round" 
-                                            data-actions-box="true" data-live-search="true"
-                                            data-header="Choisir la zone">
-                                                <option value="{{ \App\Constantes::ETAT_INACTIF }}">Non</option>
-                                                <option value="{{ \App\Constantes::ETAT_ACTIF }}">Oui</option>
-                                        </select>
-                                        @error('has_country')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                         </span>

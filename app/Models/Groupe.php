@@ -11,7 +11,7 @@ class Groupe extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['sous_zone_id','nom_groupe', 'paroisse', 'jour_reunion', 'heure_reunion'];
+    protected $fillable = ['sous_zone_id', 'pays_id', 'nom_groupe', 'paroisse', 'jour_reunion', 'heure_reunion'];
 
     public function users()
     {
@@ -22,6 +22,11 @@ class Groupe extends Model
     public function sousZone()
     {
         return $this->belongsTo(SousZone::class);
+    }
+
+    public function pays()
+    {
+        return $this->belongsTo(Pays::class);
     }
 
     public function responsableGroupes()

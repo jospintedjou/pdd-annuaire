@@ -22,13 +22,15 @@
                                     <div class="form-group @error('zone') has-danger @enderror">
                                         <label for="zone" class="bmd-label-floating0 @error('zone') text-danger @enderror">Zone</label>
 
-                                        <select name="zone_id" id="zone" 
+                                        <select name="zone_id" id="select-zone"
                                             class="selectpicker col-md-12 form-control zone"
                                             data-url="{{route('get_sous_zone')}}" data-size="auto" 
                                             data-style="select-with-transition"
                                             data-actions-box="true" data-live-search="true"
-                                            data-style2="btn btn-primary btn-round" 
+                                            data-style2="btn btn-primary btn-round"
                                             data-header="Choisir la catégorie">
+                                            <option value="" disabled selected> <i>Faire un choix</i> </option>
+                                        
                                             @foreach ($zones as $zone)
                                                 @if(isset($zone))
                                                     <option value="{{ $zone->id }}">{{ $zone->nom }}</option>
@@ -47,22 +49,50 @@
                                 <div class="col-md-4">
                                     <div class="form-group @error('sous_zone') has-danger @enderror">
                                         <label for="sous_zone" class="bmd-label-floating0 @error('sous_zone') text-danger @enderror">Sous-zone</label>
-
-                                        <select name="sous_zone_id" id="sous_zone" 
+                                        <select name="sous_zone_id" id="select-sous-zone" 
                                             class="selectpicker col-md-12 form-control sous-zone"
+                                            data-actions-box="true" data-live-search="true"
+                                            data-url="{{route('get_pays')}}"
+                                            data-size="auto" data-style="select-with-transition"
+                                            data-style2="btn btn-primary btn-round"
+                                            data-header="Choisir la catégorie">
+                                            <option value="" disabled selected>-- <i>Faire un choix</i> --</option>
+                                        
+                                            {{-- @foreach ($sous_zones as $sous_zone)
+                                                @if(isset($sous_zone))
+                                                    <option value="{{ $sous_zone->id }}" data-has_country="{{ $sous_zone->has_country }}">{{ $sous_zone->nom }}</option>
+                                                @else
+                                                    <option selected disabled>Aucune sous zone trouvée</option>
+                                                @endif
+                                            @endforeach --}}
+                                        </select>
+                                        @error('sous_zone')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-4 select-pays-container" style="display: none;">
+                                    <div class="form-group @error('pays') has-danger @enderror">
+                                        <label for="pays" class="bmd-label-floating0 @error('pays') text-danger @enderror">Pays</label>
+
+                                        <select name="pays_id" id="select-pays" 
+                                            class="selectpicker col-md-12 form-control pays"
                                             data-actions-box="true" data-live-search="true"
                                             data-size="auto" data-style="select-with-transition"
                                             data-style2="btn btn-primary btn-round" 
                                             data-header="Choisir la catégorie">
-                                            @foreach ($sous_zones as $sous_zone)
-                                                @if(isset($sous_zone))
-                                                    <option value="{{ $sous_zone->id }}">{{ $sous_zone->nom }}</option>
+                                            <option value="" disabled selected>Faire un choix</option>
+                                            @foreach ($paysArr as $pays)
+                                                @if(isset($pays))
+                                                    <option value="{{ $pays->id }}">{{ $pays->nom }}</option>
                                                 @else
                                                     <option selected disabled>Aucune sous zone trouvée</option>
                                                 @endif
                                             @endforeach
                                         </select>
-                                        @error('sous_zone')
+                                        @error('pays')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                         </span>

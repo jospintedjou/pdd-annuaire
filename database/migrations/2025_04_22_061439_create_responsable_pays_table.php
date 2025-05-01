@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateResponsableZoneTable extends Migration
+class CreateResponsablePaysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreateResponsableZoneTable extends Migration
      */
     public function up()
     {
-        Schema::create('responsable_zone', function (Blueprint $table) {
+        Schema::create('responsable_pays', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('zone_id');
+            $table->unsignedBigInteger('pays_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('nom_responsabilite'); //deleted in oyher migration
             $table->boolean('actif')->default(true);
-            $table->timestamps();
+            $table->unsignedBigInteger('responsabilite_id')->nullable();
             $table->softDeletes();
-            $table->foreign('zone_id')->references('id')->on('zones');
+            $table->timestamps();
+            $table->foreign('pays_id')->references('id')->on('pays');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('responsabilite_id')->references('id')->on('responsabilites');
         });
     }
 
@@ -33,6 +34,6 @@ class CreateResponsableZoneTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('responsable_zone');
+        Schema::dropIfExists('responsable_pays');
     }
 }

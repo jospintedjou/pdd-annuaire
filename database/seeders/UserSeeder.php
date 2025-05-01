@@ -14,21 +14,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        /*
-        $table->string('nom');
-            $table->string('prenom')->nullable();
-            $table->string('adresse');
-            $table->string('telephone1')->nullable();
-            $table->string('telephone2')->nullable();
-            $table->enum('sexe', ['M','F']);
-            $table->string('email')->nullable();
-            $table->string('profession')->nullable();
-            $table->string('quartier');
-            $table->unsignedBigInteger('niveau_engagement_id');
-            $table->string('role');
-            $table->string('categorie_sociale');
-            $table->unsignedBigInteger('apostolat_id');
-        */
 
         \Illuminate\Support\Facades\DB::table("users")->insert([
             'id' => 1,

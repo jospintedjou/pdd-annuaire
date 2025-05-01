@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Groupe @endsection
+@section('page_title') Responsables de pays @endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -7,9 +7,9 @@
                 <div class="card">
                     <div class="card-header card-header-primary card-header-icon">
                         <div class="card-icon">
-                            <i class="material-icons">terrain</i>
+                            <i class="material-icons">supervisor_account</i>
                         </div>
-                        <h4 class="card-title">Liste des groupes</h4>
+                        <h4 class="card-title">Liste des responsables des pays</h4>
                     </div>
                     <div class="card-body">
                         <div class="toolbar">
@@ -24,49 +24,52 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <th>Groupe</th>
-                                                <th>Zone</th>
-                                                <th>Sous Zone</th>
+                                                <th>N°</th>
                                                 <th>Pays</th>
-                                                <th>Paroisse</th>
-                                                <th>Jour Reunion</th>
+                                                <th>Zone</th>
+                                                <th>Sous-zone</th>
+                                                <th>Responsables</th>
                                                 <th class="disabled-sorting text-right sorting">Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($groupes as $groupe)
+                                            @foreach($paysArr as $pays)
                                             <tr>
-                                                <td class="">{{$groupe->nom_groupe}}</td>
-                                                <td class="">{{$groupe->sousZone?->zone?->nom}}</td>
-                                                <td class="">{{$groupe->sousZone?->nom}}</td>
-                                                <td class="">{{$groupe->pays?->nom}}</td>
-                                                <td class="">{{$groupe->paroisse}}</td>
-                                                <td class="">{{$groupe->jour_reunion}} &agrave; {{$groupe->heure_reunion}}</td>
+                                                <td class="">{{$loop->index + 1}}</td>
+                                                <td class="">{{$pays->nom}}</td>
+                                                <td class="">{{$pays->sousZone?->zone?->nom}}</td>
+                                                <td class="">{{$pays->sousZone?->nom}}</td>
+                                                <td class="">
+                                                    @foreach($pays->responsablePays()->where('actif', \App\Constantes::ETAT_ACTIF)->cursor() as $responsablePays)
+                                                        {{$responsablePays->nom}} {{$responsablePays->prenom}}
+                                                        @php
+                                                        $responsabilite = \App\Models\Responsabilite::find($responsablePays->pivot->responsabilite_id);
+                                                        @endphp
+
+                                                        ({{ !empty($responsabilite) ? $responsabilite->nom : "" }})
+                                                        <br>
+                                                    @endforeach
+                                                </td>
                                                 <td class="td-actions text-right">
-                                                    <form action="{{ route('groupes.destroy',$groupe->id) }}" method="Post">
+                                                    <form action="{{-- route('responsable_pays.destroy',$pays->id) --}}" method="Post">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a href="{{route('groupe_members', ['id'=>$groupe->id])}}" type="button" rel="tooltip"
-                                                           class="btn btn-success btn-round" data-original-title="" title="liste des membres">
-                                                            <i class="material-icons">person</i>
-                                                            <div class="ripple-container"></div>
-                                                        </a>
-                                                        <a href="{{route('groupes.edit', ['groupe' =>$groupe->id])}}" type="button" rel="tooltip"
+                                                        {{--dd(auth()->user()?->isResponsableZone())--}}
+                                                        @if(auth()->user()->isAdmin() || (auth()->user()?->isResponsableZone() && auth()->user()?->isResponsableZone()?->id == $pays->zone_id))
+                                                        <a href="{{route('responsable_pays.edit', ['pays' =>$pays->id])}}" type="button" rel="tooltip"
                                                            class="btn btn-success btn-round" data-original-title="" title="modifier">
                                                             <i class="material-icons">edit</i>
                                                             <div class="ripple-container"></div>
                                                         </a>
+                                                        @endif
                                                         <!-- Button trigger modal -->
-                                                        @if(auth()->user()->isAdmin())
-                                                        <button type="button" class="btn btn-danger btn-round text-white"
-                                                                data-id="{{ $groupe->id }}"
-                                                                data-href="{{ route('groupes.destroy',$groupe->id) }}"
+                                                        <!--button type="button" class="btn btn-danger btn-round text-white"
+                                                                data-id="{{-- $pays->id }}"
+                                                                data-href="{{-- route('responsable_pays.destroy',$pays->id) --}}"
                                                                 data-toggle="modal" data-target="#confirm-delete">
                                                             <i class="material-icons">close</i>
                                                             <div class="ripple-container"></div>
-                                                        </button>
-                                                        @endif
-
+                                                        </button-->
                                                     </form>
                                                 </td>
                                             </tr>
@@ -108,8 +111,7 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-
-            $fileName = 'LISTE DES GROUPES';
+            $fileName = 'LISTE DES RESPONSABLES DE PAYS';
             $('.dataTable').DataTable({
                 layout: {
                     topStart: {

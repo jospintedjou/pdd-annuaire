@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSousZonesTable extends Migration
+class CreatePaysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateSousZonesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sous_zones', function (Blueprint $table) {
+        Schema::create('pays', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('quartier');
-            $table->unsignedBigInteger('zone_id');
+            $table->string('continent');
+            $table->unsignedBigInteger('sous_zone_id');
+            $table->foreign('sous_zone_id')->references('id')->on('sous_zones');
             $table->timestamps();
             $table->softDeletes();
-            $table->tinyInteger('has_country')->default(0); //Wheither it has country or not
-            $table->foreign('zone_id')->references('id')->on('zones');
         });
     }
 
@@ -32,6 +31,6 @@ class CreateSousZonesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sous_zones');
+        Schema::dropIfExists('pays');
     }
 }

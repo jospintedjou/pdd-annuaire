@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Groupe;
+use App\Models\Pays;
 use App\Models\Zone;
 use App\Models\SousZone;
 use Illuminate\Http\Request;
@@ -67,6 +68,7 @@ class SousZoneController extends Controller
             'nom' => 'required|string',
             'quartier' => 'required|string',
             'zone_id' => 'required|exists:zones,id',
+            'has_country' => 'required|boolean',
         ]);
 
         SousZone::create($data);
@@ -109,12 +111,14 @@ class SousZoneController extends Controller
      */
     public function update(Request $request, SousZone $sousZone)
     {
+        
         $data = $request->validate([
             'nom' => 'required|string',
             'quartier' => 'required|string',
             'zone_id' => 'required|exists:zones,id',
+            'has_country' => 'required|boolean',
         ]);
-
+        
         $sousZone->update($data);
 
         return redirect()->route('sous_zones.index')
@@ -157,4 +161,31 @@ class SousZoneController extends Controller
 
         return view('sous_zones.list-members',compact('users', 'sousZone'));
     }
+
+    /**
+     * Return all 'pays'' of a sous-zone by id.
+     *
+     * @param  \App\Models\SousZone  $sousZone
+     * @return \Illuminate\Http\Response
+     */
+    public function getPays(Request $request)
+    {
+
+        $str = "";
+        $sous_zone_id = $request->input('sous_zone_id');
+        $countries = Pays::where('sous_zone_id', $sous_zone_id)->get();
+
+        if(!$countries->isEmpty()){
+            $str .= "<option value='' disabled selected>Choisissez un pays</option>";
+            foreach($countries as $country){
+                $str .= "<option value=".$country->id.">".$country->nom."</option>";
+            }
+        }else{
+            $str = "<option value=''>Aucun pays trouvé</option>";
+        }
+
+        return response()->json(['status'=>'success', 'data'=>$str], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+            JSON_UNESCAPED_UNICODE);
+    }
+
 }

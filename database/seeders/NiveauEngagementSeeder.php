@@ -14,9 +14,16 @@ class NiveauEngagementSeeder extends Seeder
      */
     public function run()
     {
-        \Illuminate\Support\Facades\DB::table("niveau_engagements")->insert([
-            'id' => 1,
-            'nom' => Constantes::SIMPLE
-        ]);
+        $index = 1;
+        // Insert the niveaux d'engagement into the database
+        foreach (Constantes::NIVEAUX_ENGAGEMENT as $niveau) {
+            \Illuminate\Support\Facades\DB::table("niveau_engagements")->insert([
+                'id' => $index,
+                'nom' => $niveau
+            ]);
+
+            $index++;
+        }
+       
     }
 }

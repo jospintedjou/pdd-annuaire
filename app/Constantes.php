@@ -8,21 +8,6 @@
 
 namespace App;
 
-
-/**
- *vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php
- *
- * public function errorInfo() {
- * parent::errorInfo();
- * }
- *
- * public function closeCursor() {
- * parent::closeCursor();
- * }
- *
- * public function columnCount() {
- * parent::columnCount();
- * } */
 class Constantes
 {
     //SEXE
@@ -43,8 +28,56 @@ class Constantes
     const ETAT_ACTIF = 1;
     const ETAT_INACTIF = 0;
 
+    //ZONES
+    const ZONE_DOUALA = 'DOUALA';
+    const ZONE_YAOUNDE = 'YAOUNDE';
+    const ZONE_BAFOUSSAM = 'BAFOUSSAM';
+    const ZONE_BAMENDA = 'BAMENDA';
+    const ZONE_RESPONSABLE_GENERAL = 'RESPONSABLE GENERAL';
+   
+    //Villes
+    const VILLE_DOUALA = 'DOUALA';
+    const VILLE_YAOUNDE = 'YAOUNDE';
+    const VILLE_BAFOUSSAM = 'BAFOUSSAM';
+    const VILLE_BAMENDA = 'BAMENDA';
+    const VILLE_PARIS = 'PARIS';
+    const VILLE_AUTRE = 'AUTRE';
+
+    //Sous Zones
+    const SOUS_ZONE_EUROPE_ASIE = 'EUROPE ASIE';
+    const SOUS_ZONE_AMERIQUE = 'AMERIQUE';
+    const SOUS_ZONE_BIYEM_ASSI = 'BIYEM ASSI';
+    const SOUS_ZONE_OMNISPORT = 'OMNISPORT';
+    const SOUS_ZONE_MVOLYE = 'MVOLYE';
+    const SOUS_ZONE_OLEMBE = 'OLEMBE';
+    const SOUS_ZONE_INSITA = 'INSITA';
+    const SOUS_ZONE_OBALA = 'OBALA';
+    const SOUS_ZONE_GRAND_NORD = 'GRAND NORD';
+   
+    //Continents
+    const CONTINENT_AFRIQUE = 'AFRIQUE';
+    const CONTINENT_AMERIQUE = 'AMERIQUE';
+    const CONTINENT_EUROPE = 'EUROPE';
+    const CONTINENT_ASIE = 'ASIE';
+    const CONTINENT_OCEANIE = 'OCEANIE';
+
+    const CONTINENTS               = array(
+        SELF::CONTINENT_AFRIQUE,
+        SELF::CONTINENT_AMERIQUE,
+        SELF::CONTINENT_EUROPE,
+        SELF::CONTINENT_ASIE,
+        SELF::CONTINENT_OCEANIE
+    );
+
     //PAYS
     const PAYS_CAMEROUN = 'CAMEROUN';
+    const PAYS_FRANCE = 'FRANCE';
+    const PAYS_ALLEMAGNE = 'ALLEMAGNE';
+    const PAYS_BELGIQUE = 'BELGIQUE';
+    const PAYS_ANGLETERRE = 'ANGLETERRE';
+    const PAYS_CHINE = 'CHINE';
+    const PAYS_USA = 'USA';
+    const PAYS_CANADA = 'CANADA';
 
     //Periodes
     const PERIODE_JOURNALIERE = 'Journalière';
@@ -52,9 +85,6 @@ class Constantes
     const PERIODE_MENSUELLE = 'Mensuelle';
     const PERIODE_TRIMESTRIELLE = 'Trimestrielle';
     const PERIODE_ANNUELLE = 'Annuelle';
-
-    //VILLE
-    const VILLE_YAOUNDE = 'YAOUNDE';
 
     //Categories Sociales
     const CATEGORIE_ADULTE_MARIE = 'ADULTE MARIE';
@@ -89,7 +119,8 @@ class Constantes
     const RESPONSABILITES_ZONE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable', '4e Adjoint au Responsable', 'EPAULEUR');
     const RESPONSABILITES_SOUS_ZONE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable', '4e Adjoint au Responsable', 'EPAULEUR');
     const RESPONSABILITES_GROUPE = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable', '4e Adjoint au Responsable', 'EPAULEUR');
-
+    const RESPONSABILITES = array('SUPERVISEUR', 'RESPONSABLE', '1er Adjoint au Responsable', '2e Adjoint au Responsable', '3e Adjoint au Responsable', '4e Adjoint au Responsable', 'Conseiller', 'EPAULEUR');
+    
     //Niveau d'engagement
     const SIMPLE                      = 'SIMPLE';
     const REGULIER                    = 'REGULIER';
@@ -109,6 +140,11 @@ class Constantes
     const ACCOMPAGNATEUR              = 'Accompagnateur';
     const INCARNATEUR                 = 'Incarnateur';
     const RESPONSABLE_GENERAL         = 'RESPONSABLE_GENERAL';
+
+    const NIVEAUX_ENGAGEMENT = array(SELF::SIMPLE, SELF::REGULIER, SELF::ACTIF_1, SELF::ACTIF_1_ANCIEN, SELF::ACTIF_1_ANCIEN_ENCOURAGE,
+        SELF::ACTIF_2, SELF::ACTIF_2_ANCIEN, SELF::ACTIF_2_ANCIEN_ENCOURAGE, SELF::ACTIF_3, SELF::ACTIF_3_ANCIEN,
+        SELF::ACTIF_3_ANCIEN_ENCOURAGE, SELF::ACTIF_3_TERMINAL, SELF::CANDIDAT_MEMBRE_PLEIN, SELF::MEMBRE_PLEIN,
+        SELF::ACCOMPAGNATEUR_EN_FORMATION, SELF::ACCOMPAGNATEUR, SELF::INCARNATEUR, SELF::RESPONSABLE_GENERAL);
 
     //Types d'activité
     const ACTIVITE_REGIONALE          = 'Régionale';

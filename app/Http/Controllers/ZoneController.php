@@ -152,12 +152,13 @@ class ZoneController extends Controller
         $zone_id = $request->input('zone_id');
         $sousZones = SousZone::where('zone_id', $zone_id)->get();
 
-        if(!empty($sousZones)){
+        if(!$sousZones->isEmpty()){
+            $str = "<option value='' disabled selected>Choisissez une sous-zone</option>";
             foreach($sousZones as $sousZone){
-                $str .= "<option value=".$sousZone->id.">".$sousZone->nom."</option>";
+                $str .= "<option value=".$sousZone->id." data-has_country=".$sousZone->has_country.">".$sousZone->nom."</option>";
             }
         }else{
-            $str = "<option value=''>Aucune</option>";
+            $str = "<option value=''>Aucune sous-zone trouvée</option>";
         }
 
         return response()->json(['status'=>'success', 'data'=>$str], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],

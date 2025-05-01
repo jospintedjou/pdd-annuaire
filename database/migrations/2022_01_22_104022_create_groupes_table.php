@@ -16,6 +16,7 @@ class CreateGroupesTable extends Migration
         Schema::create('groupes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sous_zone_id');
+            $table->unsignedBigInteger('pays_id')->nullable();
             $table->string('nom_groupe');
             $table->string('paroisse');
             $table->string('jour_reunion');
@@ -23,6 +24,7 @@ class CreateGroupesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('sous_zone_id')->references('id')->on('sous_zones');
+            $table->foreign('pays_id')->references('id')->on('pays');
         });
     }
 

@@ -18,6 +18,7 @@ class CreateActivitesTable extends Migration
             $table->unsignedBigInteger('categorie_activite_id');
             $table->unsignedBigInteger('zone_id')->nullable();
             $table->unsignedBigInteger('sous_zone_id')->nullable();
+            $table->unsignedBigInteger('pays_id')->nullable();
             $table->unsignedBigInteger('groupe_id')->nullable();
             $table->enum('type', ['zonale','sous_zonale', 'groupe']);
             $table->date('date_debut');
@@ -29,6 +30,7 @@ class CreateActivitesTable extends Migration
             $table->foreign('categorie_activite_id')->references('id')->on('categorie_activites');
             $table->foreign('zone_id')->references('id')->on('zones');
             $table->foreign('sous_zone_id')->references('id')->on('sous_zones');
+            $table->foreign('pays_id')->references('id')->on('pays');
             $table->foreign('groupe_id')->references('id')->on('groupes');
         });
     }

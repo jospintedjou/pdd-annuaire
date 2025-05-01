@@ -221,7 +221,35 @@
                     </li>
                     @endif
 
-                    @if(auth()->user()->isAdmin() || auth()->user()->isResponsableGroupe())
+                    @if(auth()->user()->isAdmin() || auth()->user()->isResponsablePays())
+                    <li class="nav-item @if(request()->routeIs('pays*')) active @endif">
+                        <a class="nav-link" data-toggle="collapse" href="#pays" aria-expanded="true">
+                            <i class="material-icons">place</i>
+                            <p>Pays <b class="caret"></b> </p>
+                        </a>
+                        <div class="collapse @if(request()->routeIs('pays*')) show @endif" id="pays" style="">
+                        <ul class="nav">
+                            <li class="nav-item @if(request()->routeIs('pays.index') || request()->routeIs('pays_members')) active @endif" >
+                                <a class="nav-link" href="{!! route('pays.index') !!}">
+                                    <span class="sidebar-mini"><i class="material-icons">list</i></span>
+                                    <span class="sidebar-normal"> Lister </span>
+                                </a>
+                            </li>
+                            @if(auth()->user()->isAdmin())
+                            <li class="nav-item @if(request()->routeIs('pays.create')) active @endif">
+                                <a class="nav-link" href="{!! route('pays.create') !!}">
+                                    <span class="sidebar-mini"><i class="material-icons">add</i></span>
+                                    <span class="sidebar-normal"> Ajouter </span>
+                                </a>
+                            </li>
+                            @endif
+                        </ul>
+                    </div>
+                    </li>
+                    @endif 
+
+                    @if(auth()->user()->isAdmin() || auth()->user()->isResponsableSousZone() 
+                        || auth()->user()->isResponsableGroupe())
                     <li class="nav-item @if(request()->routeIs('groupe*')) active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#groupes" aria-expanded="true">
                             <i class="material-icons">terrain</i>
@@ -270,16 +298,32 @@
                             <p>Responsable de Sous-zones <b class="caret"></b> </p>
                         </a>
                         <div class="collapse @if(request()->routeIs('responsable_sous_zones*')) show @endif" id="responsable-sous-zones" style="">
-                        <ul class="nav">
-                            <li class="nav-item @if(request()->routeIs('responsable_sous_zones.index')) active @endif" >
-                                <a class="nav-link" href="{!! route('responsable_sous_zones.index') !!}">
-                                    <span class="sidebar-mini"><i class="material-icons">list</i></span>
-                                    <span class="sidebar-normal"> Lister </span>
-                                </a>
-                            </li>
+                            <ul class="nav">
+                                <li class="nav-item @if(request()->routeIs('responsable_sous_zones.index')) active @endif" >
+                                    <a class="nav-link" href="{!! route('responsable_sous_zones.index') !!}">
+                                        <span class="sidebar-mini"><i class="material-icons">list</i></span>
+                                        <span class="sidebar-normal"> Lister </span>
+                                    </a>
+                                </li>
 
-                        </ul>
-                    </div>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item @if(request()->routeIs('responsable_pays*')) active @endif">
+                        <a class="nav-link" data-toggle="collapse" href="#responsable-pays" aria-expanded="true">
+                            <i class="material-icons">supervisor_account</i>
+                            <p>Responsable de Pays <b class="caret"></b> </p>
+                        </a>
+                        <div class="collapse @if(request()->routeIs('responsable_pays*')) show @endif" id="responsable-pays" style="">
+                            <ul class="nav">
+                                <li class="nav-item @if(request()->routeIs('responsable_pays.index')) active @endif" >
+                                    <a class="nav-link" href="{!! route('responsable_pays.index') !!}">
+                                        <span class="sidebar-mini"><i class="material-icons">list</i></span>
+                                        <span class="sidebar-normal"> Lister </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item @if(request()->routeIs('responsable_groupes*')) active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#responsable-groupes" aria-expanded="true">

@@ -2,25 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class SousZone extends Model
+class Pays extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
-    protected $fillable = ['nom', 'quartier', 'zone_id', 'has_country'];
+    protected $fillable = ['nom', 'continent', 'sous_zone_id'];
 
-    public function zone()
+    public function sousZone()
     {
-        return $this->belongsTo(Zone::class);
-    }
-
-    public function pays()
-    {
-        return $this->hasMany(Pays::class);
+        return $this->belongsTo(SousZone::class);
     }
 
     public function groupes()
@@ -28,9 +21,9 @@ class SousZone extends Model
         return $this->hasMany(Groupe::class);
     }
 
-    public function responsableSousZones()
+    public function responsablePays()
     {
-        return $this->belongsToMany(User::class, 'responsable_sous_zone')->withTimestamps()
+        return $this->belongsToMany(User::class, 'responsable_pays')->withTimestamps()
             ->withPivot(['responsabilite_id', 'actif']);
     }
 
@@ -39,9 +32,9 @@ class SousZone extends Model
         return User::select(['users.*','groupe_user.actif'])
             ->join('groupe_user', 'users.id', '=', 'groupe_user.user_id')
             ->join('groupes', 'groupe_user.groupe_id', '=', 'groupes.id')
-            ->join('sous_zones', 'groupes.sous_zone_id', '=', 'sous_zones.id')
+            ->join('pays', 'groupes.pays_id', '=', 'pays.id')
             ->where('groupe_user.actif', \App\Constantes::ETAT_ACTIF)
-            ->where('sous_zones.id', $this->id)
+            ->where('pays.id', $this->id)
             ->orderby('groupes.nom_groupe', 'asc')
             ->orderby('users.nom', 'asc')
             ->get();
