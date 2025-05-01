@@ -71,7 +71,8 @@
                                         <label for="has_country" class="bmd-label-floating0 @error('has_country') text-danger @enderror">A des pays ?</label>
 
                                         <select name="has_country" id="has_country" value="{{ old('has_country') }}"
-                                            class="selectpicker col-md-12 form-control"
+                                            class="selectpicker "
+                                            data-width="100%"
                                             data-size="auto" data-style="select-with-transition"
                                             data-style2="btn btn-primary btn-round" 
                                             data-actions-box="true" data-live-search="true"

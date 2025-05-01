@@ -37,7 +37,8 @@
                                             <label for="type_activite" class="bmd-label-floating0 @error('type_activite') text-danger @enderror">Type</label>
 
                                             <select name="type_activite" id="type_activite" 
-                                                class="selectpicker w-100" data-size="auto" 
+                                                class="selectpicker" 
+                                            data-width="100%"data-size="auto" 
                                                 data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
@@ -62,7 +63,8 @@
                                             <label for="periodicite" class="bmd-label-floating0 @error('periodicite') text-danger @enderror">Periodicit&eacute;</label>
                                             
                                             <select name="periodicite" id="periodicite" value="{{ old('periodicite') ?? $categorieActivite->periodicite }}" 
-                                                class="selectpicker w-100" data-size="auto" 
+                                                class="selectpicker" 
+                                            data-width="100%"data-size="auto" 
                                                 data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 

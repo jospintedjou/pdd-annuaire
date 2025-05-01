@@ -23,7 +23,8 @@
                                         <label for="zone" class="bmd-label-floating0 @error('zone') text-danger @enderror">Zone</label>
 
                                         <select name="zone_id" id="select-zone"
-                                            class="selectpicker col-md-12 form-control zone"
+                                            class="selectpicker zone"
+                                            data-width="100%"
                                             data-url="{{route('get_sous_zone')}}" data-size="auto" 
                                             data-style="select-with-transition"
                                             data-actions-box="true" data-live-search="true"
@@ -50,7 +51,8 @@
                                     <div class="form-group @error('sous_zone') has-danger @enderror">
                                         <label for="sous_zone" class="bmd-label-floating0 @error('sous_zone') text-danger @enderror">Sous-zone</label>
                                         <select name="sous_zone_id" id="select-sous-zone" 
-                                            class="selectpicker col-md-12 form-control sous-zone"
+                                            class="selectpicker sous-zone"
+                                            data-width="100%"
                                             data-actions-box="true" data-live-search="true"
                                             data-url="{{route('get_pays')}}"
                                             data-size="auto" data-style="select-with-transition"
@@ -78,7 +80,8 @@
                                         <label for="pays" class="bmd-label-floating0 @error('pays') text-danger @enderror">Pays</label>
 
                                         <select name="pays_id" id="select-pays" 
-                                            class="selectpicker col-md-12 form-control pays"
+                                            class="selectpicker pays"
+                                            data-width="100%"
                                             data-actions-box="true" data-live-search="true"
                                             data-size="auto" data-style="select-with-transition"
                                             data-style2="btn btn-primary btn-round" 
@@ -129,8 +132,9 @@
                                     <div class="form-group @error('jour_reunion') has-danger @enderror">
                                         <label for="jour_reunion" class="bmd-label-floating0 @error('jour_reunion') text-danger @enderror">Jour de Reunion</label>
                                         <select name="jour_reunion" id="jour_reunion"  value="{{ old('jour_reunion') }}"  
-                                            class="selectpicker w-100" 
+                                            class="selectpicker" 
                                             data-size="auto" data-style="select-with-transition"
+                                            data-width="100%"
                                             data-live-search="true" data-actions-box="true"
                                             data-style2="btn btn-primary btn-round" 
                                             data-header="Choisir le jour">

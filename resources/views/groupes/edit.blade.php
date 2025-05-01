@@ -22,21 +22,23 @@
                                     <div class="col-md-4">
                                         <div class="form-group @error('zone_id') has-danger @enderror">
                                             <label for="zone_id" class="bmd-label-floating0 @error('zone_id') text-danger @enderror">Zone</label>
-
-                                            <select name="zone_id" id="select-zone" data-url="{{route('get_sous_zone')}}" 
-                                                class="selectpicker col-md-12 form-control zone" 
-                                                data-size="auto" data-style="select-with-transition"
-                                                data-actions-box="true" data-live-search="true"
-                                                data-style2="btn btn-primary btn-round" 
-                                                data-header="Choisir la zone">
-                                                @foreach ($zones as $zone)
-                                                    @if(isset($zone))
-                                                        <option value="{{ $zone->id }}"  {{$zone == $groupe->sousZone->zone ? 'selected'  : '' }}>{{ $zone->nom }}</option>
-                                                    @else
-                                                        <option  selected disabled>Aucune zone trouvée</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
+                                            <div class="input-group">
+                                                <select name="zone_id" id="select-zone" data-url="{{route('get_sous_zone')}}" 
+                                                   class="selectpicker zone" 
+                                                    data-size="auto" data-style="select-with-transition"
+                                                    data-width="100%"
+                                                    data-actions-box="true" data-live-search="true"
+                                                    data-style2="btn btn-primary btn-round" 
+                                                    data-header="Choisir la zone">
+                                                    @foreach ($zones as $zone)
+                                                        @if(isset($zone))
+                                                            <option value="{{ $zone->id }}"  {{$zone == $groupe->sousZone->zone ? 'selected'  : '' }}>{{ $zone->nom }}</option>
+                                                        @else
+                                                            <option  selected disabled>Aucune zone trouvée</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                             @error('zone')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -50,8 +52,9 @@
                                                 </label>
 
                                                 <select name="sous_zone_id" id="select-sous-zone" 
-                                                    class="selectpicker col-md-12 form-control sous-zone" data-size="auto" 
+                                                    class="selectpicker sous-zone" data-size="auto" 
                                                     data-style="select-with-transition"
+                                                    data-width="100%"
                                                     data-actions-box="true" data-live-search="true"
                                                     data-url="{{route('get_pays')}}"
                                                     data-style2="btn btn-primary btn-round" 
@@ -77,8 +80,9 @@
                                             <label for="pays" class="bmd-label-floating0 @error('pays') text-danger @enderror">Pays</label>
     
                                             <select name="pays_id" id="select-pays" 
-                                                class="selectpicker col-md-12 form-control pays"
+                                                class="selectpicker pays"
                                                 data-actions-box="true" data-live-search="true"
+                                                data-width="100%"
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" 
                                                 data-header="Choisir le pays">
@@ -128,7 +132,7 @@
                                         <div class="form-group @error('jour_reunion') has-danger @enderror">
                                             <label for="jour_reunion" class="bmd-label-floating0 @error('jour_reunion') text-danger @enderror">Jour de Reunion</label>
                                             <select name="jour_reunion" id="jour_reunion" value="{{ old('jour_reunion') ?? $groupe->jour_reunion }}" 
-                                                class="selectpicker w-100" data-size="auto" 
+                                                class="selectpicker" data-size="auto" 
                                                 data-style="select-with-transition"
                                                 data-live-search="true" data-actions-box="true"
                                                 data-style2="btn btn-primary btn-round" 

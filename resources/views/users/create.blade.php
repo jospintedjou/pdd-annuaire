@@ -190,7 +190,8 @@
                                                         <div class="form-group col-md-4 @error('categorie_sociale') has-danger @enderror">
                                                             <label for="categorie_sociale" class="bmd-label-floating0 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
                                                             <select name="categorie_sociale" id="categorie_sociale"
-                                                                    class="selectpicker w-100" data-size="auto"
+                                                                    class="selectpicker" 
+                                            data-width="100%"data-size="auto"
                                                                     data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"
@@ -215,7 +216,8 @@
                                                         <div class="form-group col-md-4 @error('apostolat_id') has-danger @enderror">
                                                             <label for="apostolat_id" class="bmd-label-floating0 @error('apostolat_id') text-danger @enderror">Apostolat</label>
                                                             <select name="apostolat_id[]" id="apostolat_id"
-                                                                    class="selectpicker w-100" data-size="auto"
+                                                                    class="selectpicker" 
+                                            data-width="100%"data-size="auto"
                                                                     data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"
@@ -241,7 +243,8 @@
                                                             <label for="niveau_engagement_id" class="bmd-label-floating0 @error('niveau_engagement_id') text-danger @enderror">Niveau d'engagement</label>
                                                             <select name="niveau_engagement_id"
                                                                     id="niveau_engagement_id"
-                                                                    class="selectpicker w-100" data-size="auto"
+                                                                    class="selectpicker" 
+                                            data-width="100%"data-size="auto"
                                                                     data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"
@@ -268,7 +271,8 @@
                                                         <div class="form-group col-md-4 @error('groupe_id') has-danger @enderror">
                                                             <label for="groupe_id" class="bmd-label-floating0 @error('groupe_id') text-danger @enderror">Groupe</label>
                                                             <select name="groupe_id" id="groupe_id"
-                                                                    class="selectpicker w-100" data-size="auto"
+                                                                    class="selectpicker" 
+                                            data-width="100%"data-size="auto"
                                                                     data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"
@@ -304,7 +308,8 @@
                                                         <div class="form-group col-md-4 @error('etat') has-danger @enderror">
                                                             <label for="etat" class="bmd-label-floating0 @error('etat') text-danger @enderror">Etat</label>
                                                             <select name="etat" id="etat" 
-                                                                    class="selectpicker w-100" data-size="auto"
+                                                                    class="selectpicker" 
+                                            data-width="100%"data-size="auto"
                                                                     data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"

@@ -24,7 +24,8 @@
                                             <label for="categorie_activite_id" class="bmd-label-floating0 @error('categorie_activite') text-danger @enderror">Categorie</label>
 
                                             <select name="categorie_activite_id" id="categorie_activite" 
-                                                class="selectpicker w-100" 
+                                                class="selectpicker" 
+                                            data-width="100%"
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
@@ -55,7 +56,8 @@
                                             <label for="annee_spirituelle" class="bmd-label-floating0 @error('annee_spirituelle') text-danger @enderror">Année spirituelle</label>
                                             
                                             <select name="annee_spirituelle" id="annee_spirituelle" 
-                                                class="selectpicker w-100" 
+                                                class="selectpicker" 
+                                            data-width="100%"
                                                     data-size="auto" data-style="select-with-transition"
                                                     data-actions-box="true" data-live-search="true"
                                                     data-style2="btn btn-primary btn-round" 
@@ -80,7 +82,8 @@
                                             <label for="apostolat" class="bmd-label-floating0 @error('apostolat') text-danger @enderror">Apostolats</label>
 
                                             <select name="apostolat[]" id="apostolat" 
-                                                class="selectpicker w-100" 
+                                                class="selectpicker" 
+                                            data-width="100%"
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
@@ -101,7 +104,8 @@
                                             <label for="type_activite" class="bmd-label-floating0 @error('type_activite') text-danger @enderror">Type</label>
 
                                             <select name="type_activite" id="type_activite" 
-                                                class="selectpicker w-100" 
+                                                class="selectpicker" 
+                                            data-width="100%"
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
@@ -128,7 +132,8 @@
                                             <label for="zone" class="bmd-label-floating0 @error('zone') text-danger @enderror">Zone</label>
 
                                             <select name="zone_id" id="zone" 
-                                                class="selectpicker w-100" 
+                                                class="selectpicker" 
+                                            data-width="100%"
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
@@ -152,7 +157,8 @@
                                             <label for="sous_zone_id" class="bmd-label-floating0 @error('sous_zone') text-danger @enderror">Sous Zone</label>
 
                                             <select name="sous_zone_id" id="sous_zone" 
-                                                class="selectpicker w-100" 
+                                                class="selectpicker" 
+                                            data-width="100%"
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
@@ -176,7 +182,8 @@
                                             <label for="groupe_id" class="bmd-label-floating0 @error('groupe') text-danger @enderror">Groupe</label>
 
                                             <select name="groupe_id" id="groupe" 
-                                                class="selectpicker w-100" 
+                                                class="selectpicker" 
+                                            data-width="100%"
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
@@ -268,7 +275,8 @@
                                             <label for="apostolat" class="bmd-label-floating0 @error('apostolat') text-danger @enderror">Apostolats</label>
 
                                             <select name="apostolat[]" id="apostolat" 
-                                                class="selectpicker col-md-12 form-control" 
+                                                class="selectpicker "
+                                            data-width="100%" 
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 

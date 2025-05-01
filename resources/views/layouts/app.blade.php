@@ -224,7 +224,7 @@
                     @if(auth()->user()->isAdmin() || auth()->user()->isResponsablePays())
                     <li class="nav-item @if(request()->routeIs('pays*')) active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#pays" aria-expanded="true">
-                            <i class="material-icons">place</i>
+                            <i class="material-icons">flag</i>
                             <p>Pays <b class="caret"></b> </p>
                         </a>
                         <div class="collapse @if(request()->routeIs('pays*')) show @endif" id="pays" style="">

@@ -24,7 +24,8 @@
                                             <label for="continent" class="bmd-label-floating0 @error('continent') text-danger @enderror">Continent</label>
 
                                             <select name="continent" id="continent" 
-                                                class="selectpicker w-100" data-size="auto" 
+                                                class="selectpicker" 
+                                            data-width="100%"data-size="auto" 
                                                 data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round"
@@ -49,7 +50,8 @@
                                             <label for="pays" class="bmd-label-floating0 @error('pays') text-danger @enderror">Pays</label>
 
                                             <select name="pays" id="pays" 
-                                                class="selectpicker w-100" data-size="auto" 
+                                                class="selectpicker" 
+                                            data-width="100%"data-size="auto" 
                                                 data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
@@ -74,7 +76,8 @@
                                             <label for="ville" class="bmd-label-floating0 @error('ville') text-danger @enderror">Ville</label>
 
                                             <select name="ville" id="ville" 
-                                                class="selectpicker w-100" data-size="auto" 
+                                                class="selectpicker" 
+                                            data-width="100%"data-size="auto" 
                                                 data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
