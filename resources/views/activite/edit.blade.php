@@ -239,7 +239,7 @@
                                         <div class="form-group @error('apostolat') has-danger @enderror">
                                             <label for="apostolat" class="bmd-label-floating0 @error('apostolat') text-danger @enderror">Apostolats</label>
 
-                                            <select name="apostolat" id="apostolat" 
+                                            <select name="apostolat[]" id="apostolat" 
                                                 class="selectpicker col-md-12 form-control" 
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"

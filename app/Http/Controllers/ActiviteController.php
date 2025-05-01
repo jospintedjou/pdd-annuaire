@@ -196,7 +196,7 @@ class ActiviteController extends Controller
                 Constantes::ACTIVITE_SOUS_ZONALE.','.Constantes::ACTIVITE_GROUPE,
             'date_debut' => 'required|date',
             'date_fin' => 'nullable|date',
-            'heure_debut' => 'required|date_format:H:i:s',
+            'heure_debut' => 'required|date_format:H:i',
             'lieu' => 'required|string',
             'apostolat' => 'required|array|min:1',
             'apostolat.*' => 'exists:apostolats,id'
