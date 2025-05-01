@@ -24,7 +24,7 @@
                                             <label for="zone_id" class="bmd-label-floating0 @error('zone_id') text-danger @enderror">Zone</label>
 
                                             <select name="zone_id" id="zone_id" data-url="{{route('get_sous_zone')}}" 
-                                                class="selectpicker col-md-12 form-control zone" 
+                                                class="selectpicker w-100 zone" 
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
@@ -50,7 +50,7 @@
                                                 </label>
 
                                                 <select name="sous_zone_id" id="sous_zone" 
-                                                    class="selectpicker col-md-12 form-control sous-zone" data-size="auto" 
+                                                    class="selectpicker w-100 sous-zone" data-size="auto" 
                                                     data-style="select-with-transition"
                                                     data-actions-box="true" data-live-search="true"
                                                     data-style2="btn btn-primary btn-round" 
@@ -100,7 +100,7 @@
                                         <div class="form-group @error('jour_reunion') has-danger @enderror">
                                             <label for="jour_reunion" class="bmd-label-floating0 @error('jour_reunion') text-danger @enderror">Jour de Reunion</label>
                                             <select name="jour_reunion" id="jour_reunion" value="{{ old('jour_reunion') ?? $groupe->jour_reunion }}" 
-                                                class="selectpicker col-md-12 form-control" data-size="auto" 
+                                                class="selectpicker w-100" data-size="auto" 
                                                 data-style="select-with-transition"
                                                 data-live-search="true" data-actions-box="true"
                                                 data-style2="btn btn-primary btn-round" 
