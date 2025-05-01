@@ -24,7 +24,7 @@
                                             <label for="zone_id" class="bmd-label-floating0 @error('zone_id') text-danger @enderror">Zone</label>
 
                                             <select name="zone_id" id="zone_id" 
-                                                class="selectpicker col-md-12 form-control" value="{{ old('zone_id') }}"
+                                                class="selectpicker w-100" value="{{ old('zone_id') }}"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-size="auto" data-style="select-with-transition"
                                                 data-style2="btn btn-primary btn-round" 

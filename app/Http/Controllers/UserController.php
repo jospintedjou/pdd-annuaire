@@ -178,9 +178,11 @@ class UserController extends Controller
                 'password' => 'string|nullable',
                 'niveau_engagement_id' => 'integer|required',
                 'categorie_sociale' => 'required',
-                'apostolat_id' => 'required',
                 'groupe_id' => 'required',
-                'etat' => 'required'
+                'etat' => 'required',
+                'apostolat_id' => 'required|array|min:1',
+                'apostolat_id.*' => 'exists:apostolats,id',
+                'date_entree' => 'date|nullable',
             ]);
 
         $data['role'] = Constantes::ROLE_MEMBRE;
@@ -324,9 +326,11 @@ class UserController extends Controller
             'password' => 'string|nullable',
             'niveau_engagement_id' => 'integer|required',
             'categorie_sociale' => 'required',
-            'apostolat_id' => 'required',
+            'apostolat_id' => 'required|array|min:1',
+            'apostolat_id.*' => 'exists:apostolats,id',
             'groupe_id' => 'required',
-            'etat' => 'required'
+            'etat' => 'required',
+            'date_entree' => 'date|nullable'
         ]);
 
         $data['role'] = "MEMBRE"; //Must be "membre" or "responsable groupe" or "responsable sous-zone" or "responsable zone"

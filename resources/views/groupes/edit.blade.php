@@ -128,7 +128,7 @@
                                         <div class="form-group @error('jour_reunion') has-danger @enderror">
                                             <label for="jour_reunion" class="bmd-label-floating0 @error('jour_reunion') text-danger @enderror">Jour de Reunion</label>
                                             <select name="jour_reunion" id="jour_reunion" value="{{ old('jour_reunion') ?? $groupe->jour_reunion }}" 
-                                                class="selectpicker col-md-12 form-control" data-size="auto" 
+                                                class="selectpicker w-100" data-size="auto" 
                                                 data-style="select-with-transition"
                                                 data-live-search="true" data-actions-box="true"
                                                 data-style2="btn btn-primary btn-round" 

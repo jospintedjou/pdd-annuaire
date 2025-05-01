@@ -19,7 +19,7 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-4">
                                         <div class="form-group @error('nom') has-danger @enderror">
                                             <label for="nom" class="bmd-label-floating @error('nom') text-danger @enderror">Nom</label>
                                             <input type="text" value="{{old('nom') ?? $annee_spirituelle->nom}}" name="nom" id="nom" class="form-control @error('nom') is-invalid @enderror">
@@ -30,7 +30,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group @error('date_debut') has-danger @enderror">
                                             <label for="date_debut" class="bmd-label-floating @error('date_debut') text-danger @enderror">Date début</label>
                                             <input type="date" value="{{old('date_debut') ?? $annee_spirituelle->date_debut}}" name="date_debut" id="date_debut" class="form-control @error('date_debut') is-invalid @enderror">
@@ -41,7 +41,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group @error('date_fin') has-danger @enderror">
                                             <label for="date_fin" class="bmd-label-floating @error('date_fin') text-danger @enderror">Date fin</label>
                                             <input type="date" value="{{old('date_fin') ?? $annee_spirituelle->date_fin}}" name="date_fin" id="date_fin" class="form-control @error('date_fin') is-invalid @enderror">
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary pull-right">Modifier</button>
+                                <button type="submit" class="btn btn-primary"><i class="material-icons">send</i> Modifier</button>
                                 <div class="clearfix"></div>
                             </form>
                         </div>

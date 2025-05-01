@@ -31,15 +31,13 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('niveau_engagement_id')->nullable();
             $table->string('role');
             $table->string('categorie_sociale');
-            $table->unsignedBigInteger('apostolat_id');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
 
             $table->softDeletes();
-            $table->foreign('apostolat_id')->references('id')->on('apostolats');
-            $table->foreign('niveau_engagement_id')->references('id')->on('niveau_engagements');
+             $table->foreign('niveau_engagement_id')->references('id')->on('niveau_engagements');
         });
     }
 
