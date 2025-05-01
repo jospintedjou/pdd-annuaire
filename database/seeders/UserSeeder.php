@@ -44,7 +44,6 @@ class UserSeeder extends Seeder
             'niveau_engagement_id' => 1,
             'role' => Constantes::ROLE_ADMIN,
             'categorie_sociale' => Constantes::CATEGORIE_JEUNE_TRAVAILLEUR,
-            'apostolat_id' => 1,
             'password' => \Illuminate\Support\Facades\Hash::make('123456'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')

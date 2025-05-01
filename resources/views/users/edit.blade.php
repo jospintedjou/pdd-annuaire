@@ -224,7 +224,6 @@
                                     </div>
 
                                 </div><!-- row -->
-
                                 <div class="row">
                                     <div class="form-group col-md-4 @error('date_entree') has-danger @enderror">
                                         <label for="date_entree" class="bmd-label-floating @error('date_entree') text-danger @enderror">Date d'entrée</label>
