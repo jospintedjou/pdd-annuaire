@@ -139,7 +139,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     //Pays
     Route::resource('pays', PaysController::class);
-    Route::get('pays/membres', [PaysController::class, 'listMembers'])
+    Route::get('pays-membres', [PaysController::class, 'listMembers'])
         ->name('pays_members');
 
     //Zone

@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des membres de la {{$sousZone->nom}}</h4>
+                        <h4 class="card-title">Liste des membres de la sous-zone de {{$sousZone->nom}}</h4>
                     </div>
                     <div class="card-body">
                         @if ($message = Session::get('success'))

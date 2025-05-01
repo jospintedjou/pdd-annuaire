@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des membres de la {{$zone->nom}}</h4>
+                        <h4 class="card-title">Liste des membres de la zone de {{$zone->nom}}</h4>
                     </div>
                     <div class="card-body">
                         @if ($message = Session::get('success'))
@@ -52,7 +52,7 @@
                                                 <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
                                                 <!--td class="">{{$user->created_at}}</td-->
                                                 <td class="">{{  $user->categorie_sociale }}</td>
-                                                <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
+                                                <td class="">{{  $user->niveauEngagement?->nom }}</td>
                                             </tr>
                                                 @endif
                                             @endforeach

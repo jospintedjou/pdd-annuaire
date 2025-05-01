@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title') Membres de la {{$pays->nom}} @endsection
+@section('page_title') Membres du pays {{$pays->nom}} @endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des membres de {{$pays->nom}}</h4>
+                        <h4 class="card-title">Liste des membres du pays {{$pays->nom}}</h4>
                     </div>
                     <div class="card-body">
                         @if ($message = Session::get('success'))
