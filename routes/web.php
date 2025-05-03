@@ -83,7 +83,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/responsable_pays', [ResponsablePaysController::class, 'index'])
     ->name('responsable_pays.index');
     Route::get('/responsable_pays/create', [ResponsablePaysController::class, 'create'])
-        ->name('responsable_groupes.create');
+        ->name('responsable_pays.create');
     Route::get('/responsable_pays/{pays}', [ResponsablePaysController::class, 'edit'])
         ->name('responsable_pays.edit');
     Route::put('/responsable_pays/{pays}', [ResponsablePaysController::class, 'update'])
