@@ -53,32 +53,28 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <th width="5%">N°</th>
+                                                <!--th width="5%">N°</th-->
                                                 <th width="20%">Nom</th>
                                                 <th width="20%">Zone</th>
                                                 <th width="15%">Groupe</th>
-                                                <!--th>Date d'inscr.</th-->
-                                                <th width="20%">Catégorie Soc.</th>
-                                                <th width="10%">Niveau d'enga.</th>
+                                                <th width="20%">Catégorie Sociale</th>
+                                                <th width="10%">Niveau d'engagement</th>
                                                 <th width="10%" class="disabled-sorting text-right sorting">
                                                     Actions
                                                 </th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($users as $user)
+                                            {{--  foreach($users as $user)
                                                 @if($user)
                                                     <tr>
                                                         <td class="">{{$loop->index + 1}}</td>
                                                         <td class="">{{$user->nom}} {{$user->prenom}}</td>
                                                         <td class="">
-                                                            <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
                                                             {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()?->sousZone()?->first()?->zone()?->first()?->nom }}
                                                         </td>
-                                                        <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
                                                         <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)?->first()?->nom_groupe }}</td>
-                                                        <!--td class="">{{$user->created_at}}</td-->
-                                                        <td class="">{{  $user->categorie_sociale }}</td>
+                                                        <td class="">   </td>
                                                         <td class="">{{  $user->niveauEngagement()?->first()?->nom }}</td>
                                                         <td class="td-actions text-right">
                                                             <form action="{{ route('users.destroy',$user->id) }}"
@@ -120,6 +116,7 @@
                                                     </tr>
                                                 @endif
                                             @endforeach
+                                            --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -168,25 +165,49 @@
 
             // DataTable
             var table = $('.dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('users.data') }}",
+                columnDefs: [
+                    { targets: -1, className: 'td-actions text-right' } //add class in last td (actions) for button style
+                ],
+                columns: [
+                    //{ data: 'N°', name: 'N°' },
+                    { data: 'nom', name: 'nom' },
+                    { data: 'zone', name: 'zone' },
+                    { data: 'groupe', name: 'groupe' },
+                    { data: 'categorie_sociale', name: 'categorie_sociale' },
+                    { data: "niveau_engagement", name: "niveau_engagement" },
+                    { data: 'actions', name: 'actions' },
+                ],
+                paging: true,
                 layout: {
                     topStart: {
                         buttons: [
-                            {
+                            /*{
                                 title: null,
                                 extend: 'csv',
                                 filename: $fileName,
                                 exportOptions: {
                                     columns: ':not(:last-child)',
                                 }
-                            },
+                            },*/
                             {
+                                text: '<i class="material-icons">file_download</i> Exporter Excel',
+                                className: 'btn btn-success btn-round',
+                                filename: $fileName,
+                                action: function () {
+                                    window.location.href = "{{ route('users.export') }}";
+                                }
+                            },
+                            /*{
                                 title: null,
                                 extend: 'excel',
                                 filename: $fileName,
                                 exportOptions: {
                                     columns: ':not(:last-child)',
                                 }
-                            },
+                            },*/
                             {
                                 title: null,
                                 extend: 'print',

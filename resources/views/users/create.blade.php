@@ -498,7 +498,7 @@
                             <i class="sub-title text-muted">En-tête: Nom, Prenom, Sexe, Adresse, Telephone1, Telephone2, Email, Quartier, Profession, Categorie sociale, Apostolat, Niveau engagement, Groupe, Mot de passe, Etat, Date entrée.</i>
                             <hr>
                             <p>
-                                <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
                                         <div class="form-group col-md-4 mb-4 @error('file') has-danger @enderror">
@@ -516,7 +516,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-primary"><i class="material-icons">file_upload</i> Importer</button>
-                                    <!--a class="btn btn-success" href="{{ route('export-users') }}">Export Users</a-->
+                                    <!--a class="btn btn-success" href="{{-- route('export-users') --}}">Export Users</a-->
                                 </form>
                             </p>
                         </div>

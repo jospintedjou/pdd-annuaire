@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constantes;
+use App\Exports\UsersExport;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Models\Apostolat;
 use App\Models\ApostolatUser;
@@ -21,6 +22,7 @@ use Illuminate\Validation\ValidationException;
 use \Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ImportUser;
 use Maatwebsite\Excel\HeadingRowImport;
+use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
@@ -32,9 +34,61 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::query()->where('id', '!=', 1)->orderby('nom', 'asc')->get();
+        return view('users.index');
+    }
 
-        return view('users.index',compact('users'));
+    public function getData(Request $request){
+        $users = User::query()->where('id', '!=', 1)->with(['groupes', 'niveauEngagement'])
+                    ->orderby('nom', 'asc');
+        
+        return DataTables::of($users)
+        ->addIndexColumn()
+        ->addColumn('nom', function($row){
+            return $row->nom.' '.$row->prenom ;
+        })
+        ->addColumn('zone', function($row){
+            return $row->zone()?->nom;
+        })
+        ->addColumn('groupe', function($row){
+            return $row->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()?->sousZone()?->first()?->zone()?->first()?->nom ;
+        })
+       
+        ->addColumn('niveau_engagement', function($row){
+            return $row->niveauEngagement?->nom;
+        })
+        ->addColumn('actions', function($row) {
+            $editUrl = route('users.edit', ['user' => $row->id]);
+            $statsUrl = route('statistiques_membre', ['user' => $row->id]);
+            $deleteUrl = route('users.destroy', $row->id);
+        
+            $buttons = '
+                <form action="'.$deleteUrl.'" method="POST">
+                    '.csrf_field().method_field('DELETE').'
+                    <a href="'.$statsUrl.'" class="btn btn-primary btn-round" title="statistiques">
+                        <i class="material-icons">bar_chart</i>
+                    </a>
+                    <a href="'.$editUrl.'" class="btn btn-success btn-round" title="modifier">
+                        <i class="material-icons">edit</i>
+                    </a>';
+            
+            if (auth()->user()->isAdmin()) {
+                $buttons .= '
+                    <button type="button"
+                        class="btn btn-danger btn-round text-white"
+                        data-href="'.$deleteUrl.'"
+                        data-id="'.$row->id.'"
+                        data-toggle="modal"
+                        data-target="#confirm-delete">
+                        <i class="material-icons">close</i>
+                    </button>';
+            }
+        
+            $buttons .= '</form>';
+        
+            return $buttons;
+        }) 
+        ->rawColumns(['actions'])
+        ->make(true);
     }
 
     /**
@@ -118,6 +172,13 @@ class UserController extends Controller
 
         return $res;
 
+    }
+
+    public function exportAll()
+    {
+        $users = User::where('id', '!=', 1)->with(['groupes', 'niveauEngagement'])->orderby('nom', 'asc')->get();
+
+        return Excel::download(new UsersExport($users), 'users.xlsx'); // Using Laravel Excel
     }
 
     /**
