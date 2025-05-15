@@ -236,6 +236,7 @@
 
                                 $('input', this.header()).on('keyup change clear', function () {
                                     if (that.search() !== this.value) {
+                                        console.log('searching...', this.value);
                                         that.search(this.value.replace("/;/g", "&quot;|&quot;"), true, false).draw();
                                         //that.search(this.value).draw();
                                     }
