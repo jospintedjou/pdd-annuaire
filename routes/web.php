@@ -148,7 +148,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         ->name('get_sous_zone');
     Route::get('zone/membres', [ZoneController::class, 'listMembers'])
         ->name('zone_members');
-
+   Route::get('zones/users/data', [ZoneController::class, 'getUsersData'])
+    ->name('zones.users.data'); //Datatable data
+    Route::get('zones/users/export', [ZoneController::class, 'exportAll'])->name('zones.users.export');
+    
     //Route::resource('responsable_groupes', ResponsableGroupeController::class);
    // Route::resource('responsable_sous_zones', ResponsableSousZoneController::class);
    // Route::resource('responsable_zones', ResponsableZoneController::class);

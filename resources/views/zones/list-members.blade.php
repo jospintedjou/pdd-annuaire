@@ -29,7 +29,7 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <th width="5%">N°</th>
+                                                <!--th width="5%">N°</th-->
                                                 <th width="10%">Nom</th>
                                                 <th width="10%">Zone</th>
                                                 <th width="10%">Groupe</th>
@@ -39,23 +39,20 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($users as $user)
+                                            {{--foreach($users as $user)
                                                 @if($user)
                                                 <tr>
                                                 <td class="">{{$loop->index + 1}}</td>
                                                 <td class="">{{$user->nom}} {{$user->prenom}}</td>
                                                 <td class="">
-                                                    <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
                                                     {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first()->nom }}
                                                 </td>
-                                                <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
                                                 <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
-                                                <!--td class="">{{$user->created_at}}</td-->
                                                 <td class="">{{  $user->categorie_sociale }}</td>
                                                 <td class="">{{  $user->niveauEngagement?->nom }}</td>
                                             </tr>
                                                 @endif
-                                            @endforeach
+                                            endforeach --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -90,8 +87,98 @@
     </div>
 
 @endsection
+
 @section('script')
-    <script type="text/javascript">
+<script type="text/javascript">
+        $(document).ready(function () {
+            $fileName = "LISTE DES MEMBRES DE LA {{$zone->nom}}";
+            // Setup - add a text input to each footer cell
+            $('.dataTable thead th:not(:last)').each(function () {
+                var title = $(this).text();
+                $(this).append('<br/><input style="width:100%" type="text" placeholder="Rechercher par ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('.dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+               ajax: {
+                    url: "{{ route('zones.users.data') }}",
+                    data: function (d) {
+                        d.zone_id = "{{$zone->id}}";
+                    }
+                },
+                columnDefs: [
+                    { targets: -1, className: 'td-actions text-right' } //add class in last td (actions) for button style
+                ],
+                columns: [
+                    //{ data: 'N°', name: 'N°' },
+                    { data: 'nom', name: 'nom' },
+                    { data: 'zone', name: 'zone' },
+                    { data: 'groupe', name: 'groupe' },
+                    { data: 'categorie_sociale', name: 'categorie_sociale' },
+                    { data: "niveau_engagement", name: "niveau_engagement" },
+                    //{ data: 'actions', name: 'actions' },
+                ],
+                paging: true,
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                text: '<i class="material-icons">file_download</i> Exporter Excel',
+                                className: 'btn btn-success btn-round',
+                                filename: $fileName,
+                                action: function () {
+                                    window.location.href = "{{ route('zones.users.export') }}";
+                                }
+                            },
+                            /*{
+                                title: null,
+                                extend: 'excel',
+                                filename: $fileName,
+                                exportOptions: {
+                                    columns: ':not(:last-child)',
+                                }
+                            },*/
+                            {
+                                title: null,
+                                extend: 'print',
+                                filename: $fileName,
+                                exportOptions: {
+                                    columns: ':not(:last-child)',
+                                }
+                            }
+                        ]
+                    }
+                },
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [50, 100, 150, -1],
+                    [50, 100, 150, "All"]
+                ],
+                "order": [[1, "asc"]],
+                responsive: true,
+                language: datatable_fr,
+                initComplete: function () {
+                    // Apply the search
+                    this.api()
+                            .columns()
+                            .every(function () {
+                                var that = this;
+
+                                $('input', this.header()).on('keyup change clear', function () {
+                                    if (that.search() !== this.value) {
+                                        console.log('searching...', this.value);
+                                        that.search(this.value.replace("/;/g", "&quot;|&quot;"), true, false).draw();
+                                        //that.search(this.value).draw();
+                                    }
+                                });
+                            });
+                }
+            });
+        });
+    </script>
+    <!--script type="text/javascript">
         $(document).ready(function () {
             $fileName = "LISTE DES MEMBRES DE LA {{$zone->nom}}";
 
@@ -217,5 +304,5 @@
         });
         */
 
-    </script>
+    </script-->
 @endsection

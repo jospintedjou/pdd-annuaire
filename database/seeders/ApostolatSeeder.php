@@ -14,9 +14,16 @@ class ApostolatSeeder extends Seeder
      */
     public function run()
     {
-        \Illuminate\Support\Facades\DB::table("apostolats")->insert([
-            'id' => 1,
-            'nom' => Constantes::APOSTOLAT_JEUNES
-        ]);
+       
+        $index = 1;
+        // Insert the niveaux d'engagement into the database
+        foreach (Constantes::APOSTOLATS as $nom) {
+            \Illuminate\Support\Facades\DB::table("apostolats")->insert([
+                'id' => $index,
+                'nom' => $nom,
+            ]);
+
+            $index++;
+        }
     }
 }

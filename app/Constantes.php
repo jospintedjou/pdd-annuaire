@@ -23,6 +23,8 @@ class Constantes
     const APOSTOLAT_JEUNES = "JEUNE";
     const APOSTOLAT_MARIES = "MARIE(E)";
     const APOSTOLAT_SINGLES = "SINGLE";
+    const APOSTOLATS = array(SELF::APOSTOLAT_ENFANTS, SELF::APOSTOLAT_JEUNES, 
+            SELF::APOSTOLAT_MARIES, SELF::APOSTOLAT_SINGLES);
 
     //Actif-Inactif
     const ETAT_ACTIF = 1;

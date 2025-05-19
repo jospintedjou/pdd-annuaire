@@ -50,6 +50,7 @@ class User extends AuthUser
     {
         return $this->belongsTo(NiveauEngagement::class);
     }
+    
     /*
     public function apostolat()
     {
@@ -66,6 +67,14 @@ class User extends AuthUser
     {
         return $this->belongsToMany(Groupe::class)->withTimestamps()
             ->withPivot(['actif']);
+    }
+
+    public function activeGroupes()
+    {
+        return $this->belongsToMany(Groupe::class)
+            ->withTimestamps()
+            ->withPivot(['actif'])
+            ->wherePivot('actif', true);
     }
 
     /* Get user actual actif group */
