@@ -189,9 +189,7 @@
                                                         <div class="row"> -->
                                                         <div class="form-group col-md-4 @error('categorie_sociale') has-danger @enderror">
                                                             <label for="categorie_sociale" class="bmd-label-floating0 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
-                                                            <select name="categorie_sociale" id="categorie_sociale"
-                                                                    class="selectpicker" 
-                                            data-width="100%"data-size="auto"
+                                                              data-width="100%"data-size="auto"
                                                                     data-style="select-with-transition"
                                                                     data-actions-box="true" data-live-search="true"
                                                                     data-style2="btn btn-primary btn-round"

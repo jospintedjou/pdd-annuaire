@@ -184,14 +184,6 @@
                 layout: {
                     topStart: {
                         buttons: [
-                            /*{
-                                title: null,
-                                extend: 'csv',
-                                filename: $fileName,
-                                exportOptions: {
-                                    columns: ':not(:last-child)',
-                                }
-                            },*/
                             {
                                 text: '<i class="material-icons">file_download</i> Exporter Excel',
                                 className: 'btn btn-success btn-round',
