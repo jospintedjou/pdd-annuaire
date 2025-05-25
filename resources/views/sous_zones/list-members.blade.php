@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des membres de la sous-zone de {{$sousZone->nom}}</h4>
+                        <h4 class="card-title">Liste des membres de la sous-zone {{$sousZone->nom}}</h4>
                     </div>
                     <div class="card-body">
                         @if ($message = Session::get('success'))
@@ -31,15 +31,19 @@
                                             <tr>
                                                 <th width="5%">N°</th>
                                                 <th width="10%">Nom</th>
-                                                <th width="10%">Zone</th>
+                                                <!--th width="10%">Zone</th-->
                                                 <th width="10%">Sous-zone</th>
                                                 <th width="10%">Groupe</th>
                                                 <!--th>Date d'inscr.</th-->
+                                                <th width="10%">Profession</th>
+                                                <th width="10%">Spécialité</th>
                                                 <th width="10%">Catégorie Soc.</th>
                                                 <th width="10%">Niveau d'enga.</th>
+                                                <th width="10%">Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
+                                                {{--  
                                             @foreach($users as $user)
                                                 @if($user)
                                                     <tr>
@@ -51,14 +55,14 @@
                                                         <td class="">
                                                             {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom }}
                                                         </td>
-                                                        <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
+                                                        <!--td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom }}</td-->
                                                         <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
-                                                        <!--td class="">{{--$user->created_at--}}</td-->
                                                         <td class="">{{  $user->categorie_sociale }}</td>
                                                         <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
                                                     </tr>
                                                 @endif
                                             @endforeach
+                                            --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -95,37 +99,60 @@
 
 @endsection
 @section('script')
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
             $fileName = "LISTE DES MEMBRES DE LA {{$sousZone->nom}}";
-
             // Setup - add a text input to each footer cell
-            $('.dataTable thead th').each(function () {
+            $('.dataTable thead th:not(:last)').each(function () {
                 var title = $(this).text();
                 $(this).append('<br/><input style="width:100%" type="text" placeholder="Rechercher par ' + title + '" />');
             });
 
             // DataTable
             var table = $('.dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+               ajax: {
+                    url: "{{ route('sous_zones.users.data') }}",
+                    data: function (d) {
+                        d.sous_zone_id = "{{$sousZone->id}}";
+                    }
+                },
+                columnDefs: [
+                    { targets: -1, className: 'td-actions text-right' } //add class in last td (actions) for button style
+                ],
+                columns: [
+                    { data: 'index', name: 'index' },
+                    { data: 'nom', name: 'nom' },
+                    /*{ data: 'zone', name: 'zone' },*/
+                    { data: 'sous-zone', name: 'sous-zone' },
+                    { data: 'groupe', name: 'groupe' },
+                    { data: 'profession', name: 'profession' },
+                    { data: 'specialite', name: 'specialite' },
+                    { data: 'categorie_sociale', name: 'categorie_sociale' },
+                    { data: "niveau_engagement", name: "niveau_engagement" },
+                    { data: 'actions', name: 'actions' },
+                ],
+                paging: true,
                 layout: {
                     topStart: {
                         buttons: [
                             {
-                                title: null,
-                                extend: 'csv',
+                                text: '<i class="material-icons">file_download</i> Exporter Excel',
+                                className: 'btn btn-success btn-round',
                                 filename: $fileName,
-                                exportOptions: {
-                                    columns: ':not(:last-child)',
+                                action: function () {
+                                    window.location.href = "{{ route('sous_zones.users.export') }}";
                                 }
                             },
-                            {
+                            /*{
                                 title: null,
                                 extend: 'excel',
                                 filename: $fileName,
                                 exportOptions: {
                                     columns: ':not(:last-child)',
                                 }
-                            },
+                            },*/
                             {
                                 title: null,
                                 extend: 'print',
@@ -142,7 +169,7 @@
                     [50, 100, 150, -1],
                     [50, 100, 150, "All"]
                 ],
-                "order": [[0, "asc"]],
+                "order": [[1, "asc"]],
                 responsive: true,
                 language: datatable_fr,
                 initComplete: function () {
@@ -154,6 +181,7 @@
 
                                 $('input', this.header()).on('keyup change clear', function () {
                                     if (that.search() !== this.value) {
+                                        console.log('searching...', this.value);
                                         that.search(this.value.replace("/;/g", "&quot;|&quot;"), true, false).draw();
                                         //that.search(this.value).draw();
                                     }
@@ -163,4 +191,5 @@
             });
         });
     </script>
+
 @endsection

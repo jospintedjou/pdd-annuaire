@@ -177,6 +177,10 @@ class ZoneController extends Controller
     {
         $zone = Zone::query()->find($request->input('id'));
        
+        if(!$zone){
+            abort(404);
+        }
+
         return view('zones.list-members',compact('zone'));
     }
 
@@ -289,7 +293,7 @@ class ZoneController extends Controller
             ->make(true);
     }
 
-     public function exportAll()
+    public function exportAll()
     {
         $users = User::where('id', '!=', 1)->with(['groupes', 'niveauEngagement'])->orderby('nom', 'asc')->get();
 

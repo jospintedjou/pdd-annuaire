@@ -136,7 +136,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     ->name('get_pays');
     Route::get('sous_zone/membres', [SousZoneController::class, 'listMembers'])
         ->name('sous_zone_members');
-
+    Route::get('sous_zones/users/data', [SousZoneController::class, 'getUsersData'])
+    ->name('sous_zones.users.data'); //Datatable data
+    Route::get('sous_zones/users/export', [SousZoneController::class, 'exportAll'])->name('sous_zones.users.export');
+    
     //Pays
     Route::resource('pays', PaysController::class);
     Route::get('pays-membres', [PaysController::class, 'listMembers'])
