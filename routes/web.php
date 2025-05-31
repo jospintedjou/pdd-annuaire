@@ -129,7 +129,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('groupes', GroupeController::class);
     Route::get('groupe/membres', [GroupeController::class, 'listMembers'])
         ->name('groupe_members');
-
+    Route::get('groupes/users/data', [GroupeController::class, 'getUsersData'])
+    ->name('groupes.users.data'); //Datatable data
+    Route::get('groupes/users/export', [GroupeController::class, 'exportAll'])
+    ->name('groupes.users.export');
+    
     //Sous-zone
     Route::resource('sous_zones', SousZoneController::class);
     Route::post('/get-pays', [SousZoneController::class, 'getPays'])

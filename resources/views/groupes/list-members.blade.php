@@ -9,7 +9,7 @@
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
-                        <h4 class="card-title">Liste des membres de {{$groupe->nom_groupe}}</h4>
+                        <h4 class="card-title">Liste des membres du groupe {{$groupe->nom_groupe}}</h4>
                     </div>
                     <div class="card-body">
                         @if ($message = Session::get('success'))
@@ -29,33 +29,36 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <th width="5%">N°</th>
+                                                 <th width="5%">N°</th>
                                                 <th width="10%">Nom</th>
-                                                <th width="10%">Zone</th>
+                                                <!--th width="10%">Zone</th-->
+                                                <th width="10%">Sous-zone</th>
                                                 <th width="10%">Groupe</th>
                                                 <!--th>Date d'inscr.</th-->
+                                                <th width="10%">Profession</th>
+                                                <th width="10%">Spécialité</th>
                                                 <th width="10%">Catégorie Soc.</th>
                                                 <th width="10%">Niveau d'enga.</th>
+                                                <th width="10%">Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            {{-- 
                                             @foreach($users as $user)
                                                 @if($user)
                                                 <tr>
                                                 <td class="">{{$loop->index + 1}}</td>
                                                 <td class="">{{$user->nom}} {{$user->prenom}}</td>
                                                 <td class="">
-                                                    <?php //dd($user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()) ?>
                                                     {{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->zone()->first()->nom }}
                                                 </td>
-                                                <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
                                                 <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
-                                                <!--td class="">{{$user->created_at}}</td-->
                                                 <td class="">{{  $user->categorie_sociale }}</td>
                                                 <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
                                             </tr>
                                                 @endif
                                             @endforeach
+                                             --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -91,37 +94,60 @@
 
 @endsection
 @section('script')
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
             $fileName = "LISTE DES MEMBRES DE {{$groupe->nom_groupe}}";
-
             // Setup - add a text input to each footer cell
-            $('.dataTable thead th').each(function () {
+            $('.dataTable thead th:not(:last)').each(function () {
                 var title = $(this).text();
                 $(this).append('<br/><input style="width:100%" type="text" placeholder="Rechercher par ' + title + '" />');
             });
 
             // DataTable
             var table = $('.dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+               ajax: {
+                    url: "{{ route('groupes.users.data') }}",
+                    data: function (d) {
+                        d.groupe_id = "{{$groupe->id}}";
+                    }
+                },
+                columnDefs: [
+                    { targets: -1, className: 'td-actions text-right' } //add class in last td (actions) for button style
+                ],
+                columns: [
+                    { data: 'index', name: 'index' },
+                    { data: 'nom', name: 'nom' },
+                    /*{ data: 'zone', name: 'zone' },*/
+                    { data: 'sous-zone', name: 'sous-zone' },
+                    { data: 'groupe', name: 'groupe' },
+                    { data: 'profession', name: 'profession' },
+                    { data: 'specialite', name: 'specialite' },
+                    { data: 'categorie_sociale', name: 'categorie_sociale' },
+                    { data: "niveau_engagement", name: "niveau_engagement" },
+                    { data: 'actions', name: 'actions' },
+                ],
+                paging: true,
                 layout: {
                     topStart: {
                         buttons: [
                             {
-                                title: null,
-                                extend: 'csv',
+                                text: '<i class="material-icons">file_download</i> Exporter Excel',
+                                className: 'btn btn-success btn-round',
                                 filename: $fileName,
-                                exportOptions: {
-                                    columns: ':not(:last-child)',
+                                action: function () {
+                                    window.location.href = "{{ route('groupes.users.export') }}";
                                 }
                             },
-                            {
+                            /*{
                                 title: null,
                                 extend: 'excel',
                                 filename: $fileName,
                                 exportOptions: {
                                     columns: ':not(:last-child)',
                                 }
-                            },
+                            },*/
                             {
                                 title: null,
                                 extend: 'print',
@@ -138,7 +164,7 @@
                     [50, 100, 150, -1],
                     [50, 100, 150, "All"]
                 ],
-                "order": [[ 3, "asc" ]],
+                "order": [[1, "asc"]],
                 responsive: true,
                 language: datatable_fr,
                 initComplete: function () {
@@ -150,6 +176,7 @@
 
                                 $('input', this.header()).on('keyup change clear', function () {
                                     if (that.search() !== this.value) {
+                                        console.log('searching...', this.value);
                                         that.search(this.value.replace("/;/g", "&quot;|&quot;"), true, false).draw();
                                         //that.search(this.value).draw();
                                     }
@@ -157,65 +184,7 @@
                             });
                 }
             });
-
-            // Apply the search
-            /*
-            * mytable.columns().eq(0).each(function (colIdx) {
-                 $('input', mytable.column(colIdx).footer()).on('keyup change', function () {
-                     mytable.column (colIdx)
-                              .search (this.value.replace(/;/g, &quot;|&quot;), true, false)
-                              .draw ();
-                 } );
-             } );
-            * */
-            /*table.columns().eq( 0 ).each( function ( colIdx ) {
-                $( 'input', table.column( colIdx ).header() ).on( 'keyup change', function () {
-                    table
-                            .column( colIdx )
-                            .search( this.value )
-                            .draw();
-                } );
-            } );*/
         });
-
-        /*$(document).ready(function () {
-            //console.log($('#datatables').html());
-            $('.dataTable').DataTable({
-                "pagingType": "full_numbers",
-                "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
-                ],
-                "order": [[ 4, "desc" ]],
-                responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records",
-                }
-            });
-
-            //var table = $('#datatable').DataTable();
-
-            // Edit record
-            table.on('click', '.edit', function () {
-                $tr = $(this).closest('tr');
-                var data = table.row($tr).data();
-                alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-            });
-
-            // Delete a record
-            table.on('click', '.remove', function (e) {
-                $tr = $(this).closest('tr');
-                table.row($tr).remove().draw();
-                e.preventDefault();
-            });
-
-            //Like record
-            table.on('click', '.like', function () {
-                alert('You clicked on Like button');
-            });
-        });
-        */
-
     </script>
+
 @endsection
