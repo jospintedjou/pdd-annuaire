@@ -29,7 +29,7 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <!--th width="5%">N°</th-->
+                                                <th width="5%">N°</th>
                                                 <th width="10%">Nom</th>
                                                 <th width="10%">Zone</th>
                                                 <th width="10%">Groupe</th>
@@ -91,7 +91,7 @@
 @section('script')
 <script type="text/javascript">
         $(document).ready(function () {
-            $fileName = "LISTE DES MEMBRES DE LA {{$zone->nom}}";
+            $fileName = "LISTE DES MEMBRES DE LA ZONE {{$zone->nom}}";
             // Setup - add a text input to each footer cell
             $('.dataTable thead th:not(:last)').each(function () {
                 var title = $(this).text();
@@ -112,7 +112,15 @@
                     { targets: -1, className: 'td-actions text-right' } //add class in last td (actions) for button style
                 ],
                 columns: [
-                    //{ data: 'N°', name: 'N°' },
+                    {
+                        data: null,
+                        name: 'index',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
                     { data: 'nom', name: 'nom' },
                     { data: 'zone', name: 'zone' },
                     { data: 'groupe', name: 'groupe' },
@@ -178,131 +186,4 @@
             });
         });
     </script>
-    <!--script type="text/javascript">
-        $(document).ready(function () {
-            $fileName = "LISTE DES MEMBRES DE LA {{$zone->nom}}";
-
-            // Setup - add a text input to each footer cell
-            $('.dataTable thead th').each(function () {
-                var title = $(this).text();
-                $(this).append('<br/><input style="width:100%" type="text" placeholder="Rechercher par ' + title + '" />');
-            });
-
-            // DataTable
-            var table = $('.dataTable').DataTable({
-                layout: {
-                    topStart: {
-                        buttons: [
-                            {
-                                title: null,
-                                extend: 'csv',
-                                filename: $fileName,
-                                exportOptions: {
-                                    columns: ':not(:last-child)',
-                                }
-                            },
-                            {
-                                title: null,
-                                extend: 'excel',
-                                filename: $fileName,
-                                exportOptions: {
-                                    columns: ':not(:last-child)',
-                                }
-                            },
-                            {
-                                title: null,
-                                extend: 'print',
-                                filename: $fileName,
-                                exportOptions: {
-                                    columns: ':not(:last-child)',
-                                }
-                            }
-                        ]
-                    }
-                },
-                "pagingType": "full_numbers",
-                "lengthMenu": [
-                    [50, 100, 150, -1],
-                    [50, 100, 150, "All"]
-                ],
-                "order": [[ 3, "asc" ]],
-                responsive: true,
-                language: datatable_fr,
-                initComplete: function () {
-                    // Apply the search
-                    this.api()
-                            .columns()
-                            .every(function () {
-                                var that = this;
-
-                                $('input', this.header()).on('keyup change clear', function () {
-                                    if (that.search() !== this.value) {
-                                        that.search(this.value.replace("/;/g", "&quot;|&quot;"), true, false).draw();
-                                        //that.search(this.value).draw();
-                                    }
-                                });
-                            });
-                }
-            });
-
-            // Apply the search
-            /*
-            * mytable.columns().eq(0).each(function (colIdx) {
-                 $('input', mytable.column(colIdx).footer()).on('keyup change', function () {
-                     mytable.column (colIdx)
-                              .search (this.value.replace(/;/g, &quot;|&quot;), true, false)
-                              .draw ();
-                 } );
-             } );
-            * */
-            /*table.columns().eq( 0 ).each( function ( colIdx ) {
-                $( 'input', table.column( colIdx ).header() ).on( 'keyup change', function () {
-                    table
-                            .column( colIdx )
-                            .search( this.value )
-                            .draw();
-                } );
-            } );*/
-        });
-
-        /*$(document).ready(function () {
-            //console.log($('#datatables').html());
-            $('.dataTable').DataTable({
-                "pagingType": "full_numbers",
-                "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
-                ],
-                "order": [[ 4, "desc" ]],
-                responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records",
-                }
-            });
-
-            //var table = $('#datatable').DataTable();
-
-            // Edit record
-            table.on('click', '.edit', function () {
-                $tr = $(this).closest('tr');
-                var data = table.row($tr).data();
-                alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-            });
-
-            // Delete a record
-            table.on('click', '.remove', function (e) {
-                $tr = $(this).closest('tr');
-                table.row($tr).remove().draw();
-                e.preventDefault();
-            });
-
-            //Like record
-            table.on('click', '.like', function () {
-                alert('You clicked on Like button');
-            });
-        });
-        */
-
-    </script-->
 @endsection

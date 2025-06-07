@@ -130,24 +130,28 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('groupe/membres', [GroupeController::class, 'listMembers'])
         ->name('groupe_members');
     Route::get('groupes/users/data', [GroupeController::class, 'getUsersData'])
-    ->name('groupes.users.data'); //Datatable data
+    ->name('groupes.users.data'); 
     Route::get('groupes/users/export', [GroupeController::class, 'exportAll'])
     ->name('groupes.users.export');
     
     //Sous-zone
     Route::resource('sous_zones', SousZoneController::class);
     Route::post('/get-pays', [SousZoneController::class, 'getPays'])
-    ->name('get_pays');
+        ->name('get_pays');
     Route::get('sous_zone/membres', [SousZoneController::class, 'listMembers'])
         ->name('sous_zone_members');
     Route::get('sous_zones/users/data', [SousZoneController::class, 'getUsersData'])
-    ->name('sous_zones.users.data'); //Datatable data
+        ->name('sous_zones.users.data'); //Datatable data
     Route::get('sous_zones/users/export', [SousZoneController::class, 'exportAll'])->name('sous_zones.users.export');
     
     //Pays
     Route::resource('pays', PaysController::class);
     Route::get('pays-membres', [PaysController::class, 'listMembers'])
         ->name('pays_members');
+    Route::get('pays/users/data', [PaysController::class, 'getUsersData'])
+        ->name('pays.users.data'); //Datatable data
+    Route::get('pays/users/export', [PaysController::class, 'exportAll'])
+        ->name('pays.users.export');
 
     //Zone
     Route::resource('zones', ZoneController::class);
@@ -155,14 +159,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         ->name('get_sous_zone');
     Route::get('zone/membres', [ZoneController::class, 'listMembers'])
         ->name('zone_members');
-   Route::get('zones/users/data', [ZoneController::class, 'getUsersData'])
+    Route::get('zones/users/data', [ZoneController::class, 'getUsersData'])
     ->name('zones.users.data'); //Datatable data
     Route::get('zones/users/export', [ZoneController::class, 'exportAll'])->name('zones.users.export');
     
-    //Route::resource('responsable_groupes', ResponsableGroupeController::class);
-   // Route::resource('responsable_sous_zones', ResponsableSousZoneController::class);
-   // Route::resource('responsable_zones', ResponsableZoneController::class);
-
    Route::get('users-data', [UserController::class, 'getData'])
     ->name('users.data');
     Route::get('users-export', [UserController::class, 'exportAll'])->name('users.export');

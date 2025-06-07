@@ -286,6 +286,14 @@ class SousZoneController extends Controller
             ->make(true);
     }
 
+    public function exportAll()
+    {
+        $users = User::where('id', '!=', 1)->with(['groupes', 'niveauEngagement'])->orderby('nom', 'asc')->get();
+
+        return Excel::download(new UsersExport($users), 'users.xlsx'); // Using Laravel Excel
+    }
+
+
     /**
      * Return all 'pays'' of a sous-zone by id.
      *
@@ -311,11 +319,5 @@ class SousZoneController extends Controller
         return response()->json(['status'=>'success', 'data'=>$str], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
             JSON_UNESCAPED_UNICODE);
     }
-    public function exportAll()
-    {
-        $users = User::where('id', '!=', 1)->with(['groupes', 'niveauEngagement'])->orderby('nom', 'asc')->get();
-
-        return Excel::download(new UsersExport($users), 'users.xlsx'); // Using Laravel Excel
-    }
-
+   
 }

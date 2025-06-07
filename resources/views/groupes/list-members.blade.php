@@ -29,7 +29,7 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                 <th width="5%">N°</th>
+                                                <th width="5%">N°</th>
                                                 <th width="10%">Nom</th>
                                                 <!--th width="10%">Zone</th-->
                                                 <th width="10%">Sous-zone</th>
@@ -96,7 +96,7 @@
 @section('script')
 <script type="text/javascript">
         $(document).ready(function () {
-            $fileName = "LISTE DES MEMBRES DE {{$groupe->nom_groupe}}";
+            $fileName = "LISTE DES MEMBRES DU GROUPE {{$groupe->nom_groupe}}";
             // Setup - add a text input to each footer cell
             $('.dataTable thead th:not(:last)').each(function () {
                 var title = $(this).text();
@@ -108,16 +108,24 @@
                 processing: true,
                 serverSide: true,
                ajax: {
-                    url: "{{ route('groupes.users.data') }}",
+                    url: "{!! route('groupes.users.data') !!}",
                     data: function (d) {
                         d.groupe_id = "{{$groupe->id}}";
                     }
                 },
                 columnDefs: [
-                    { targets: -1, className: 'td-actions text-right' } //add class in last td (actions) for button style
+                    { targets: -1, className: 'td-actions text-right' }
                 ],
                 columns: [
-                    { data: 'index', name: 'index' },
+                     {
+                        data: null,
+                        name: 'index',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
                     { data: 'nom', name: 'nom' },
                     /*{ data: 'zone', name: 'zone' },*/
                     { data: 'sous-zone', name: 'sous-zone' },
@@ -137,7 +145,7 @@
                                 className: 'btn btn-success btn-round',
                                 filename: $fileName,
                                 action: function () {
-                                    window.location.href = "{{ route('groupes.users.export') }}";
+                                    window.location.href = "{!! route('groupes.users.export', ['groupe_id' => $groupe->id]) !!}";
                                 }
                             },
                             /*{
@@ -185,6 +193,6 @@
                 }
             });
         });
-    </script>
+</script>
 
 @endsection

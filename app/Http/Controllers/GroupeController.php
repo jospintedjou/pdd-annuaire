@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Models\Zone;
 use App\Models\Groupe;
 use App\Models\Pays;
@@ -9,6 +10,7 @@ use App\Models\SousZone;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class GroupeController extends Controller
@@ -145,7 +147,6 @@ class GroupeController extends Controller
      */
     public function destroy(Request $request)
     {
-        //
         $id = $request->input('id');
 
         if(!empty($id)){
@@ -164,9 +165,7 @@ class GroupeController extends Controller
     public function listMembers(Request $request)
     {
         $groupe = Groupe::query()->find($request->input('id'));
-        if($groupe){
-            $users =  $groupe->getMembres();
-        }else{
+        if(!$groupe){
             abort(404);
         }
 
@@ -184,8 +183,8 @@ class GroupeController extends Controller
             ->whereHas('activeGroupes', function ($query) use ($groupe) {
                 $query->where('groupes.id', $groupe->id);
             })
-            ->with(['niveauEngagement']);
-          
+            ->with(['groupes', 'activeGroupes', 'activeGroupes.sousZone', 'activeGroupes.pays', 'niveauEngagement']);
+
         // Apply column-specific search (DataTables sends columns[x][search][value])
         $columns = $request->input('columns');
 
@@ -292,5 +291,27 @@ class GroupeController extends Controller
             })
             ->rawColumns(['actions'])
             ->make(true);
+    }
+
+    public function exportAll(Request $request)
+    {
+        $groupeId = $request->get('groupe_id');
+        
+        $groupe = Groupe::find($request->input('groupe_id'));
+       
+        if(!$groupe){
+            abort(404);
+        }
+
+        $users = User::query()
+                ->where('id', '!=', 1)
+                ->whereHas('activeGroupes', function ($query) use ($groupe) {
+                    $query->where('groupes.id', $groupe->id);
+                })
+                ->with(['groupes', 'activeGroupes', 'activeGroupes.sousZone',
+                 'activeGroupes.pays', 'niveauEngagement']) 
+                ->get();
+
+        return Excel::download(new UsersExport($users), "liste des membres du groupe ".$groupe->nom_groupe.".xlsx");
     }
 }

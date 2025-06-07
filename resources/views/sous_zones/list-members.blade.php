@@ -101,7 +101,7 @@
 @section('script')
 <script type="text/javascript">
         $(document).ready(function () {
-            $fileName = "LISTE DES MEMBRES DE LA {{$sousZone->nom}}";
+            $fileName = "LISTE DES MEMBRES DE LA SOUS-ZONE {{$sousZone->nom}}";
             // Setup - add a text input to each footer cell
             $('.dataTable thead th:not(:last)').each(function () {
                 var title = $(this).text();
@@ -122,7 +122,15 @@
                     { targets: -1, className: 'td-actions text-right' } //add class in last td (actions) for button style
                 ],
                 columns: [
-                    { data: 'index', name: 'index' },
+                    {
+                        data: null,
+                        name: 'index',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
                     { data: 'nom', name: 'nom' },
                     /*{ data: 'zone', name: 'zone' },*/
                     { data: 'sous-zone', name: 'sous-zone' },
