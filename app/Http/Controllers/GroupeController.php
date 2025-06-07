@@ -297,7 +297,7 @@ class GroupeController extends Controller
     {
         $groupeId = $request->get('groupe_id');
         
-        $groupe = Groupe::find($request->input('groupe_id'));
+        $groupe = Groupe::find($groupeId);
        
         if(!$groupe){
             abort(404);

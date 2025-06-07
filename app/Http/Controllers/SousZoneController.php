@@ -286,13 +286,27 @@ class SousZoneController extends Controller
             ->make(true);
     }
 
-    public function exportAll()
+    public function exportAll(Request $request)
     {
-        $users = User::where('id', '!=', 1)->with(['groupes', 'niveauEngagement'])->orderby('nom', 'asc')->get();
+        $sousZoneId = $request->get('sous_zone_id');
+        
+        $sousZone = SousZone::find($sousZoneId);
 
-        return Excel::download(new UsersExport($users), 'users.xlsx'); // Using Laravel Excel
+        if(!$sousZone){
+            abort(404);
+        }
+
+        $users = User::query()
+            ->where('id', '!=', 1)
+            ->whereHas('activeGroupes.sousZone', function ($query) use ($sousZone) {
+                $query->where('id', $sousZone->id);
+            })
+            ->with(['groupes', 'activeGroupes',
+             'activeGroupes.sousZone', 'activeGroupes.pays', 'niveauEngagement'])
+             ->get();
+             
+        return Excel::download(new UsersExport($users), "liste des membres de la sous-zone ".$sousZone->nom.".xlsx");
     }
-
 
     /**
      * Return all 'pays'' of a sous-zone by id.

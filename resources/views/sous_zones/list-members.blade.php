@@ -113,7 +113,7 @@
                 processing: true,
                 serverSide: true,
                ajax: {
-                    url: "{{ route('sous_zones.users.data') }}",
+                    url: "{!! route('sous_zones.users.data') !!}",
                     data: function (d) {
                         d.sous_zone_id = "{{$sousZone->id}}";
                     }
@@ -150,7 +150,7 @@
                                 className: 'btn btn-success btn-round',
                                 filename: $fileName,
                                 action: function () {
-                                    window.location.href = "{{ route('sous_zones.users.export') }}";
+                                    window.location.href = "{!! route('sous_zones.users.export', ['sous_zone_id' => $sousZone->id]) !!}";
                                 }
                             },
                             /*{
