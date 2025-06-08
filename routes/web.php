@@ -141,7 +141,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('sous_zone/membres', [SousZoneController::class, 'listMembers'])
         ->name('sous_zone_members');
     Route::get('sous_zones/users/data', [SousZoneController::class, 'getUsersData'])
-        ->name('sous_zones.users.data'); //Datatable data
+        ->name('sous_zones.users.data');
     Route::get('sous_zones/users/export', [SousZoneController::class, 'exportAll'])->name('sous_zones.users.export');
     
     //Pays
@@ -149,7 +149,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('pays-membres', [PaysController::class, 'listMembers'])
         ->name('pays_members');
     Route::get('pays/users/data', [PaysController::class, 'getUsersData'])
-        ->name('pays.users.data'); //Datatable data
+        ->name('pays.users.data');
     Route::get('pays/users/export', [PaysController::class, 'exportAll'])
         ->name('pays.users.export');
 

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UsersExport;
-use App\Models\Log;
 use App\Models\SousZone;
 use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log as FacadesLog;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -186,14 +185,13 @@ class ZoneController extends Controller
 
     public function getUsersData(Request $request)
     {
-        
-        FacadesLog::info($request->all());
         $users = User::query()
             ->where('id', '!=', 1)
             ->whereHas('activeGroupes.sousZone.zone', function ($query) use ($request) {
                 $query->where('id', $request->input('zone_id'));
             })
-            ->with(['groupes', 'niveauEngagement']);
+            ->with(['groupes', 'activeGroupes', 'activeGroupes.sousZone','activeGroupes.sousZone.zone',
+                 'activeGroupes.pays', 'niveauEngagement']);
 
         // Apply column-specific search (DataTables sends columns[x][search][value])
         $columns = $request->input('columns');
@@ -293,11 +291,26 @@ class ZoneController extends Controller
             ->make(true);
     }
 
-    public function exportAll()
+    public function exportAll(Request $request)
     {
-        $users = User::where('id', '!=', 1)->with(['groupes', 'niveauEngagement'])->orderby('nom', 'asc')->get();
+        $zoneId = $request->get('zone_id');
+        
+        $zone = Zone::find($zoneId);
+       
+        if(!$zone){
+            abort(404);
+        }
 
-        return Excel::download(new UsersExport($users), 'users.xlsx'); // Using Laravel Excel
+        $users = User::query()
+                ->where('id', '!=', 1)
+                ->whereHas('activeGroupes.sousZone.zone', function ($query) use ($zoneId) {
+                    $query->where('id', $zoneId);
+                })
+                ->with(['groupes', 'activeGroupes', 'activeGroupes.sousZone','activeGroupes.sousZone.zone',
+                 'activeGroupes.pays', 'niveauEngagement'])
+                ->get();
+
+        return Excel::download(new UsersExport($users), "liste des membres de la zone  ".$zone->nom.".xlsx");
     }
 
 }

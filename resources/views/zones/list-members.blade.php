@@ -103,7 +103,7 @@
                 processing: true,
                 serverSide: true,
                ajax: {
-                    url: "{{ route('zones.users.data') }}",
+                    url: "{!! route('zones.users.data') !!}",
                     data: function (d) {
                         d.zone_id = "{{$zone->id}}";
                     }
@@ -137,7 +137,7 @@
                                 className: 'btn btn-success btn-round',
                                 filename: $fileName,
                                 action: function () {
-                                    window.location.href = "{{ route('zones.users.export') }}";
+                                    window.location.href = "{!! route('zones.users.export', ['zone_id' => $zone->id]) !!}";
                                 }
                             },
                             /*{

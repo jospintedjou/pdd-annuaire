@@ -41,7 +41,8 @@ class UserController extends Controller
     {
         $users = User::query()
             ->where('id', '!=', 1)
-            ->with(['groupes.sousZone.zone', 'niveauEngagement']);
+             ->with(['groupes', 'activeGroupes', 'activeGroupes.sousZone','activeGroupes.sousZone.zone',
+                 'activeGroupes.pays', 'niveauEngagement']);
 
         // Apply column-specific search (DataTables sends columns[x][search][value])
         $columns = $request->input('columns');
@@ -226,9 +227,13 @@ class UserController extends Controller
 
     public function exportAll()
     {
-        $users = User::where('id', '!=', 1)->with(['groupes', 'niveauEngagement'])->orderby('nom', 'asc')->get();
+        $users = User::where('id', '!=', 1)
+        ->with(['groupes', 'activeGroupes', 'activeGroupes.sousZone',
+            'activeGroupes.sousZone.zone', 'activeGroupes.pays', 'niveauEngagement'])
+        ->orderby('nom', 'asc')
+        ->get();
 
-        return Excel::download(new UsersExport($users), 'users.xlsx'); // Using Laravel Excel
+        return Excel::download(new UsersExport($users), 'Liste de memebres.xlsx'); // Using Laravel Excel
     }
 
     /**

@@ -112,9 +112,9 @@
                 processing: true,
                 serverSide: true,
                ajax: {
-                    url: "{{ route('pays.users.data') }}",
+                    url: "{!! route('pays.users.data') !!}",
                     data: function (d) {
-                        d.groupe_id = "{{$pays->id}}";
+                        d.pays_id = "{{$pays->id}}";
                     }
                 },
                 columnDefs: [
@@ -149,7 +149,7 @@
                                 className: 'btn btn-success btn-round',
                                 filename: $fileName,
                                 action: function () {
-                                    window.location.href = "{{ route('pays.users.export') }}";
+                                    window.location.href = "{!! route('pays.users.export', ['pays_id' => $pays->id]) !!}";
                                 }
                             },
                             /*{

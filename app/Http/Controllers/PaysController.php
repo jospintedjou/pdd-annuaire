@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Models\Groupe;
 use App\Models\SousZone;
 use App\Models\Pays;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class PaysController extends Controller
@@ -154,16 +157,14 @@ class PaysController extends Controller
     public function listMembers(Request $request)
     {
         $pays = Pays::query()->find($request->input('id'));
-        if($pays){
-            $users =  $pays->getMembres();
-        }else{
+        if(!$pays){
             abort(404);
         }
 
         return view('pays.list-members',compact('pays'));
     }
 
-     public function getUsersData(Request $request)
+    public function getUsersData(Request $request)
     {
         $pays = Groupe::find($request->input('pays_id'));
         if(!$pays){
@@ -228,7 +229,12 @@ class PaysController extends Controller
                 return $row->groupes->where('pivot.actif', \App\Constantes::ETAT_ACTIF)
                         ->first()?->sousZone?->zone?->nom;
             })*/
-             ->addColumn('sous-zone', function ($row) {
+             ->addColumn('pays', function ($row) {
+                // Get the first active groupe, and its sousZone
+                return $row->groupes->where('pivot.actif', \App\Constantes::ETAT_ACTIF)
+                        ->first()?->pays?->nom;
+            })
+            ->addColumn('sous-zone', function ($row) {
                 // Get the first active groupe, and its sousZone
                 return $row->groupes->where('pivot.actif', \App\Constantes::ETAT_ACTIF)
                         ->first()?->sousZone?->nom;
@@ -282,5 +288,27 @@ class PaysController extends Controller
             })
             ->rawColumns(['actions'])
             ->make(true);
+    }
+
+    public function exportAll(Request $request)
+    {
+        $paysId = $request->get('pays_id');
+        
+        $pays = Pays::find($paysId);
+       
+        if(!$pays){
+            abort(404);
+        }
+
+        $users = User::query()
+                ->where('id', '!=', 1)
+                ->whereHas('activeGroupes.pays', function ($query) use ($paysId) {
+                    $query->where('id', $paysId);
+                })
+                ->with(['groupes', 'activeGroupes', 'activeGroupes.sousZone','activeGroupes.sousZone.zone',
+                 'activeGroupes.pays', 'niveauEngagement'])
+                ->get();
+
+        return Excel::download(new UsersExport($users), "liste des membres de la zone  ".$pays->nom.".xlsx");
     }
 }
