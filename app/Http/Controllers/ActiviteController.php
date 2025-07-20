@@ -28,16 +28,6 @@ class ActiviteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function listMembers(Request $request)
-    {
-        $zone = Zone::query()->find($request->input('id'));
-       
-        if(!$zone){
-            abort(404);
-        }
-
-        return view('zones.list-members',compact('zone'));
-    }
     public function index()
     {
         return view('activite.index');
@@ -77,8 +67,6 @@ class ActiviteController extends Controller
                 ->orderBy('nom', 'asc')
                 ->with(['categorieActivite']);
         }
-
-        Log::info($request->all());
 
         // Apply column-specific search (DataTables sends columns[x][search][value])
         $columns = $request->input('columns');
@@ -125,7 +113,7 @@ class ActiviteController extends Controller
                 return $row->heure_debut;
             })
             ->addColumn('actions', function ($row) {
-                $editUrl = route('presences.create', $row->id);
+                $editUrl = route('presences.create', ['activite' => $row->id]);
 
                 $buttons = '
                         <a href="' . $editUrl . '" class="btn btn-success btn-round" title="modifier">
