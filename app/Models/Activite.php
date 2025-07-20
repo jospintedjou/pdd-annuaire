@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constantes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -57,6 +58,7 @@ class Activite extends Model
     {
         return $this->belongsToMany(Apostolat::class, ApostolatConcerne::class)->withTimestamps();
     }
+
     /*
         public function apostolats(){
             return $this->hasMany(Apostolat::class, ApostolatConcerne::class, NULL, "id");
@@ -71,5 +73,18 @@ class Activite extends Model
         }
 
         return $this->id_apostolats_concernes;
+    }
+
+    public function concerned(){
+        $conerned = "";
+
+        $concerned = match($this->type_activite) {
+            Constantes::ACTIVITE_REGIONALE => 'Région',
+            Constantes::ACTIVITE_ZONALE => $this?->zone?->nom,
+            Constantes::ACTIVITE_SOUS_ZONALE => $this?->sousZone?->nom,
+            default => "Groupe de " . $this?->groupe?->nom_groupe
+        };
+
+        return $concerned;
     }
 }

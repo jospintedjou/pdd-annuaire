@@ -24,7 +24,6 @@
                                                style="width: 100%;" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
-                                                <th>N°</th>
                                                 <th>Categorie</th>
                                                 <th>Activité</th>
                                                 <th>Concernés</th>
@@ -35,38 +34,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($activites as $activite)
-                                            <tr>
-                                                <td>{{$loop->index + 1}}</td>
-                                                <td class="">{{$activite?->categorieActivite?->nom}}</td>
-                                                <td class="">{{$activite?->nom}}</td>
-                                                <td class="">
-                                                    @if ($activite?->type_activite == App\Constantes::ACTIVITE_REGIONALE)
-                                                        Région
-                                                    @elseif ($activite?->type_activite == App\Constantes::ACTIVITE_ZONALE)
-                                                        {{$activite?->zone?->nom}}
-                                                    @elseif ($activite?->type_activite == App\Constantes::ACTIVITE_SOUS_ZONALE)
-                                                        {{$activite?->sousZone?->nom}}
-                                                    @else
-                                                        Groupe de {{$activite?->groupe?->nom_groupe}}
-                                                    @endif
-                                                </td>
-                                                <td class="">{{$activite?->date_debut}}</td>
-                                                <td class="">{{$activite?->date_fin}}</td>
-                                                <td class="">{{$activite?->heure_debut}}</td>
-                                                <td class="td-actions text-right">
-                                                    <form action="{{ route('presences.create',$activite->id) }}" method="Post">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <a href="{{route('presences.create', ['activite' =>$activite->id])}}" type="button" rel="tooltip"
-                                                           class="btn btn-success btn-round" data-original-title="" title="marquer les présences">
-                                                            <i class="material-icons">edit</i>
-                                                            <div class="ripple-container"></div>
-                                                        </a>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            @endforeach
+                                            
                                             </tbody>
                                         </table>
                                     </div>
@@ -101,41 +69,91 @@
     </div>
 
 @endsection
+
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-            //console.log($('.dataTable').html());
             $fileName = 'LISTE DES ACTIVITES';
-            $('.dataTable').DataTable({
+
+            // Setup - add a text input to each footer cell
+            $('.dataTable thead th:not(:last)').each(function () {
+                var title = $(this).text();
+                $(this).append('<br/><input style="width:100%" type="text" placeholder="Rechercher par ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('.dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('presences.activites.data') }}",
+                columnDefs: [
+                    { targets: -1, className: 'td-actions text-right' } //add class in last td (actions) for button style
+                ],
+                columns: [
+                    //{ data: 'N°', name: 'N°' },
+                    { data: 'categorie', name: 'categorie' },
+                    { data: 'nom', name: 'nom' },
+                    { data: 'concernes', name: 'concernes' },
+                    { data: 'date_debut', name: 'date_debut' },
+                    { data: 'date_fin', name: 'date_fin' },
+                    { data: 'heure_debut', name: 'heure_debut' },
+                    { data: 'actions', name: 'actions' },
+                ],
+                paging: true,
                 layout: {
                     topStart: {
                         buttons: [
                             {
-                                title: null,
-                                extend: 'csv',
+                                text: '<i class="material-icons">file_download</i> Exporter Excel',
+                                className: 'btn btn-success btn-round',
                                 filename: $fileName,
+                                action: function () {
+                                    window.location.href = "{{ route('presences.activites.export') }}";
+                                }
                             },
-                            {
+                            /*{
                                 title: null,
                                 extend: 'excel',
-                                filename: $fileName
-                            },
+                                filename: $fileName,
+                                exportOptions: {
+                                    columns: ':not(:last-child)',
+                                }
+                            },*/
                             {
                                 title: null,
                                 extend: 'print',
-                                filename: $fileName
+                                filename: $fileName,
+                                exportOptions: {
+                                    columns: ':not(:last-child)',
+                                }
                             }
                         ]
                     }
                 },
                 "pagingType": "full_numbers",
                 "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
+                    [50, 100, 150, -1],
+                    [50, 100, 150, "All"]
                 ],
-                "order": [],
+                "order": [[1, "asc"]],
                 responsive: true,
-                language: datatable_fr
+                language: datatable_fr,
+                initComplete: function () {
+                    // Apply the search
+                    this.api()
+                            .columns()
+                            .every(function () {
+                                var that = this;
+
+                                $('input', this.header()).on('keyup change clear', function () {
+                                    if (that.search() !== this.value) {
+                                        console.log('searching...', this.value);
+                                        that.search(this.value.replace("/;/g", "&quot;|&quot;"), true, false).draw();
+                                        //that.search(this.value).draw();
+                                    }
+                                });
+                            });
+                }
             });
         });
     </script>

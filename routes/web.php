@@ -63,7 +63,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/presences', [ActiviteController::class, 'presence'])->name('presences.index');
     Route::get('/presences-create', [ActiviteController::class, 'createPresence'])->name('presences.create');
     Route::post('/presences', [ActiviteController::class, 'storePresence'])->name('presences.store');
-
+    Route::get('presences/activites/data', [ActiviteController::class, 'getActivitiesData'])
+        ->name('presences.activites.data'); //Datatable data
+    Route::get('presences/activites/export', [ActiviteController::class, 'exportAll'])
+        ->name('presences.activites.export');
+  
     //Evaluation
     Route::get('/evaluations', [EvaluationController::class, 'index'])->name('evaluations.index');
     Route::get('/evaluations-create', [EvaluationController::class, 'create'])->name('evaluations.create');
@@ -151,8 +155,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         ->name('get_sous_zone');
     Route::get('zone/membres', [ZoneController::class, 'listMembers'])
         ->name('zone_members');
-   Route::get('zones/users/data', [ZoneController::class, 'getUsersData'])
-    ->name('zones.users.data'); //Datatable data
+    Route::get('zones/users/data', [ZoneController::class, 'getUsersData'])
+        ->name('zones.users.data'); //Datatable data
     Route::get('zones/users/export', [ZoneController::class, 'exportAll'])->name('zones.users.export');
     
     //Route::resource('responsable_groupes', ResponsableGroupeController::class);
