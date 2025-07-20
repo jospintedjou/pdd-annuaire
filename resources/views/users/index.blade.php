@@ -167,7 +167,7 @@
             var table = $('.dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('users.data') }}",
+                ajax: "{!! route('users.data') !!}",
                 columnDefs: [
                     { targets: -1, className: 'td-actions text-right' } //add class in last td (actions) for button style
                 ],
@@ -189,7 +189,7 @@
                                 className: 'btn btn-success btn-round',
                                 filename: $fileName,
                                 action: function () {
-                                    window.location.href = "{{ route('users.export') }}";
+                                    window.location.href = "{!! route('users.export') !!}";
                                 }
                             },
                             /*{

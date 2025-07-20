@@ -189,11 +189,14 @@
                                                         <div class="row"> -->
                                                         <div class="form-group col-md-4 @error('categorie_sociale') has-danger @enderror">
                                                             <label for="categorie_sociale" class="bmd-label-floating0 @error('categorie_sociale') text-danger @enderror">Categorie sociale</label>
-                                                              data-width="100%"data-size="auto"
-                                                                    data-style="select-with-transition"
-                                                                    data-actions-box="true" data-live-search="true"
-                                                                    data-style2="btn btn-primary btn-round"
-                                                                    data-header="Choisir une catégorie sociale">
+                                                            <select name="categorie_sociale" id="categorie_sociale"  
+                                                                class="selectpicker"
+                                                                data-width="100%"
+                                                                data-size="auto"
+                                                                data-style="select-with-transition"
+                                                                data-actions-box="true" data-live-search="true"
+                                                                data-style2="btn btn-primary btn-round"
+                                                                data-header="Choisir une catégorie sociale">
                                                                 @foreach (\App\Constantes::CATEGORIE_SOCIALES as $categorie_sociale)
                                                                     @if(isset($categorie_sociale))
                                                                         <option value="{{ $categorie_sociale }}">{{$categorie_sociale}}</option>
