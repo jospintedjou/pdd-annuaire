@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use \Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ImportUser;
@@ -149,14 +150,21 @@ class UserController extends Controller
      */
     public function import(Request $request){
         $data = $request->validate([
-            'file' =>  'required||mimes:xls,xlsx,csv',
+            'file' =>  'required|file|mimes:xls,xlsx,csv',
         ]);
 
         $updateFile = $request->file('file');
-        $path = $updateFile->getRealPath();
-        //$path = $updateFile->getClientOriginalName();
+        
+        // Store the file temporarily with its original extension to preserve file type detection
+        $originalName = $updateFile->getClientOriginalName();
+        $extension = $updateFile->getClientOriginalExtension();
+        $tempFileName = 'temp_import_' . time() . '.' . $extension;
+        
+        try {
+            $path = $updateFile->storeAs('temp', $tempFileName);
+            $fullPath = storage_path('app/' . $path);
 
-        $originalHeadings = (new HeadingRowImport(1))->toArray($path);
+            $originalHeadings = (new HeadingRowImport(1))->toArray($fullPath);
         $originalHeadings = array_change_key_case($originalHeadings, CASE_LOWER)[0][0];
 
         $headings_arr =  ["zone", "sous_zone", "groupe", "noms", "prenoms", "sexe",
@@ -175,7 +183,19 @@ class UserController extends Controller
         }
 
         if($fileHasError){
+            // Clean up temporary file before throwing error
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
+            }
             throw ValidationException::withMessages(['file' => $fileErrors]);
+        }
+
+        } catch (\Exception $e) {
+            // Clean up temporary file on error
+            if (isset($fullPath) && file_exists($fullPath)) {
+                unlink($fullPath);
+            }
+            throw ValidationException::withMessages(['file' => 'Erreur lors du traitement du fichier: ' . $e->getMessage()]);
         }
 
         //$datas = Excel::import(new ProductsImport($request->suppliers_id),request()->file('file'));
@@ -183,8 +203,8 @@ class UserController extends Controller
         try {
             $importUser = new ImportUser;
 
-            $excelData = Excel::import($importUser,
-                            $request->file('file')->store('files'));
+            // Use the already stored file with proper extension
+            $excelData = Excel::import($importUser, $fullPath);
 
             $totalImportedRows = $importUser->getImportedCount();
             $failures = $importUser->failures();
@@ -220,6 +240,11 @@ class UserController extends Controller
                 : $res->with('error',
                     $totalImportedRows.' membres ajouté(s), '.$totalFailures.' lignes ignorré(e)s')
                     ->with('failures',$failures);
+
+        // Clean up temporary file
+        if (file_exists($fullPath)) {
+            unlink($fullPath);
+        }
 
         return $res;
 
