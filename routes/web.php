@@ -62,6 +62,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     //Présence
     Route::get('/presences', [ActiviteController::class, 'presence'])->name('presences.index');
     Route::get('/presences-create', [ActiviteController::class, 'createPresence'])->name('presences.create');
+    Route::get('/presences/users/data', [ActiviteController::class, 'getPresenceUsersData'])->name('presences.users.data');
     Route::post('/presences', [ActiviteController::class, 'storePresence'])->name('presences.store');
     Route::get('presences/activites/data', [ActiviteController::class, 'getActivitiesData'])
         ->name('presences.activites.data'); //Datatable data
