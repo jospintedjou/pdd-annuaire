@@ -1,11 +1,41 @@
 @extends('layouts.app')
 @section('page_title') Fiche de présence {{$activite->nom}} @endsection
+
+@section('css')
+<style>
+    .presence-active {
+        background-color: #d4edda !important;
+        border-color: #c3e6cb !important;
+    }
+    .presence-active td {
+        background-color: #d4edda !important;
+    }
+    .processing {
+        opacity: 0.7;
+        position: relative;
+    }
+    .processing::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.5);
+        z-index: 1;
+    }
+    #notification-area {
+        position: relative;
+        z-index: 1050;
+    }
+</style>
+@endsection
+
 @section('content')
     <div class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header card-header-primary card-header-icon">
+                <div class="card">      <div class="card-header card-header-primary card-header-icon">
                         <div class="card-icon">
                             <i class="material-icons">person</i>
                         </div>
@@ -24,6 +54,19 @@
                                     data-toggle="modal" data-target="#add-user">
                                 <i class="material-icons">add</i>Ajouter un nouveau
                                 <div class="ripple-container"></div>
+                            </button>
+                            <button type="button" id="reload-table-btn" class="btn btn-info btn-round text-white ml-2"
+                                    title="Actualiser la liste">
+                                <i class="material-icons">refresh</i>Actualiser
+                                <div class="ripple-container"></div>
+                            </button>
+                        </div>
+                        
+                        <!-- Notification area -->
+                        <div id="notification-area" style="display: none;" class="alert alert-dismissible fade show mt-2" role="alert">
+                            <span id="notification-message"></span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="material-datatables">
@@ -51,42 +94,7 @@
                                             </thead>
 
                                             <tbody>
-                                            @foreach($users as $user)
-                                                <tr class="@if($user->activites()->where('activite_id', $activite->id)->exists()) presence-active @endif" data-user_id="{{$user->id}}">
-                                                    <td>{{$loop->index + 1}}</td>
-                                                    <td class="">
-                                                        {{$user->nom}} {{$user->prenom}} </td>
-                                                    <!--td class="">{{-- $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->sousZone()->first()->nom --}}</td-->
-                                                    <td class="">{{ $user->groupes()->where('actif', \App\Constantes::ETAT_ACTIF)->first()->nom_groupe }}</td>
-                                                    <td class="">{{  $user->niveauEngagement()->first()->nom }}</td>
-                                                    <td class="">
-                                                        <div class="form-check">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control timepicker heure_arrivee"
-                                                                       step="3600" min="00:00" max="23:59" pattern="[0-2][0-9]:[0-5][0-9]"
-                                                                       value="@if($user->activites()->where('activite_id', $activite->id)->exists())
-                                                                               {{$user->activites()->where('activite_id', $activite->id)->first()->pivot->heure_arrivee}}
-                                                                               @else
-                                                                                {{\Carbon\Carbon::now()}}
-                                                                               @endif"/>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="td-actions text-right">
-                                                        <div class="form-check">
-                                                            <div class="form-group">
-                                                                <label class="form-check-label">
-                                                                    <input class="form-check-input presence-checkbox" type="checkbox" value="1"
-                                                                           @if($user->activites()->where('activite_id', $activite->id)->exists()) checked @endif>
-                                                                <span class="form-check-sign">
-                                                                    <span class="check"></span>
-                                                                </span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                                <!-- Data will be loaded via AJAX -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -366,100 +374,210 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-            // Setup - add a text input to each footer cell
-            $('.dataTable thead th').each(function () {
-                var title = $(this).text();
-                $(this).append('<br/><input style="width:100%" type="text" placeholder="Rechercher par ' + title + '" />');
-            });
+            // Get activite_id from the data attribute
+            var activiteId = $('#datatables').data('activite_id');
+            var storeUrl = $('#datatables').data('url');
 
-            // DataTable
-            var table = $('.dataTable').DataTable({
-                "pagingType": "full_numbers",
-                "lengthMenu": [
-                    [50, 100, 150, -1],
-                    [50, 100, 150, "All"]
-                ],
-                "order": [[0, "asc"]],
-                responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records"
-                },
-                initComplete: function () {
-                    // Apply the search
-                    this.api()
-                            .columns()
-                            .every(function () {
-                                var that = this;
-
-                                $('input', this.header()).on('keyup change clear', function () {
-                                    if (that.search() !== this.value) {
-                                        that.search(this.value.replace("/;/g", "&quot;|&quot;"), true, false).draw();
-                                        //that.search(this.value).draw();
-                                    }
-                                });
-                            });
+            // Setup - add a text input to each footer cell (except first and last columns)
+            $('.dataTable thead th').each(function (index) {
+                if (index > 0 && index < 4) { // Skip index, heure and presence columns
+                    var title = $(this).text();
+                    $(this).append('<br/><input style="width:100%" type="text" placeholder="Rechercher par ' + title + '" />');
                 }
             });
 
-            // Apply the search
-            /*
-             * mytable.columns().eq(0).each(function (colIdx) {
-                 $('input', mytable.column(colIdx).footer()).on('keyup change', function () {
-                     mytable.column (colIdx)
-                              .search (this.value.replace(/;/g, &quot;|&quot;), true, false)
-                              .draw ();
-                 } );
-             } );
-             * */
-            /*table.columns().eq( 0 ).each( function ( colIdx ) {
-             $( 'input', table.column( colIdx ).header() ).on( 'keyup change', function () {
-             table
-             .column( colIdx )
-             .search( this.value )
-             .draw();
-             } );
-             } );*/
+            // DataTable with server-side processing
+            var table = $('#datatables').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('presences.users.data') }}",
+                    data: function (d) {
+                        d.activite_id = activiteId;
+                    }
+                },
+                columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
+                    {data: 'nom', name: 'nom'},
+                    {data: 'groupe', name: 'groupe'},
+                    {data: 'niveau_engagement', name: 'niveau_engagement'},
+                    {data: 'heure_arrivee', name: 'heure_arrivee', orderable: false, searchable: false},
+                    {data: 'presence_checkbox', name: 'presence_checkbox', orderable: false, searchable: false}
+                ],
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [25, 50, 100, -1],
+                    [25, 50, 100, "All"]
+                ],
+                "order": [[1, "asc"]],
+                responsive: true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Rechercher des membres",
+                    processing: "Chargement...",
+                    lengthMenu: "Afficher _MENU_ entrées",
+                    info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+                    infoEmpty: "Affichage de 0 à 0 sur 0 entrées",
+                    infoFiltered: "(filtré à partir de _MAX_ entrées au total)",
+                    paginate: {
+                        first: "Premier",
+                        last: "Dernier",
+                        next: "Suivant",
+                        previous: "Précédent"
+                    }
+                },
+                initComplete: function () {
+                    // Apply the search for individual columns
+                    this.api()
+                        .columns([1, 2, 3]) // Only searchable columns (Nom, Groupe, Niveau engagement)
+                        .every(function () {
+                            var that = this;
+                            $('input', this.header()).on('keyup change clear', function () {
+                                if (that.search() !== this.value) {
+                                    that.search(this.value).draw();
+                                }
+                            });
+                        });
+                },
+                drawCallback: function() {
+                    // Apply green background to checked rows after each draw
+                    $('#datatables tbody tr').each(function() {
+                        var checkbox = $(this).find('.presence-checkbox');
+                        if (checkbox.is(':checked')) {
+                            $(this).addClass('presence-active');
+                        } else {
+                            $(this).removeClass('presence-active');
+                        }
+                    });
+                }
+            });
+
+            // Handle presence checkbox changes
+            $(document).on('change', '.presence-checkbox', function () {
+                var checkbox = $(this);
+                var userId = checkbox.data('user-id');
+                var activiteId = checkbox.data('activite-id');
+                var isChecked = checkbox.is(':checked');
+                var $row = checkbox.closest('tr');
+                var timeInput = $row.find('input[type="time"], .heure_arrivee, .timepicker');
+                var heureArrivee = timeInput.val();
+
+                // If checked but no time, set current time
+                if (isChecked && !heureArrivee) {
+                    var now = new Date();
+                    heureArrivee = now.getHours().toString().padStart(2, '0') + ':' + 
+                                  now.getMinutes().toString().padStart(2, '0');
+                    timeInput.val(heureArrivee);
+                }
+
+                // Add/remove green background for checked rows
+                if (isChecked) {
+                    $row.addClass('presence-active');
+                } else {
+                    $row.removeClass('presence-active');
+                }
+
+                // Show processing state
+                checkbox.prop('disabled', true);
+                $row.addClass('processing');
+
+                // Send AJAX request to update presence
+                $.ajax({
+                    url: storeUrl,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        user_id: userId,
+                        activite_id: activiteId,
+                        presence: isChecked ? 1 : 0,
+                        heure_arrivee: heureArrivee
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            // Show success notification without reloading table
+                            showNotification('Présence mise à jour avec succès', 'success');
+                            
+                            // Optional: Update counter or badge if you have one
+                            console.log('Presence updated successfully');
+                        }
+                        
+                        // Remove processing state
+                        checkbox.prop('disabled', false);
+                        $row.removeClass('processing');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error updating presence:', error);
+                        
+                        // Revert checkbox state on error
+                        checkbox.prop('checked', !isChecked);
+                        if (isChecked) {
+                            $row.removeClass('presence-active');
+                        } else {
+                            $row.addClass('presence-active');
+                        }
+                        
+                        // Remove processing state
+                        checkbox.prop('disabled', false);
+                        $row.removeClass('processing');
+                        
+                        // Show error notification
+                        var errorMessage = 'Erreur lors de la mise à jour de la présence';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        showNotification(errorMessage, 'error');
+                    }
+                });
+            });
+
+            // Handle time input changes
+            $(document).on('change', 'input[type="time"], .heure_arrivee, .timepicker', function () {
+                var timeInput = $(this);
+                var userId = timeInput.data('user-id');
+                var checkbox = timeInput.closest('tr').find('.presence-checkbox');
+                
+                // If time is changed and user is marked present, update the presence
+                if (checkbox.is(':checked')) {
+                    checkbox.trigger('change');
+                }
+            });
+
+            // Manual reload button
+            $('#reload-table-btn').on('click', function() {
+                var btn = $(this);
+                var originalText = btn.html();
+                
+                // Show loading state
+                btn.html('<i class="material-icons">hourglass_empty</i> Chargement...');
+                btn.prop('disabled', true);
+                
+                // Reload table
+                table.ajax.reload(function() {
+                    // Restore button state
+                    btn.html(originalText);
+                    btn.prop('disabled', false);
+                    showNotification('Liste actualisée', 'success');
+                }, false); // false = don't reset pagination
+            });
+
+            // Notification function
+            function showNotification(message, type) {
+                var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+                var iconClass = type === 'success' ? 'check_circle' : 'error';
+                
+                $('#notification-area')
+                    .removeClass('alert-success alert-danger')
+                    .addClass(alertClass)
+                    .find('#notification-message')
+                    .html('<i class="material-icons" style="vertical-align: middle; margin-right: 5px;">' + iconClass + '</i>' + message);
+                
+                $('#notification-area').slideDown();
+                
+                // Auto-hide after 3 seconds
+                setTimeout(function() {
+                    $('#notification-area').slideUp();
+                }, 3000);
+            }
         });
-
-        /*$(document).ready(function () {
-         //console.log($('#datatables').html());
-         $('.dataTable').DataTable({
-         "pagingType": "full_numbers",
-         "lengthMenu": [
-         [10, 25, 50, -1],
-         [10, 25, 50, "All"]
-         ],
-         "order": [[ 4, "desc" ]],
-         responsive: true,
-         language: {
-         search: "_INPUT_",
-         searchPlaceholder: "Search records",
-         }
-         });
-
-         //var table = $('#datatable').DataTable();
-
-         // Edit record
-         table.on('click', '.edit', function () {
-         $tr = $(this).closest('tr');
-         var data = table.row($tr).data();
-         alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-         });
-
-         // Delete a record
-         table.on('click', '.remove', function (e) {
-         $tr = $(this).closest('tr');
-         table.row($tr).remove().draw();
-         e.preventDefault();
-         });
-
-         //Like record
-         table.on('click', '.like', function () {
-         alert('You clicked on Like button');
-         });
-         });
-         */
-
     </script>
 @endsection

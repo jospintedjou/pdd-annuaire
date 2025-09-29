@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ApostolatSeeder::class);
         $this->call(NiveauEngagementSeeder::class);
         $this->call(ResponsabiliteSeeder::class);
+        $this->call(CategorieActiviteSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(AnneeSpirituelleSeeder::class);
         $this->call(ZoneSeeder::class);
