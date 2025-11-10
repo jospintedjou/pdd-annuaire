@@ -165,13 +165,13 @@ class UserController extends Controller
             $fullPath = storage_path('app/' . $path);
 
             $originalHeadings = (new HeadingRowImport(1))->toArray($fullPath);
-        $originalHeadings = array_change_key_case($originalHeadings, CASE_LOWER)[0][0];
+            $originalHeadings = array_change_key_case($originalHeadings, CASE_LOWER)[0][0];
 
-        $headings_arr =  ["zone", "sous_zone", "groupe", "noms", "prenoms", "sexe",
-                    "apostolat", "categorie","niveau_dengagement", "profession_classe",
-                    "specialite_filiere", "ville", "quartier",
-                    "telephone_whatsapp","email"
-        ];
+            $headings_arr =  ["zone", "sous_zone", "groupe", "noms", "prenoms", "sexe",
+                        "apostolat", "categorie","niveau_dengagement", "profession_classe",
+                        "specialite_filiere", "ville", "quartier",
+                        "telephone_whatsapp","email"
+            ];
 
         //Check if the excel file has all needed headings
         $fileHasError = 0;
