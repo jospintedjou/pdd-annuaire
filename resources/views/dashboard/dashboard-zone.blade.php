@@ -153,48 +153,110 @@
                                     @if(sizeof($categorieActivitesDetails))
                                         @foreach($categorieActivitesDetails as $nom => $categorieActivite)
                                             <div class="tab-pane @if($loop->first) active @endif" id="{{trim($nom)}}">
-                                                <p>
-                                                <table
-                                                       class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
-                                                       style="width: 100%;" width="100%" cellspacing="0">
-                                                    <thead>
-                                                    <tr>
-                                                        <th width="20%">Activité</th>
-                                                        <th width="10%">Participation</th>
-                                                        <th width="10%">Ratio</th>
-                                                        <th width="10%">Pourcentage</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @foreach($categorieActivite as $nom => $activite)
-                                                        <tr>
-                                                            <td class="">
-                                                                <span class="font-weight-normal">{{$nom}}</span>
-                                                            </td>
-                                                            <td class="">
-                                                                <span class="font-weight-normal">
-                                                                    {{ $activite['nombreParticipation'] }}
-                                                                </span>
-                                                            </td>
-                                                            <td class="">
-                                                                <span class="font-weight-normal">
-                                                                    {{ $activite['ratio'] }}
-                                                                </span>
-                                                            </td>
-                                                            <td class="">
-                                                                <span class="font-weight-normal">
-                                                                    {{ $activite['stats'] }}%
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
-                                                </p>
+                                                <!-- Sub-tabs for En général and Par groupe -->
+                                                <ul class="nav nav-pills mb-3" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" data-toggle="pill" href="#general-{{trim($nom)}}" role="tab">En général</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-toggle="pill" href="#groupe-{{trim($nom)}}" role="tab">Par groupe</a>
+                                                    </li>
+                                                </ul>
+
+                                                <div class="tab-content mt-3">
+                                                    <!-- Tab 1: En général (current view) -->
+                                                    <div class="tab-pane active" id="general-{{trim($nom)}}" role="tabpanel">
+                                                        <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                                                               style="width: 100%;" width="100%" cellspacing="0">
+                                                            <thead>
+                                                            <tr>
+                                                                <th width="20%">Activité</th>
+                                                                <th width="10%">Participation</th>
+                                                                <th width="10%">Ratio</th>
+                                                                <th width="10%">Pourcentage</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @foreach($categorieActivite as $nomActivite => $activite)
+                                                                <tr>
+                                                                    <td class="">
+                                                                        <span class="font-weight-normal">{{$nomActivite}}</span>
+                                                                    </td>
+                                                                    <td class="">
+                                                                        <span class="font-weight-normal">
+                                                                            {{ $activite['nombreParticipation'] }}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td class="">
+                                                                        <span class="font-weight-normal">
+                                                                            {{ $activite['ratio'] }}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td class="">
+                                                                        <span class="font-weight-normal">
+                                                                            {{ $activite['stats'] }}%
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <!-- Tab 2: Par groupe (new view) -->
+                                                    <div class="tab-pane" id="groupe-{{trim($nom)}}" role="tabpanel">
+                                                        @if(isset($categorieActivitesGroupes[$nom]) && sizeof($categorieActivitesGroupes[$nom]))
+                                                            @php
+                                                                $groupStats = $categorieActivitesGroupes[$nom];
+                                                                $activities = $groupStats[0]['activities'] ?? [];
+                                                                $activityNames = array_keys($activities);
+                                                            @endphp
+                                                            
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped table-no-bordered table-hover dataTable dtr-inline"
+                                                                       style="width: 100%;" width="100%" cellspacing="0">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Groupe</th>
+                                                                        <th>Membres</th>
+                                                                        @foreach($activityNames as $activityName)
+                                                                            <th>{{ $activityName ?: 'N/A' }}</th>
+                                                                        @endforeach
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    @foreach($groupStats as $groupData)
+                                                                        <tr>
+                                                                            <td>
+                                                                                <span class="font-weight-normal">{{ $groupData['groupe_name'] }}</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="font-weight-normal">{{ $groupData['total_members'] }}</span>
+                                                                            </td>
+                                                                            @foreach($activityNames as $activityName)
+                                                                                @php
+                                                                                    $activityData = $groupData['activities'][$activityName] ?? ['ratio' => '0/0', 'percentage' => 0];
+                                                                                @endphp
+                                                                                <td>
+                                                                                    <span class="font-weight-normal" title="{{ $activityData['percentage'] }}%">
+                                                                                        {{ $activityData['ratio'] }}
+                                                                                    </span>
+                                                                                </td>
+                                                                            @endforeach
+                                                                        </tr>
+                                                                    @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        @else
+                                                            <p class="text-muted">Aucune donnée disponible pour cette catégorie.</p>
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
                                         @endforeach
                                     @endif
-                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

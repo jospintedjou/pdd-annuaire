@@ -81,7 +81,13 @@ class DashboardZoneController extends DashboardController
             $anneeSpirituelle ? $anneeSpirituelle->id : null
         );
 
-        return view('dashboard.dashboard-zone', compact('categorieActivitesDetails', 'categorieActivites', 'zone', 'nombreMembres'));
+        $categorieActivitesGroupes = $this->getGroupAttendanceStats(
+            $categorieActivitesArr,
+            $zone->id,
+            $anneeSpirituelle ? $anneeSpirituelle->id : null
+        );
+
+        return view('dashboard.dashboard-zone', compact('categorieActivitesDetails', 'categorieActivites', 'categorieActivitesGroupes', 'zone', 'nombreMembres'));
     }
 
     /**
@@ -298,5 +304,132 @@ class DashboardZoneController extends DashboardController
         $res = $nombreActivite > 0 ? $nombreParticipation * 100 / ($nombreMembres * $nombreActivite) : 0;
 
         return $res;
+    }
+
+    /**
+     * Get attendance statistics by group for each activity category
+     * 
+     * @param \Illuminate\Database\Eloquent\Collection $categorieActivites
+     * @param int $zoneId
+     * @param int|null $anneeSpirituelleId
+     * @return array
+     */
+    private function getGroupAttendanceStats($categorieActivites, $zoneId, $anneeSpirituelleId = null)
+    {
+        $stats = [];
+
+        // Get all groups in this zone through sous-zones
+        $sousZoneIds = SousZone::where('zone_id', $zoneId)->pluck('id')->toArray();
+        $groupes = Groupe::whereIn('sous_zone_id', $sousZoneIds)
+            ->with(['users' => function($query) {
+                $query->where('groupe_user.actif', Constantes::ETAT_ACTIF);
+            }])
+            ->orderBy('nom_groupe')
+            ->get();
+
+        foreach ($categorieActivites as $categorieActivite) {
+            // Get activities for this category filtered by zone
+            $activitiesQuery = Activite::where('categorie_activite_id', $categorieActivite->id);
+
+            // TODO: Filter by spiritual year when annee_spirituelle column is added to activites table
+            // if ($anneeSpirituelleId) {
+            //     $activitiesQuery->where('annee_spirituelle', $anneeSpirituelleId);
+            // }
+
+            // Filter activities based on type and zone (same logic as other methods)
+            switch ($categorieActivite->type_activite) {
+                case Constantes::ACTIVITE_REGIONALE:
+                    $activitiesQuery->where('type_activite', Constantes::ACTIVITE_REGIONALE);
+                    break;
+                
+                case Constantes::ACTIVITE_ZONALE:
+                    $activitiesQuery->where('type_activite', Constantes::ACTIVITE_ZONALE)
+                        ->where('zone_id', $zoneId);
+                    break;
+                
+                case Constantes::ACTIVITE_SOUS_ZONALE:
+                    $activitiesQuery->where('type_activite', Constantes::ACTIVITE_SOUS_ZONALE)
+                        ->whereIn('sous_zone_id', $sousZoneIds);
+                    break;
+                
+                case Constantes::ACTIVITE_PAYS:
+                    $paysIds = Pays::whereIn('sous_zone_id', $sousZoneIds)->pluck('id')->toArray();
+                    $activitiesQuery->where('type_activite', Constantes::ACTIVITE_PAYS)
+                        ->whereIn('pays_id', $paysIds);
+                    break;
+                
+                case Constantes::ACTIVITE_GROUPE:
+                    $groupeIds = $groupes->pluck('id')->toArray();
+                    $activitiesQuery->where('type_activite', Constantes::ACTIVITE_GROUPE)
+                        ->whereIn('groupe_id', $groupeIds);
+                    break;
+                
+                default:
+                    // For categories without a specific type, skip
+                    $stats[$categorieActivite->nom] = [];
+                    continue 2;
+            }
+
+            $activities = $activitiesQuery->get();
+
+            // Build matrix: groups vs activities
+            $categoryStats = [];
+            
+            foreach ($groupes as $groupe) {
+                $groupUserIds = $groupe->users->pluck('id')->toArray();
+                $groupMembersCount = count($groupUserIds);
+                
+                $groupRow = [
+                    'groupe_name' => $groupe->nom_groupe,
+                    'total_members' => $groupMembersCount,
+                    'total_participations' => 0, // Track total for sorting
+                    'activities' => []
+                ];
+
+                if ($activities->isEmpty()) {
+                    $groupRow['activities'][''] = [
+                        'ratio' => '0/' . $groupMembersCount,
+                        'percentage' => 0,
+                        'participations' => 0
+                    ];
+                } else {
+                    foreach ($activities as $activity) {
+                        // Count participations for this group in this activity
+                        $participationCount = 0;
+                        if (!empty($groupUserIds)) {
+                            $participationCount = DB::table('participations')
+                                ->where('activite_id', $activity->id)
+                                ->whereIn('user_id', $groupUserIds)
+                                ->whereNull('deleted_at')
+                                ->count();
+                        }
+
+                        $percentage = $groupMembersCount > 0 
+                            ? round($participationCount * 100 / $groupMembersCount, 2) 
+                            : 0;
+
+                        $groupRow['activities'][$activity->nom] = [
+                            'ratio' => $participationCount . '/' . $groupMembersCount,
+                            'percentage' => $percentage,
+                            'participations' => $participationCount
+                        ];
+                        
+                        // Add to total participations
+                        $groupRow['total_participations'] += $participationCount;
+                    }
+                }
+
+                $categoryStats[] = $groupRow;
+            }
+
+            // Sort groups by total participations (descending - highest first)
+            usort($categoryStats, function($a, $b) {
+                return $b['total_participations'] - $a['total_participations'];
+            });
+
+            $stats[$categorieActivite->nom] = $categoryStats;
+        }
+
+        return $stats;
     }
 }
