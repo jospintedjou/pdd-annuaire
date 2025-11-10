@@ -76,6 +76,7 @@
                                     <th width="20%">Activité</th>
                                     <th width="10%">Participation</th>
                                     <th width="10%">Total de séances</th>
+                                    <th width="10%">Ratio</th>
                                     <th width="10%">Pourcentage</th>
                                 </tr>
                                 </thead>
@@ -96,6 +97,11 @@
 
                                                     {{ $categorieActivite['nombreActivite'] }}
 
+                                                </span>
+                                            </td>
+                                            <td class="">
+                                                <span class="font-weight-normal">
+                                                    {{ $categorieActivite['ratio'] }}
                                                 </span>
                                             </td>
                                              <td class="">
@@ -155,7 +161,7 @@
                                                     <tr>
                                                         <th width="20%">Activité</th>
                                                         <th width="10%">Participation</th>
-                                                        <th width="10%">Total de séances</th>
+                                                        <th width="10%">Ratio</th>
                                                         <th width="10%">Pourcentage</th>
                                                     </tr>
                                                     </thead>
@@ -172,7 +178,7 @@
                                                             </td>
                                                             <td class="">
                                                                 <span class="font-weight-normal">
-                                                                    {{ $activite['nombreActivite'] }}
+                                                                    {{ $activite['ratio'] }}
                                                                 </span>
                                                             </td>
                                                             <td class="">

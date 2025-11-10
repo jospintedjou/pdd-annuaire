@@ -65,15 +65,13 @@ class DashboardZoneController extends DashboardController
                 $nombreMembres,
                 $anneeSpirituelle ? $anneeSpirituelle->id : null
             );
-            Log::info('stats categories activites', [$stats]);
-
+            
             $categorieActivites[$categorieActivite->nom] = [
                 "nombreActivite" => $stats['totalActivities'],
                 "nombreParticipation" => $stats['totalParticipations'],
-                "stats" => $stats['percentage']
+                "stats" => $stats['percentage'],
+                "ratio" => $stats['totalParticipations'] . '/' . ($nombreMembres * $stats['totalActivities'])
             ];
-
-            Log::info('stats categories activites', [$stats]);
         }
 
         $categorieActivitesDetails = $this->getCategoryAttendanceDetails(
@@ -244,7 +242,8 @@ class DashboardZoneController extends DashboardController
                         '' => [
                             'nombreParticipation' => 0,
                             'nombreActivite' => 0,
-                            'stats' => 0
+                            'stats' => 0,
+                            'ratio' => '0/' . count($userIds)
                         ]
                     ];
                     continue 2;
@@ -260,19 +259,22 @@ class DashboardZoneController extends DashboardController
                 $categoryDetails[''] = [
                     'nombreParticipation' => 0,
                     'nombreActivite' => 0,
-                    'stats' => 0
+                    'stats' => 0,
+                    'ratio' => '0/' . count($userIds)
                 ];
             } else {
                 foreach ($activities as $activity) {
                     $participationCount = $activity->participations->count();
-                    $percentage = $userIds && count($userIds) > 0 
-                        ? round($participationCount * 100 / count($userIds), 2) 
+                    $totalMembers = count($userIds);
+                    $percentage = $totalMembers > 0 
+                        ? round($participationCount * 100 / $totalMembers, 2) 
                         : 0;
                     
                     $categoryDetails[$activity->nom] = [
                         'nombreParticipation' => $participationCount,
                         'nombreActivite' => 1, // Each activity is counted as 1
-                        'stats' => $percentage
+                        'stats' => $percentage,
+                        'ratio' => $participationCount . '/' . $totalMembers
                     ];
                 }
             }
