@@ -152,8 +152,9 @@ class Constantes
     const ACTIVITE_REGIONALE          = 'Régionale';
     const ACTIVITE_ZONALE             = 'Zonale';
     const ACTIVITE_SOUS_ZONALE        = 'Sous-zonale';
+    const ACTIVITE_PAYS               = 'Pays';
     const ACTIVITE_GROUPE             = 'Groupe';
     const TYPE_ACTIVITE               = array(SELF::ACTIVITE_REGIONALE, SELF::ACTIVITE_ZONALE, SELF::ACTIVITE_SOUS_ZONALE,
-                                            SELF::ACTIVITE_GROUPE);
+                                            SELF::ACTIVITE_PAYS, SELF::ACTIVITE_GROUPE);
 
 }

@@ -19,7 +19,7 @@ class DashboardController extends Controller
     {
 
         $nombreMembres = sizeof($users);
-        //Get all activities related to this user
+        //Get all activities
         $categorieActivitesArr = CategorieActivite::get();
         $categorieActivites = [];
         $nombreActivite = 0;
