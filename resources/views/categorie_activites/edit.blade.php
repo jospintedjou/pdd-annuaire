@@ -38,14 +38,15 @@
 
                                             <select name="type_activite" id="type_activite" 
                                                 class="selectpicker" 
-                                            data-width="100%"data-size="auto" 
+                                                data-width="100%" data-size="auto" 
                                                 data-style="select-with-transition"
                                                 data-actions-box="true" data-live-search="true"
                                                 data-style2="btn btn-primary btn-round" 
                                                 data-header="Choisir le type d'activité">
+                                               
                                                 @foreach (\App\Constantes::TYPE_ACTIVITE as $type_activite)
                                                     @if(isset($type_activite))
-                                                        <option value="{{ $type_activite }}" @if($categorieActivite->type_activite == $type_activite) selected @endif>{{ $type_activite }}</option>
+                                                        <option value="{{ $type_activite }}" @if(strtolower($categorieActivite->type_activite) == strtolower($type_activite)) selected @endif>{{ $type_activite }}</option>
                                                     @else
                                                         <option  selected disabled>Aucun type d'activité trouvé</option>
                                                     @endif
@@ -71,7 +72,7 @@
                                                 data-header="Choisir la catégorie">
                                                 <!-- <option value="" disabled>-- <i>Choisir dans la liste</i></option> -->
                                                 @foreach (config('data.periods') as $period)
-                                                    <option value="{{ $period }}" {{$period == $categorieActivite->periodicite ? 'selected' : ''}}>{{ $period }}</option>
+                                                    <option value="{{ $period }}" {{strtolower($period) == strtolower($categorieActivite->periodicite) ? 'selected' : ''}}>{{ $period }}</option>
                                                 @endforeach
                                             </select>
                                             @error('periodicite')
