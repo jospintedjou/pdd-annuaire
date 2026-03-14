@@ -3,40 +3,143 @@
 @section('content')
     <div class="content user-level">
         <div class="container-fluid">
-            @if ($message = Session::get('duplicatedRowsStr'))
-                <div class="alert alert-warning">
-                    <p>{{ $message }}</p>
-                </div>
-            @endif
-
             @if ($message = Session::get('success'))
-                <div class="alert alert-success">
-                    <p>{{ $message }}</p>
+                {{-- ── Import result banner ── --}}
+                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
+                    <i class="material-icons me-2" style="font-size:20px;vertical-align:middle">check_circle</i>
+                    <span>{{ $message }}</span>
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
                 </div>
+
+                @php
+                    $duplicatedRows = Session::get('duplicatedRows', []);
+                    $skippedRows    = Session::get('skippedRows', []);
+                @endphp
+
+                @if(count($duplicatedRows) > 0 || count($skippedRows) > 0)
+                <div class="row g-3 mb-3">
+
+                    {{-- ── Doublons card ── --}}
+                    @if(count($duplicatedRows) > 0)
+                    <div class="{{ count($skippedRows) > 0 ? 'col-md-6' : 'col-12' }}">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header d-flex align-items-center justify-content-between py-2"
+                                 style="background:#fff3cd;border-left:4px solid #ffc107;">
+                                <span class="fw-semibold text-warning-emphasis">
+                                    <i class="material-icons align-middle me-1" style="font-size:18px">content_copy</i>
+                                    Déjà existants
+                                </span>
+                                <span class="badge rounded-pill" style="background:#ffc107;color:#333;">
+                                    {{ count($duplicatedRows) }}
+                                </span>
+                            </div>
+                            <div class="card-body p-0">
+                                <div style="max-height:220px;overflow-y:auto;">
+                                    <table class="table table-sm table-hover mb-0">
+                                        <thead class="table-light sticky-top">
+                                            <tr><th style="width:40px">#</th><th>Nom</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($duplicatedRows as $i => $name)
+                                            <tr>
+                                                <td class="text-muted small">{{ $i + 1 }}</td>
+                                                <td>{{ $name }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
+                    {{-- ── Lignes ignorées card ── --}}
+                    @if(count($skippedRows) > 0)
+                    <div class="{{ count($duplicatedRows) > 0 ? 'col-md-6' : 'col-12' }}">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header d-flex align-items-center justify-content-between py-2"
+                                 style="background:#f8d7da;border-left:4px solid #dc3545;">
+                                <span class="fw-semibold text-danger-emphasis">
+                                    <i class="material-icons align-middle me-1" style="font-size:18px">block</i>
+                                    Lignes ignorées
+                                </span>
+                                <span class="badge rounded-pill bg-danger">
+                                    {{ count($skippedRows) }}
+                                </span>
+                            </div>
+                            <div class="card-body p-0">
+                                <div style="max-height:220px;overflow-y:auto;">
+                                    <table class="table table-sm table-hover mb-0">
+                                        <thead class="table-light sticky-top">
+                                            <tr>
+                                                <th style="width:50px">Ligne</th>
+                                                <th>Nom</th>
+                                                <th>Raison</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($skippedRows as $skippedRow)
+                                            <tr>
+                                                <td class="text-muted small">{{ $skippedRow['row'] }}</td>
+                                                <td>{{ $skippedRow['name'] }}</td>
+                                                <td class="text-danger small">{{ $skippedRow['reason'] }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
+                </div>
+                @endif
+
             @elseif($message = Session::get('error'))
-                <div class="alert alert-danger">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <p>{{ $message }}</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
 
                 @if($failures = Session::get('failures'))
-
                     @if($failures->isNotEmpty())
-                        <div class="alert alert-danger">
-                            <h4>Import Errors</h4>
-                            <ul>
-                                @foreach($failures as $failure)
-                                    <li>
-                                        Ligne {{ $failure->row() }}: {{ implode(', ', $failure->errors()) }}
-                                        <br>
-                                        <strong>Valeurs:</strong> {{ json_encode($failure->values()) }}
-                                    </li>
-                                @endforeach
-                            </ul>
+                        <div class="card border-0 shadow-sm mb-3">
+                            <div class="card-header d-flex align-items-center justify-content-between py-2"
+                                 style="background:#f8d7da;border-left:4px solid #dc3545;">
+                                <span class="fw-semibold text-danger-emphasis">
+                                    <i class="material-icons align-middle me-1" style="font-size:18px">error_outline</i>
+                                    Erreurs de validation
+                                </span>
+                                <span class="badge rounded-pill bg-danger">{{ $failures->count() }}</span>
+                            </div>
+                            <div class="card-body p-0">
+                                <div style="max-height:220px;overflow-y:auto;">
+                                    <table class="table table-sm table-hover mb-0">
+                                        <thead class="table-light sticky-top">
+                                            <tr>
+                                                <th style="width:60px">Ligne</th>
+                                                <th>Champ</th>
+                                                <th>Erreur</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($failures as $failure)
+                                            <tr>
+                                                <td class="text-muted small">{{ $failure->row() }}</td>
+                                                <td class="small">{{ $failure->attribute() }}</td>
+                                                <td class="text-danger small">{{ implode(', ', $failure->errors()) }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        @endif
-
-                        @endif
                     @endif
+                @endif
+            @endif
                     <!-- Tabs navs -->
             <div class="nav-tabs-navigation">
                 <div class="nav-tabs-wrapper">
@@ -499,25 +602,39 @@
                             <i class="sub-title text-muted">En-tête: Nom, Prenom, Sexe, Adresse, Telephone1, Telephone2, Email, Quartier, Profession, Categorie sociale, Apostolat, Niveau engagement, Groupe, Mot de passe, Etat, Date entrée.</i>
                             <hr>
                             <p>
-                                <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data" id="importForm">
                                     @csrf
-                                    <div class="row">
-                                        <div class="form-group col-md-4 mb-4 @error('file') has-danger @enderror">
-                                            <div class="custom-file text-left">
-                                                <label class="custom-file-label" for="customFile" @error('file') text-danger @enderror>Choisir une fichier Excel <i class="fa fa-file-excel-o"></i>
-                                                    <input type="file" name="file" class="custom-file-input" id="customFile"
-                                                        required>
-                                                </label>
-                                                @error('file')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
+                                    <div class="row align-items-end g-3">
+                                        <div class="col-md-5">
+                                            {{-- Drop-zone / file picker --}}
+                                            <div id="importDropZone"
+                                                 class="@error('file') border-danger @else border-secondary @enderror"
+                                                 style="border:2px dashed #aaa;border-radius:10px;padding:28px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:#fafafa;">
+                                                <input type="file" name="file" id="importFileInput"
+                                                       accept=".xls,.xlsx,.csv" required
+                                                       style="display:none;">
+                                                <div id="importPlaceholder">
+                                                    <i class="material-icons" style="font-size:40px;color:#aaa;">upload_file</i>
+                                                    <p class="mb-0 mt-1 text-muted small">Glisser-déposer le fichier Excel ici<br>ou <span style="color:#1a73e8;text-decoration:underline;">parcourir</span></p>
+                                                    <p class="mb-0 text-muted" style="font-size:11px;">Formats acceptés : .xls, .xlsx, .csv</p>
+                                                </div>
+                                                <div id="importFileInfo" style="display:none;">
+                                                    <i class="material-icons" style="font-size:38px;color:#1e7e34;">check_circle</i>
+                                                    <p class="mb-0 mt-1 fw-semibold" id="importFileName" style="word-break:break-all;color:#1e7e34;"></p>
+                                                    <p class="mb-0 text-muted" id="importFileSize" style="font-size:11px;"></p>
+                                                    <span style="font-size:11px;color:#888;text-decoration:underline;cursor:pointer;" id="importChangefile">Changer de fichier</span>
+                                                </div>
                                             </div>
+                                            @error('file')
+                                            <div class="text-danger small mt-1"><strong>{{ $message }}</strong></div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="submit" id="importSubmitBtn" class="btn btn-primary w-100" disabled>
+                                                <i class="material-icons align-middle" style="font-size:18px;">file_upload</i> Importer
+                                            </button>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary"><i class="material-icons">file_upload</i> Importer</button>
-                                    <!--a class="btn btn-success" href="{{-- route('export-users') --}}">Export Users</a-->
                                 </form>
                             </p>
                         </div>
@@ -536,6 +653,89 @@
             e.preventDefault();
             $(this).closest('form').submit();
         });
+
+        (function () {
+            var zone       = document.getElementById('importDropZone');
+            var input      = document.getElementById('importFileInput');
+            var placeholder = document.getElementById('importPlaceholder');
+            var fileInfo   = document.getElementById('importFileInfo');
+            var fileName   = document.getElementById('importFileName');
+            var fileSize   = document.getElementById('importFileSize');
+            var changeBtn  = document.getElementById('importChangefile');
+            var submitBtn  = document.getElementById('importSubmitBtn');
+
+            if (!zone) return;
+
+            function formatBytes(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+
+            function showFile(file) {
+                fileName.textContent = file.name;
+                fileSize.textContent = formatBytes(file.size);
+                placeholder.style.display = 'none';
+                fileInfo.style.display = 'block';
+                zone.style.borderColor = '#1e7e34';
+                zone.style.background  = '#f0fff4';
+                submitBtn.disabled = false;
+            }
+
+            function resetZone() {
+                placeholder.style.display = 'block';
+                fileInfo.style.display = 'none';
+                zone.style.borderColor = '#aaa';
+                zone.style.background  = '#fafafa';
+                submitBtn.disabled = true;
+                input.value = '';
+            }
+
+            // Click on zone opens file picker
+            zone.addEventListener('click', function (e) {
+                if (e.target === changeBtn) return;
+                input.click();
+            });
+
+            changeBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                resetZone();
+                input.click();
+            });
+
+            input.addEventListener('change', function () {
+                if (this.files && this.files[0]) showFile(this.files[0]);
+            });
+
+            // Drag & drop
+            zone.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                zone.style.borderColor = '#1a73e8';
+                zone.style.background  = '#e8f0fe';
+            });
+            zone.addEventListener('dragleave', function () {
+                zone.style.borderColor = input.files && input.files[0] ? '#1e7e34' : '#aaa';
+                zone.style.background  = input.files && input.files[0] ? '#f0fff4' : '#fafafa';
+            });
+            zone.addEventListener('drop', function (e) {
+                e.preventDefault();
+                var file = e.dataTransfer.files[0];
+                if (!file) return;
+                // Transfer dropped file to the real input via DataTransfer
+                var dt = new DataTransfer();
+                dt.items.add(file);
+                input.files = dt.files;
+                showFile(file);
+            });
+
+            // Prevent form submit if no file (belt + suspenders)
+            document.getElementById('importForm').addEventListener('submit', function (e) {
+                if (!input.files || !input.files[0]) {
+                    e.preventDefault();
+                    zone.style.borderColor = '#dc3545';
+                }
+            });
+        })();
     </script>
 @endsection
 

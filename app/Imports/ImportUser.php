@@ -35,6 +35,14 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
 
     private $duplicatedRows = [];
 
+    private $consecutiveEmpty = 0;
+
+    private $done = false;
+
+    private $skippedRows = [];
+
+    private const MAX_CONSECUTIVE_EMPTY = 3;
+
     /**
      * @param  int $headingRow
      */
@@ -93,18 +101,62 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
     {
         //Validate file header
 
-        //Skip empty rows in the provided Excel File
-        if(empty($row['zone']) || empty($row['sous_zone'])  || empty($row['groupe']) ) {
-            Log::info('Row N° '. $this->currentRow.' skipped in Excel file because the zone, sous-zone or group name is empty');
+        // Stop processing once we have seen enough consecutive fully-empty rows
+        if ($this->done) {
+            return null;
+        }
+
+        // Detect a completely empty row: all meaningful fields are blank
+        // (only the pre-filled row-number column may have a value)
+        $meaningfulFields = ['zone', 'sous_zone', 'groupe', 'noms', 'prenoms',
+                             'sexe', 'apostolat', 'categorie', 'niveau_dengagement',
+                             'profession_classe', 'specialite_filiere', 'ville',
+                             'quartier', 'telephone_whatsapp', 'email'];
+        $isCompletelyEmpty = true;
+        foreach ($meaningfulFields as $field) {
+            if (!empty($row[$field])) {
+                $isCompletelyEmpty = false;
+                break;
+            }
+        }
+
+        if ($isCompletelyEmpty) {
+            $this->consecutiveEmpty++;
+            if ($this->consecutiveEmpty >= self::MAX_CONSECUTIVE_EMPTY) {
+                $this->done = true;
+                Log::info('Import stopped early at row ' . $this->currentRow . ' after ' . self::MAX_CONSECUTIVE_EMPTY . ' consecutive fully-empty rows.');
+            }
             $this->currentRow++;
             return null;
-         } 
+        }
+
+        // Row has data — reset the empty-row counter
+        $this->consecutiveEmpty = 0;
+
+        // Skip rows where zone, sous_zone or groupe is missing, but continue processing the rest
+        if (empty($row['zone']) || empty($row['sous_zone']) || empty($row['groupe'])) {
+            $missing = implode(', ', array_filter([
+                empty($row['zone'])      ? 'zone'      : null,
+                empty($row['sous_zone']) ? 'sous-zone'  : null,
+                empty($row['groupe'])    ? 'groupe'     : null,
+            ]));
+            $nom_label = trim(($row['noms'] ?? '') . ' ' . ($row['prenoms'] ?? '')) ?: '—';
+            Log::info('Row N° ' . $this->currentRow . ' skipped: missing ' . $missing . ' for ' . $nom_label);
+            $this->skippedRows[] = [
+                'row'    => $this->currentRow,
+                'name'   => $nom_label,
+                'reason' => 'Champ(s) obligatoire(s) manquant(s) : ' . $missing,
+            ];
+            $this->currentRow++;
+            return null;
+        }
+
         $row['zone'] = $row['zone'] == "ZONE DU RESPONSABLE GÉNÉRAL" 
                         ? Constantes::ZONE_RESPONSABLE_GENERAL : $row['zone'];
 
         $nom = empty($row['noms']) ? 'ras' : $row['noms'];
         $prenoms = empty($row['prenoms']) ? 'ras' : $row['prenoms'];
-        $niveau_engagement = NiveauEngagement::where('nom', $row['niveau_dengagement'])->first();
+        $niveau_engagement = NiveauEngagement::whereRaw('LOWER(nom) = LOWER(?)', [trim($row['niveau_dengagement'] ?? '')])->first();
         $niveau_engagement_id = $niveau_engagement ? $niveau_engagement->id : NULL;
         $zone = Zone::where('nom', $row['zone'])->first();
         $sousZone = SousZone::where('nom', $row['sous_zone'])->first();
@@ -113,21 +165,26 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
         $sexe = $row['sexe'] == "Masculin" || $row['sexe'] == "M" ? Constantes::SEXE_MASCULIN : Constantes::SEXE_FEMININ;
         $quartier = empty($row['quartier']) ? 'ras' : $row['quartier'];
 
-        if(empty($groupe)) {
+        /*if(empty($groupe)) {
             Log::info('Row skipped in Excel file because the group name ' . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
             $this->currentRow++;
             return null;
-        }
+        }*/
 
-        //If not specified the engagement level is 'regulier'
+        //If not specified or not found, default to 'REGULIER' and re-fetch
         if(empty($niveau_engagement)){
             $row['niveau_dengagement'] = Constantes::REGULIER;
+            $niveau_engagement = NiveauEngagement::whereRaw('LOWER(nom) = LOWER(?)', [Constantes::REGULIER])->first();
+            $niveau_engagement_id = $niveau_engagement ? $niveau_engagement->id : NULL;
         }
-
-        Log::info('row zone -- ' . $row['zone']);
 
         if(empty($zone)){
             Log::info('Row skipped in Excel file because the zone name ' . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
+            $this->skippedRows[] = [
+                'row'    => $this->currentRow,
+                'name'   => $nom . ' ' . $prenoms,
+                'reason' => 'Zone inconnue : ' . $row['zone'],
+            ];
             $this->currentRow++;
             return null;
         }
@@ -141,6 +198,11 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
         //If zone is not specified or does not exist, return null
         if($zone == null){
             Log::info('Row skipped in Excel file because the zone name ' . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
+            $this->skippedRows[] = [
+                'row'    => $this->currentRow,
+                'name'   => $nom . ' ' . $prenoms,
+                'reason' => 'Zone inconnue : ' . $row['zone'],
+            ];
             $this->currentRow++;
             return null;
         }   
@@ -190,28 +252,43 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
             $email = $row['email'];
         }
 
-        //Categories
-        if(empty($row['categorie'])){
+        //Categories — normalize raw value: uppercase + strip accents for reliable comparison
+        $categorie_raw = trim($row['categorie'] ?? '');
+        $categorie_norm = strtoupper(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $categorie_raw));
+
+        // Known typos coming from Excel files (misspelling, not accent issues)
+        $typoMap = [
+            'SECONDAIRE INTERMEDIARE'  => Constantes::CATEGORIE_SECONDAIRE_INTERMEDIAIRE, // missing 'i'
+        ];
+
+        // Build a normalized → original map from all valid constants
+        $normToConst = [];
+        foreach (Constantes::CATEGORIE_SOCIALES as $const) {
+            $normKey = strtoupper(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $const));
+            $normToConst[$normKey] = $const;
+        }
+
+        if (empty($categorie_raw)) {
             $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
-        }elseif($row['categorie'] == "Elève" || $row['categorie'] == "Eleve" ){
+        } elseif (isset($normToConst[$categorie_norm])) {
+            // Normalized value matches a valid constant (handles accents like 'Adulte Marié' → 'ADULTE MARIE')
+            $categorie = $normToConst[$categorie_norm];
+        } elseif (isset($typoMap[$categorie_norm])) {
+            $categorie = $typoMap[$categorie_norm];
+        } elseif (in_array($categorie_norm, ['ELEVE'])) {
             $categorie = Constantes::CATEGORIE_SECONDAIRE_INTERMEDIAIRE;
-        }elseif($row['categorie'] == "Etudiant" || $row['categorie'] == "Etudiante" || $row['categorie'] == "Etudiants"){
+        } elseif (in_array($categorie_norm, ['ETUDIANT', 'ETUDIANTE', 'ETUDIANTS', 'UNIVERSITAIRE', 'UNIVERSITAIRE DEBUTANT'])) {
             $categorie = Constantes::CATEGORIE_UNIVERSITAIRE_DEBUTANT;
-        }elseif($row['categorie'] == "Universitaire"){
-            $categorie = Constantes::CATEGORIE_UNIVERSITAIRE_DEBUTANT;
-        }elseif($row['categorie'] == "Femme Au Foyer") {
+        } elseif ($categorie_norm === 'UNIVERSITAIRE MAJEUR') {
+            $categorie = Constantes::CATEGORIE_UNIVERSITAIRE_MAJEUR;
+        } elseif ($categorie_norm === 'JEUNE TRAVAILLEUR MAJEUR') {
+            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR_MAJEUR;
+        } elseif (in_array($categorie_norm, ['JEUNE TRAVAILLEUR', 'TRAVAILLEUR', 'TRAVAILLEURS', 'FEMME AU FOYER', 'ING QHSE', 'STAGIAIRE'])) {
             $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
-        }elseif($row['categorie'] == "Ing Qhse"){
-            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
-        }elseif($row['categorie'] == "Stagiaire"){
-            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
-        }elseif($row['categorie'] == "Travailleur"){
-            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
-        }elseif($row['categorie'] == "Travailleurs"){
-            $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
-        }elseif($row['categorie'] == "Retraité"){
+        } elseif ($categorie_norm === 'RETRAITE') {
             $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR_SENIOR;
-        }else if (!in_array($row['categorie'], Constantes::CATEGORIE_SOCIALES)){
+        } else {
+            Log::info('Unknown categorie value "' . $categorie_raw . '" for user ' . $nom . ' ' . $prenoms . ' — defaulting to JEUNE TRAVAILLEUR.');
             $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
         }
 
@@ -227,14 +304,29 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
             return null;
         }else if(empty($niveau_engagement_id)){
             Log::info('Row skipped in Excel file because the niveau d engagement '.$row['niveau_dengagement'].' for user '.$nom.' '.$prenoms.' is unknown.');
+            $this->skippedRows[] = [
+                'row'    => $this->currentRow,
+                'name'   => $nom . ' ' . $prenoms,
+                'reason' => "Niveau d'engagement inconnu : " . $row['niveau_dengagement'],
+            ];
             $this->currentRow++;
             return null;
         }else if(empty($groupe_id)) {
             Log::info('Row skipped in Excel file because the group name ' . $row['groupe'] . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
+            $this->skippedRows[] = [
+                'row'    => $this->currentRow,
+                'name'   => $nom . ' ' . $prenoms,
+                'reason' => 'Groupe introuvable : ' . $row['groupe'],
+            ];
             $this->currentRow++;
             return null;
         }else if(empty($apostolat_id)){
             Log::info('Row skipped in Excel file because the apostolat name '.$row['apostolat'].' for user '.$nom.' '.$prenoms.' is unknown.');
+            $this->skippedRows[] = [
+                'row'    => $this->currentRow,
+                'name'   => $nom . ' ' . $prenoms,
+                'reason' => 'Apostolat inconnu : ' . $row['apostolat'],
+            ];
             $this->currentRow++;
             return null;
         }
@@ -290,5 +382,10 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
     public function getDuplicatedRows()
     {
         return $this->duplicatedRows;
+    }
+
+    public function getSkippedRows(): array
+    {
+        return $this->skippedRows;
     }
 }

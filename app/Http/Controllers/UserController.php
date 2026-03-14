@@ -221,25 +221,23 @@ class UserController extends Controller
         }
 
         $duplicatedRows = $importUser->getDuplicatedRows();
-        $duplicatedRowsStr = implode(', ', $duplicatedRows);
-        $countRows = count($duplicatedRows);
-
-        $res = redirect()->back()
-                ->with('totalImportedRows', $totalImportedRows);
+        $skippedRows    = $importUser->getSkippedRows();
+        $countDuplicates = count($duplicatedRows);
+        $countSkipped    = count($skippedRows);
 
         $totalFailures = isset($failures) ? count($failures) : 0;
 
-        if($duplicatedRowsStr != ""){
-            $res->with('duplicatedRowsStr',
-            $countRows.' noms en double : '.$duplicatedRowsStr);
-        }
-        
-        $res = !empty($failures)
+        $res = redirect()->back()
+                ->with('totalImportedRows', $totalImportedRows)
+                ->with('duplicatedRows', $duplicatedRows)
+                ->with('skippedRows', $skippedRows);
+
+        $res = !empty($failures) && $failures->isNotEmpty()
                 ? $res->with('success',
                     $totalImportedRows.' membres ajouté(s) avec succès.')
-                : $res->with('error',
-                    $totalImportedRows.' membres ajouté(s), '.$totalFailures.' lignes ignorré(e)s')
-                    ->with('failures',$failures);
+                : $res->with('success',
+                    $totalImportedRows.' membres ajouté(s), '.$countDuplicates.' déjà existant(s), '.$countSkipped.' ignoré(s).')
+                    ->with('failures', $failures);
 
         // Clean up temporary file
         if (file_exists($fullPath)) {
@@ -290,6 +288,9 @@ class UserController extends Controller
                 }elseif( $authUser->isResponsableSousZone() && $groupe->sousZone->id == $authSousZone->id){
                     $groupes[] = $groupe;
                 }elseif( $authUser->isResponsableGroupe() && $groupe->id == $authGroupe->id){
+                    $groupes[] = $groupe;
+                }elseif( $authSousZone && $groupe->sousZone->id == $authSousZone->id){
+                    // Regular member: see all groups in their own sous-zone
                     $groupes[] = $groupe;
                 }
             }
@@ -436,6 +437,9 @@ class UserController extends Controller
                 }elseif( $authUser->isResponsableSousZone() && $groupe->sousZone->id == $authSousZone->id){
                     $groupes[] = $groupe;
                 }elseif( $authUser->isResponsableGroupe() && $groupe->id == $authGroupe->id){
+                    $groupes[] = $groupe;
+                }elseif( $authSousZone && $groupe->sousZone->id == $authSousZone->id){
+                    // Regular member: see all groups in their own sous-zone
                     $groupes[] = $groupe;
                 }
             }

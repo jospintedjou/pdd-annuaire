@@ -13,31 +13,143 @@
                     </div>
                     <div class="card-body">
                         @if ($message = Session::get('success'))
-                            <div class="alert alert-success">
-                                <p>{{ $message }}</p>
+                            {{-- ── Import result banner ── --}}
+                            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
+                                <i class="material-icons me-2" style="font-size:20px;vertical-align:middle">check_circle</i>
+                                <span>{{ $message }}</span>
+                                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
                             </div>
+
+                            @php
+                                $duplicatedRows = Session::get('duplicatedRows', []);
+                                $skippedRows    = Session::get('skippedRows', []);
+                            @endphp
+
+                            @if(count($duplicatedRows) > 0 || count($skippedRows) > 0)
+                            <div class="row g-3 mb-3">
+
+                                {{-- ── Doublons card ── --}}
+                                @if(count($duplicatedRows) > 0)
+                                <div class="{{ count($skippedRows) > 0 ? 'col-md-6' : 'col-12' }}">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-header d-flex align-items-center justify-content-between py-2"
+                                             style="background:#fff3cd;border-left:4px solid #ffc107;">
+                                            <span class="fw-semibold text-warning-emphasis">
+                                                <i class="material-icons align-middle me-1" style="font-size:18px">content_copy</i>
+                                                Déjà existants
+                                            </span>
+                                            <span class="badge rounded-pill" style="background:#ffc107;color:#333;">
+                                                {{ count($duplicatedRows) }}
+                                            </span>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div style="max-height:220px;overflow-y:auto;">
+                                                <table class="table table-sm table-hover mb-0">
+                                                    <thead class="table-light sticky-top">
+                                                        <tr>
+                                                            <th style="width:40px">#</th>
+                                                            <th>Nom</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($duplicatedRows as $i => $name)
+                                                        <tr>
+                                                            <td class="text-muted small">{{ $i + 1 }}</td>
+                                                            <td>{{ $name }}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+
+                                {{-- ── Lignes ignorées card ── --}}
+                                @if(count($skippedRows) > 0)
+                                <div class="{{ count($duplicatedRows) > 0 ? 'col-md-6' : 'col-12' }}">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-header d-flex align-items-center justify-content-between py-2"
+                                             style="background:#f8d7da;border-left:4px solid #dc3545;">
+                                            <span class="fw-semibold text-danger-emphasis">
+                                                <i class="material-icons align-middle me-1" style="font-size:18px">block</i>
+                                                Lignes ignorées
+                                            </span>
+                                            <span class="badge rounded-pill bg-danger">
+                                                {{ count($skippedRows) }}
+                                            </span>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div style="max-height:220px;overflow-y:auto;">
+                                                <table class="table table-sm table-hover mb-0">
+                                                    <thead class="table-light sticky-top">
+                                                        <tr>
+                                                            <th style="width:50px">Ligne</th>
+                                                            <th>Nom</th>
+                                                            <th>Raison</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($skippedRows as $row)
+                                                        <tr>
+                                                            <td class="text-muted small">{{ $row['row'] }}</td>
+                                                            <td>{{ $row['name'] }}</td>
+                                                            <td class="text-danger small">{{ $row['reason'] }}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+
+                            </div>
+                            @endif
+
                         @elseif($message = Session::get('error'))
-                            <div class="alert alert-danger">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <p>{{ $message }}</p>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
 
                             @if($failures = Session::get('failures'))
-
                                 @if($failures->isNotEmpty())
-                                    <div class="alert alert-danger">
-                                        <h4>Import Errors</h4>
-                                        <ul>
-                                            @foreach($failures as $failure)
-                                                <li>
-                                                    Ligne {{ $failure->row() }}: {{ implode(', ', $failure->errors()) }}
-                                                    <br>
-                                                    <strong>Valeurs:</strong> {{ json_encode($failure->values()) }}
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                    <div class="card border-0 shadow-sm mb-3">
+                                        <div class="card-header d-flex align-items-center justify-content-between py-2"
+                                             style="background:#f8d7da;border-left:4px solid #dc3545;">
+                                            <span class="fw-semibold text-danger-emphasis">
+                                                <i class="material-icons align-middle me-1" style="font-size:18px">error_outline</i>
+                                                Erreurs de validation
+                                            </span>
+                                            <span class="badge rounded-pill bg-danger">{{ $failures->count() }}</span>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div style="max-height:220px;overflow-y:auto;">
+                                                <table class="table table-sm table-hover mb-0">
+                                                    <thead class="table-light sticky-top">
+                                                        <tr>
+                                                            <th style="width:60px">Ligne</th>
+                                                            <th>Champ</th>
+                                                            <th>Erreur</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($failures as $failure)
+                                                        <tr>
+                                                            <td class="text-muted small">{{ $failure->row() }}</td>
+                                                            <td class="small">{{ $failure->attribute() }}</td>
+                                                            <td class="text-danger small">{{ implode(', ', $failure->errors()) }}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 @endif
-
                             @endif
                         @endif
 
