@@ -99,6 +99,8 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
             $this->currentRow++;
             return null;
          } 
+        $row['zone'] = $row['zone'] == "ZONE DU RESPONSABLE GÉNÉRAL" 
+                        ? Constantes::ZONE_RESPONSABLE_GENERAL : $row['zone'];
 
         $nom = empty($row['noms']) ? 'ras' : $row['noms'];
         $prenoms = empty($row['prenoms']) ? 'ras' : $row['prenoms'];
@@ -111,28 +113,30 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
         $sexe = $row['sexe'] == "Masculin" || $row['sexe'] == "M" ? Constantes::SEXE_MASCULIN : Constantes::SEXE_FEMININ;
         $quartier = empty($row['quartier']) ? 'ras' : $row['quartier'];
 
-        if(empty($row['groupe'])) {
+        if(empty($groupe)) {
             Log::info('Row skipped in Excel file because the group name ' . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
             $this->currentRow++;
             return null;
         }
 
         //If not specified the engagement level is 'regulier'
-        if(empty($row['niveau_dengagement'])){
+        if(empty($niveau_engagement)){
             $row['niveau_dengagement'] = Constantes::REGULIER;
         }
 
-        if(empty($row['zone'])){
+        Log::info('row zone -- ' . $row['zone']);
+
+        if(empty($zone)){
             Log::info('Row skipped in Excel file because the zone name ' . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
             $this->currentRow++;
             return null;
         }
-
-        if(empty($row['sous_zone'])){
+ 
+        /*if(empty($sous_zone)){
             Log::info('Row skipped in Excel file because the souszone name ' . ' for user ' . $nom . ' ' . $prenoms . ' is unknown.');
             $this->currentRow++;
             return null;
-        }
+        }*/
 
         //If zone is not specified or does not exist, return null
         if($zone == null){
@@ -145,8 +149,9 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
         if($sousZone == null){
             $sousZone = new SousZone();
             $sousZone->nom = $row['sous_zone'];
-            $sousZone->quartier = $row['quartier'];
+            $sousZone->quartier = $quartier;
             $sousZone->zone_id = $zone->id;
+            $sousZone->has_country = $zone->nom == Constantes::ZONE_RESPONSABLE_GENERAL;
             $sousZone->save();
             $sousZone->refresh();   
         }
@@ -190,7 +195,7 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
             $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
         }elseif($row['categorie'] == "Elève" || $row['categorie'] == "Eleve" ){
             $categorie = Constantes::CATEGORIE_SECONDAIRE_INTERMEDIAIRE;
-        }elseif($row['categorie'] == "Etudiants" || $row['categorie'] == "Etudiant"){
+        }elseif($row['categorie'] == "Etudiant" || $row['categorie'] == "Etudiante" || $row['categorie'] == "Etudiants"){
             $categorie = Constantes::CATEGORIE_UNIVERSITAIRE_DEBUTANT;
         }elseif($row['categorie'] == "Universitaire"){
             $categorie = Constantes::CATEGORIE_UNIVERSITAIRE_DEBUTANT;
@@ -206,7 +211,7 @@ class ImportUser implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
             $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
         }elseif($row['categorie'] == "Retraité"){
             $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR_SENIOR;
-        }else{
+        }else if (!in_array($row['categorie'], Constantes::CATEGORIE_SOCIALES)){
             $categorie = Constantes::CATEGORIE_JEUNE_TRAVAILLEUR;
         }
 
