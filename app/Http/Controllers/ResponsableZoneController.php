@@ -63,15 +63,15 @@ class ResponsableZoneController extends Controller
     public function edit(Request $request)
     {
         $zone = Zone::find($request->zone);
+        if(empty($zone)) abort(404);
         $responsabilites = Responsabilite::all();
-        $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
-            ->orderBy('nom')->get();
-        if(!empty($request)){
-            return view('responsable_zones.edit',compact('zone', 'users', 'responsabilites'));
-        }else{
-            abort(404);
-        }
-        
+        $currentResponsables = $zone->responsableZones()
+            ->where('actif', Constantes::ETAT_ACTIF)
+            ->get()->keyBy('pivot.responsabilite_id');
+        $initialUsers = User::where('etat', Constantes::ETAT_ACTIF)
+            ->where('role', '!=', Constantes::ROLE_ADMIN)
+            ->orderBy('nom')->limit(10)->get(['id', 'nom', 'prenom']);
+        return view('responsable_zones.edit', compact('zone', 'initialUsers', 'responsabilites', 'currentResponsables'));
     }
 
     /**
@@ -105,7 +105,9 @@ class ResponsableZoneController extends Controller
         }
 
         return redirect()->route('responsable_zones.edit', [$zone])
-            ->with('success','Responsables de zone mis à jour avec succès.');
+            ->with('success','Responsables de zone mis à jour avec succès.')
+            ->with('success_link', route('responsable_zones.index'))
+            ->with('success_link_text', 'Voir la liste des responsables');
     }
 
     /**

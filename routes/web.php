@@ -83,6 +83,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         ->name('responsable_groupes.edit');
     Route::put('/responsable_groupes/{groupe}', [ResponsableGroupeController::class, 'update'])
         ->name('responsable_groupes.update');
+    Route::get('/users-search', [ResponsableGroupeController::class, 'searchUsers'])
+        ->name('users.search');
 
     //responsable pay
     Route::get('/responsable_pays', [ResponsablePaysController::class, 'index'])

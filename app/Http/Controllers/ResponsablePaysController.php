@@ -25,7 +25,7 @@ class ResponsablePaysController extends Controller
         //Only the admin can see all the activities. Normal user sees the Pays activities.
         if($authUser->isAdmin()){
             $paysArr = Pays::query()->with('responsablePays')->get();
-        }else{
+        }elseif($authPays !== null){
             $allPays = Pays::query()->with('responsablePays')->get();
             $paysArr = [];
             foreach($allPays as $pays){
@@ -33,6 +33,9 @@ class ResponsablePaysController extends Controller
                     $paysArr[] = $pays;
                 }
             }
+        }else{
+            // Regular member with no pays assigned: show nothing
+            $paysArr = [];
         }
         return view('responsable_pays.index',compact('paysArr'));
     }
@@ -77,16 +80,16 @@ class ResponsablePaysController extends Controller
      */
     public function edit(Request $request)
     {
-
         $pays = Pays::find($request->pays);
+        if(empty($pays)) abort(404);
         $responsabilites = Responsabilite::all();
-        $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
-            ->orderBy('nom')->get();
-        if(!empty($request)){
-            return view('responsable_pays.edit',compact('pays', 'users', 'responsabilites'));
-        }else{
-            abort(404);
-        }
+        $currentResponsables = $pays->responsablePays()
+            ->where('actif', Constantes::ETAT_ACTIF)
+            ->get()->keyBy('pivot.responsabilite_id');
+        $initialUsers = User::where('etat', Constantes::ETAT_ACTIF)
+            ->where('role', '!=', Constantes::ROLE_ADMIN)
+            ->orderBy('nom')->limit(10)->get(['id', 'nom', 'prenom']);
+        return view('responsable_pays.edit', compact('pays', 'initialUsers', 'responsabilites', 'currentResponsables'));
     }
 
     /**
@@ -121,7 +124,9 @@ class ResponsablePaysController extends Controller
         }
         
         return redirect()->route('responsable_pays.edit', [$pays])
-            ->with('success','Responsables de pays mis à jour avec succès.');
+            ->with('success','Responsables de pays mis à jour avec succès.')
+            ->with('success_link', route('responsable_pays.index'))
+            ->with('success_link_text', 'Voir la liste des responsables');
     }
 
     /**

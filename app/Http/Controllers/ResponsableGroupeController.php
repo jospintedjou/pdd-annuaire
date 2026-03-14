@@ -80,15 +80,54 @@ class ResponsableGroupeController extends Controller
     public function edit(Request $request)
     {
         $groupe = Groupe::find($request->groupe);
-        $responsabilites = Responsabilite::all();
-        $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
-                    ->orderBy('nom')->get();
-        if(!empty($request)){
-            return view('responsable_groupes.edit',compact('groupe', 'users', 'responsabilites'));
-        }else{
+        if(empty($groupe)){
             abort(404);
         }
+        $responsabilites = Responsabilite::all();
 
+        // Preload current active responsables keyed by responsabilite_id — fixes N+1
+        $currentResponsables = $groupe->responsableGroupes()
+            ->where('actif', Constantes::ETAT_ACTIF)
+            ->get()
+            ->keyBy('pivot.responsabilite_id');
+
+        // Initial 10 users for page load (AJAX will load the rest on search/scroll)
+        $initialUsers = User::where('etat', Constantes::ETAT_ACTIF)
+            ->where('role', '!=', Constantes::ROLE_ADMIN)
+            ->orderBy('nom')
+            ->limit(10)
+            ->get(['id', 'nom', 'prenom']);
+
+        return view('responsable_groupes.edit', compact('groupe', 'initialUsers', 'responsabilites', 'currentResponsables'));
+    }
+
+    /**
+     * AJAX endpoint: search users by name (used by Select2)
+     */
+    public function searchUsers(Request $request)
+    {
+        $q = trim($request->input('q', ''));
+        $page = (int) $request->input('page', 1);
+        $perPage = 10;
+
+        $query = User::where('etat', Constantes::ETAT_ACTIF)
+            ->where('role', '!=', Constantes::ROLE_ADMIN)
+            ->orderBy('nom');
+
+        if ($q !== '') {
+            $query->where(function($sub) use ($q) {
+                $sub->where('nom', 'LIKE', '%'.$q.'%')
+                    ->orWhere('prenom', 'LIKE', '%'.$q.'%');
+            });
+        }
+
+        $total  = $query->count();
+        $users  = $query->skip(($page - 1) * $perPage)->take($perPage)->get(['id', 'nom', 'prenom']);
+
+        return response()->json([
+            'results'    => $users->map(fn($u) => ['id' => $u->id, 'text' => $u->nom.' '.$u->prenom]),
+            'pagination' => ['more' => ($page * $perPage) < $total],
+        ]);
     }
 
     /**
@@ -127,7 +166,9 @@ class ResponsableGroupeController extends Controller
         }
 
         return redirect()->route('responsable_groupes.edit', [$groupe])
-            ->with('success','Responsables de groupe mis à jour avec succès.');
+            ->with('success','Responsables de groupe mis à jour avec succès.')
+            ->with('success_link', route('responsable_groupes.index'))
+            ->with('success_link_text', 'Voir la liste des responsables');
     }
 
     /**

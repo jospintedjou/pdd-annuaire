@@ -79,16 +79,16 @@ class ResponsableSousZoneController extends Controller
      */
     public function edit(Request $request)
     {
-
         $sous_zone = SousZone::find($request->sous_zone);
+        if(empty($sous_zone)) abort(404);
         $responsabilites = Responsabilite::all();
-        $users = User::where(['etat'=>Constantes::ETAT_ACTIF])->where('role', '!=', Constantes::ROLE_ADMIN)
-            ->orderBy('nom')->get();
-        if(!empty($request)){
-            return view('responsable_sous_zones.edit',compact('sous_zone', 'users', 'responsabilites'));
-        }else{
-            abort(404);
-        }
+        $currentResponsables = $sous_zone->responsableSousZones()
+            ->where('actif', Constantes::ETAT_ACTIF)
+            ->get()->keyBy('pivot.responsabilite_id');
+        $initialUsers = User::where('etat', Constantes::ETAT_ACTIF)
+            ->where('role', '!=', Constantes::ROLE_ADMIN)
+            ->orderBy('nom')->limit(10)->get(['id', 'nom', 'prenom']);
+        return view('responsable_sous_zones.edit', compact('sous_zone', 'initialUsers', 'responsabilites', 'currentResponsables'));
     }
 
     /**
@@ -123,7 +123,9 @@ class ResponsableSousZoneController extends Controller
         }
 
         return redirect()->route('responsable_sous_zones.edit', [$sous_zone])
-            ->with('success','Responsables de Sous-zone mis à jour avec succès.');
+            ->with('success','Responsables de Sous-zone mis à jour avec succès.')
+            ->with('success_link', route('responsable_sous_zones.index'))
+            ->with('success_link_text', 'Voir la liste des responsables');
     }
 
     /**
