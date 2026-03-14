@@ -5,113 +5,159 @@ namespace App\Http\Controllers;
 use App\Constantes;
 use App\Models\Activite;
 use App\Models\CategorieActivite;
-use App\Models\Groupe;
-use App\Models\SousZone;
 use App\Models\User;
-use App\Models\Zone;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardMembreController extends DashboardController
 {
-   
+
     public function index(Request $request)
     {
         $users = User::where('role', '!=', Constantes::ROLE_ADMIN)->get();
-        $nombreMembres = User::where('role', '!=', Constantes::ROLE_ADMIN)->get()->count();
+        $nombreMembres = $users->count();
 
         return view('dashboard.dashboard-user-index', compact('users', 'nombreMembres'));
     }
 
-    /* Dashboard of one user */
     public function dashboard(Request $request)
     {
-        if(!$request->user){
-            abort(404);
-        }
+        if (!$request->user) abort(404);
+
         $user = User::find($request->user);
+        if (!$user) abort(404);
 
-        $groupe = $user->groupeActif()->first();
-        $sousZone = $user->groupeActif()->first()->sousZone;
-        $zone = $user->groupeActif()->first()->sousZone->zone;
+        $groupe   = $user->groupeActif();
+        $sousZone = $user->sousZone();
+        $zone     = $user->zone();
 
-        //Get all activities related to this user
-        $categorieActivitesArr = CategorieActivite::get();
-        $categorieActivites = [];
-        $activites = Activite::get();
+        if (!$groupe) abort(404);
 
-        foreach($categorieActivitesArr as $categorieActivite){
+        $context = [
+            'groupe_id'    => $groupe->id,
+            'sous_zone_id' => $sousZone?->id,
+            'zone_id'      => $zone?->id,
+        ];
 
-            switch($categorieActivite->type_activite){
-                CASE \App\Constantes::ACTIVITE_REGIONALE:
-                    $nombreActivite = $categorieActivite->activites()
-                        ->where('categorie_activite_id', $categorieActivite->id)
-                        ->count();
-                    $nombreParticipation = $user->activites()
-                        ->where('categorie_activite_id', $categorieActivite->id)
-                        ->count();
-                    break;
-                CASE \App\Constantes::ACTIVITE_ZONALE:
-                    $nombreActivite = $categorieActivite->activites()
-                        ->where('categorie_activite_id', $categorieActivite->id)
-                        ->where(['type_activite'=>\App\Constantes::ACTIVITE_ZONALE, 'zone_id'=>$zone->id])
-                        ->count();
-                    $nombreParticipation = $user->activites()
-                        ->where('categorie_activite_id', $categorieActivite->id)
-                        ->where(['type_activite'=>\App\Constantes::ACTIVITE_ZONALE])
-                        //->where(['type_activite'=>\App\Constantes::ACTIVITE_ZONALE, 'zone_id'=>$zone->id])
-                        ->count();
-                    break;
-                CASE \App\Constantes::ACTIVITE_SOUS_ZONALE:
-                    $nombreActivite = $categorieActivite->activites()
-                        ->where('categorie_activite_id', $categorieActivite->id)
-                        ->where(['type_activite'=>\App\Constantes::ACTIVITE_SOUS_ZONALE, 'sous_zone_id'=>$sousZone->id])
-                        ->count();
-                    $nombreParticipation = $user->activites()
-                        ->where('categorie_activite_id', $categorieActivite->id)
-                        ->where(['type_activite'=>\App\Constantes::ACTIVITE_SOUS_ZONALE])
-                        //->where(['type_activite'=>\App\Constantes::ACTIVITE_SOUS_ZONALE, 'sous_zone_id'=>$sousZone->id])
-                        ->count();
-                    break;
-                CASE \App\Constantes::ACTIVITE_GROUPE:
-                    $nombreActivite = $categorieActivite->activites()
-                        ->where('categorie_activite_id', $categorieActivite->id)
-                        ->where(['type_activite'=>\App\Constantes::ACTIVITE_GROUPE, 'groupe_id'=>$groupe->id])
-                        ->count();
-                    $nombreParticipation = $user->activites()
-                        ->where('categorie_activite_id', $categorieActivite->id)
-                        ->where(['type_activite'=>\App\Constantes::ACTIVITE_GROUPE])
-                        //->where(['type_activite'=>\App\Constantes::ACTIVITE_GROUPE, 'groupe_id'=>$groupe->id])
-                        ->count();
-                    break;
-                default:
-                    $nombreActivite = 0;
-                    $nombreParticipation = 0;
-                    break;
-            }
+        // Load all in-scope activities in one query
+        $allActivities = $this->loadAllMemberActivities($context);
 
-            /* If the activity is annual, we consider 01 attemp per year even if the were more than one attemps.
-             E.g: we can have 03 optionnal Retreat but every member should attemp for one */
-            if($categorieActivite->periodicite == Constantes::PERIODE_ANNUELLE){
-                $nombreActivite = $nombreActivite > 0 ? 1 : 0;
-            }
+        $categorieActivitesArr = CategorieActivite::all();
+        $allActivityIds = $allActivities->pluck('id')->toArray();
 
-            $categorieActivites[$categorieActivite->nom] = array("nombreActivite" => $nombreActivite,
-                "nombreParticipation" => $nombreParticipation );
-            $categorieActivites[$categorieActivite->nom]["stats"] = $categorieActivites[$categorieActivite->nom]["nombreActivite"] > 0
-                ? $categorieActivites[$categorieActivite->nom]["nombreParticipation"] * 100 / $categorieActivites[$categorieActivite->nom]["nombreActivite"] : 0;
+        // Single aggregated query: participations by this user across all in-scope activities
+        $userParticipations = [];
+        if (!empty($allActivityIds)) {
+            DB::table('participations')
+                ->where('user_id', $user->id)
+                ->whereIn('activite_id', $allActivityIds)
+                ->whereNull('deleted_at')
+                ->selectRaw('activite_id, COUNT(*) as count')
+                ->groupBy('activite_id')
+                ->get()
+                ->each(function ($row) use (&$userParticipations) {
+                    $userParticipations[$row->activite_id] = $row->count;
+                });
         }
 
-        $categorieActivitesDetails = $this->activityStats(array($user));
+        $categorieActivites        = $this->buildMemberCategoryStats($categorieActivitesArr, $allActivities, $userParticipations);
+        $categorieActivitesDetails = $this->buildMemberCategoryDetails($categorieActivitesArr, $allActivities, $userParticipations);
 
-        return view('dashboard.dashboard-user', compact('categorieActivitesDetails', 'user', 'activites', 'categorieActivites'));
+        return view('dashboard.dashboard-user', compact(
+            'categorieActivites', 'categorieActivitesDetails', 'user', 'groupe', 'sousZone', 'zone'
+        ));
     }
 
-    /* Return stats */
-    protected function getPourcentageActivite($nombreActivite, $nombreParticipation, $nombreMembres){
+    /**
+     * Load all activities in scope for this member (Régionale + Zonale + Sous-zonale + Groupe).
+     */
+    private function loadAllMemberActivities(array $context): \Illuminate\Database\Eloquent\Collection
+    {
+        return Activite::where(function ($q) use ($context) {
+            $q->where('type_activite', Constantes::ACTIVITE_REGIONALE)
+              ->orWhere(function ($q2) use ($context) {
+                  $q2->where('type_activite', Constantes::ACTIVITE_ZONALE)
+                     ->where('zone_id', $context['zone_id']);
+              })
+              ->orWhere(function ($q2) use ($context) {
+                  $q2->where('type_activite', Constantes::ACTIVITE_SOUS_ZONALE)
+                     ->where('sous_zone_id', $context['sous_zone_id']);
+              })
+              ->orWhere(function ($q2) use ($context) {
+                  $q2->where('type_activite', Constantes::ACTIVITE_GROUPE)
+                     ->where('groupe_id', $context['groupe_id']);
+              });
+        })->get();
+    }
 
-        $res = $nombreActivite > 0 ? $nombreParticipation * 100 / ($nombreMembres * $nombreActivite) : 0;
+    /**
+     * Summary stats per category, with ratio (participations/total_activities).
+     */
+    private function buildMemberCategoryStats($categorieActivites, $allActivities, $participations): array
+    {
+        $activitiesByCategory = $allActivities->groupBy('categorie_activite_id');
+        $result = [];
 
-        return $res;
+        foreach ($categorieActivites as $cat) {
+            $catActivities  = $activitiesByCategory->get($cat->id, collect());
+            $totalActivites = $catActivities->count();
+
+            if ($cat->periodicite == Constantes::PERIODE_ANNUELLE && $totalActivites > 0) {
+                $totalActivites = 1;
+            }
+
+            $totalParticipations = $catActivities->sum(fn ($a) => min($participations[$a->id] ?? 0, 1));
+
+            $result[$cat->nom] = [
+                'nombreActivite'      => $totalActivites,
+                'nombreParticipation' => $totalParticipations,
+                'stats'               => $totalActivites > 0 ? round($totalParticipations * 100 / $totalActivites, 2) : 0,
+                'ratio'               => $totalParticipations . '/' . $totalActivites,
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Detailed per-activity stats per category, with ratio.
+     */
+    private function buildMemberCategoryDetails($categorieActivites, $allActivities, $participations): array
+    {
+        $activitiesByCategory = $allActivities->groupBy('categorie_activite_id');
+        $details = [];
+
+        foreach ($categorieActivites as $cat) {
+            $activities      = $activitiesByCategory->get($cat->id, collect());
+            $categoryDetails = [];
+
+            if ($activities->isEmpty()) {
+                $categoryDetails[''] = [
+                    'nombreParticipation' => 0,
+                    'nombreActivite'      => 0,
+                    'stats'               => 0,
+                    'ratio'               => '0/0',
+                ];
+            } else {
+                foreach ($activities as $activity) {
+                    $count = min($participations[$activity->id] ?? 0, 1); // 0 or 1 per activity per member
+                    $categoryDetails[$activity->nom] = [
+                        'nombreParticipation' => $count,
+                        'nombreActivite'      => 1,
+                        'stats'               => $count * 100,
+                        'ratio'               => $count . '/1',
+                    ];
+                }
+            }
+
+            $details[$cat->nom] = $categoryDetails;
+        }
+
+        return $details;
+    }
+
+    protected function getPourcentageActivite($nombreActivite, $nombreParticipation, $nombreMembres)
+    {
+        return $nombreActivite > 0 ? $nombreParticipation * 100 / ($nombreMembres * $nombreActivite) : 0;
     }
 }
